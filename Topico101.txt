@@ -1,0 +1,374 @@
+Liberdades
+Liberdade0 - Liberdade de Executar o programa para qualquer proposito
+Liberdade1 - Liberdade de estudar como o programa funciona e adaptar lo a suas necessidades
+Liberdade2 - Liberdade de distribuir copias para ajudar proximo
+Liberdade3 - Liberdade de aperfeiçoar o progrma e liberar os seus aperfeiçoamentos para que toda a comunidade se beneficie
+FSF - Free Software Foundation
+GPL General Public License
+GNU Gnu is not Unix
+GNU - Projeto criado por Ricahrd Stallman em 1984
+Decada de 90 - Linus Torvalds cria o kernel - nucleo semelhante ao UNIX
+
+101: Arquitetura de Sistema
+101: Observação. Aspectos de identificação e configuração de dispositivos de Hardware no Linux
+101: Bios - Basic Input Output System - Integrado em memoria ROM a placa mãe
+101: Diretorios /sys e /proc - diretorios virtuais. Kernel utiliza esses dois arquivos para controle no momento da inicialização
+101: Diretorios /sys - encontramos arquivos referentes ao hardware do sistema - gerenciado pelo UDEV no /dev
+
+drwxr-xr-x   2 root root 0 Feb 23 19:50 block - Informações dispositivos de blocos, como HD, cd,dvd
+drwxr-xr-x  34 root root 0 Feb 23 19:50 bus - Barramento suportado pelo kernel
+drwxr-xr-x  52 root root 0 Feb 23 19:50 class - Organiza os tipos de dispositivos em subdiretorios
+drwxr-xr-x   4 root root 0 Feb 23 19:50 dev - Logs 
+drwxr-xr-x  16 root root 0 Feb 23 19:50 devices
+drwxr-xr-x   5 root root 0 Feb 23 19:50 firmware
+drwxr-xr-x   7 root root 0 Feb 23 19:50 fs
+drwxr-xr-x   2 root root 0 Feb 23 21:22 hypervisor
+drwxr-xr-x  13 root root 0 Feb 23 19:50 kernel -Informaçoes do kernel
+drwxr-xr-x 131 root root 0 Feb 23 19:50 module - Modulos carregados na memoria
+drwxr-xr-x   3 root root 0 Feb 23 19:50 power - Controlador de estado de energia
+101: Diretorios /proc - Armazena arquivos em tempo de execução e manter informação sobre dispositivo de hardware da maquina
+
+dr-xr-xr-x  3 root       root                     0 Feb 23 19:50 acpi
+dr-xr-xr-x 12 root       root                     0 Feb 23 19:51 asound
+-r--r--r--  1 root       root                     0 Feb 24 06:44 buddyinfo
+dr-xr-xr-x  4 root       root                     0 Feb 23 19:51 bus
+-r--r--r--  1 root       root                     0 Feb 23 19:51 cgroups
+-r--r--r--  1 root       root                     0 Feb 23 19:50 cmdline
+-r--r--r--  1 root       root                     0 Feb 24 06:44 consoles
+-r--r--r--  1 root       root                     0 Feb 23 19:51 cpuinfo
+-r--r--r--  1 root       root                     0 Feb 24 06:44 crypto
+-r--r--r--  1 root       root                     0 Feb 23 19:51 devices
+-r--r--r--  1 root       root                     0 Feb 23 19:51 diskstats
+-r--r--r--  1 root       root                     0 Feb 24 06:44 dma
+dr-xr-xr-x  3 root       root                     0 Feb 24 06:44 driver
+dr-xr-xr-x  3 root       root                     0 Feb 24 06:44 dynamic_debug
+-r--r--r--  1 root       root                     0 Feb 24 06:44 execdomains
+-r--r--r--  1 root       root                     0 Feb 24 06:44 fb
+-r--r--r--  1 root       root                     0 Feb 23 19:50 filesystems
+dr-xr-xr-x  5 root       root                     0 Feb 23 19:51 fs
+-r--r--r--  1 root       root                     0 Feb 23 19:51 interrupts
+-r--r--r--  1 root       root                     0 Feb 24 06:44 iomem
+-r--r--r--  1 root       root                     0 Feb 24 06:44 ioports
+dr-xr-xr-x 57 root       root                     0 Feb 23 19:51 irq
+-r--r--r--  1 root       root                     0 Feb 23 19:51 kallsyms
+-r--------  1 root       root       140737471586304 Feb 23 19:51 kcore
+-r--r--r--  1 root       root                     0 Feb 24 06:44 keys
+-r--r--r--  1 root       root                     0 Feb 24 06:44 key-users
+-r--------  1 root       root                     0 Feb 23 19:51 kmsg
+-r--------  1 root       root                     0 Feb 24 06:44 kpagecgroup
+-r--------  1 root       root                     0 Feb 24 06:44 kpagecount
+-r--------  1 root       root                     0 Feb 24 06:44 kpageflags
+-r--r--r--  1 root       root                     0 Feb 24 06:44 loadavg
+-r--r--r--  1 root       root                     0 Feb 24 06:44 locks
+-r--r--r--  1 root       root                     0 Feb 23 19:51 meminfo
+-r--r--r--  1 root       root                     0 Feb 24 06:44 misc
+-r--r--r--  1 root       root                     0 Feb 24 06:44 modules
+lrwxrwxrwx  1 root       root                    11 Feb 23 19:51 mounts -> self/mounts
+dr-xr-xr-x  5 root       root                     0 Feb 24 06:44 mpt
+-rw-r--r--  1 root       root                     0 Feb 23 19:51 mtrr
+lrwxrwxrwx  1 root       root                     8 Feb 23 19:51 net -> self/net
+-r--------  1 root       root                     0 Feb 24 06:44 pagetypeinfo
+-r--r--r--  1 root       root                     0 Feb 24 06:44 partitions
+dr-xr-xr-x  5 root       root                     0 Feb 24 06:44 pressure
+-r--r--r--  1 root       root                     0 Feb 24 06:44 sched_debug
+-r--r--r--  1 root       root                     0 Feb 24 06:44 schedstat
+lrwxrwxrwx  1 root       root                     0 Feb 23 19:50 self -> 3739
+-r--------  1 root       root                     0 Feb 24 06:44 slabinfo
+-r--r--r--  1 root       root                     0 Feb 24 06:44 softirqs
+-r--r--r--  1 root       root                     0 Feb 23 19:51 stat
+-r--r--r--  1 root       root                     0 Feb 23 19:51 swaps
+dr-xr-xr-x  1 root       root                     0 Feb 23 19:50 sys
+--w-------  1 root       root                     0 Feb 23 19:51 sysrq-trigger
+dr-xr-xr-x  5 root       root                     0 Feb 24 06:44 sysvipc
+lrwxrwxrwx  1 root       root                     0 Feb 23 19:50 thread-self -> 3739/task/3739
+-r--------  1 root       root                     0 Feb 24 06:44 timer_list
+dr-xr-xr-x  6 root       root                     0 Feb 24 06:44 tty
+-r--r--r--  1 root       root                     0 Feb 23 19:50 uptime
+-r--r--r--  1 root       root                     0 Feb 24 06:44 version
+-r--------  1 root       root                     0 Feb 24 06:44 vmallocinfo
+-r--r--r--  1 root       root                     0 Feb 23 19:51 vmstat
+-r--r--r--  1 root       root                     0 Feb 23 19:51 zoneinfo
+Verificando alguns arquivos do /proc
+
+BOOT_IMAGE=/vmlinuz-5.9.0-kali1-amd64 root=UUID=923a359e-b4b1-4d62-bc54-194ef54faacc ro quiet splash
+
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 61
+model name	: Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz
+stepping	: 4
+microcode	: 0x2d
+cpu MHz		: 2194.921
+cache size	: 3072 KB
+physical id	: 0
+siblings	: 1
+core id		: 0
+cpu cores	: 1
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 20
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid rdseed adx smap xsaveopt arat md_clear flush_l1d arch_capabilities
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit srbds
+bogomips	: 4389.84
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 43 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 61
+model name	: Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz
+stepping	: 4
+microcode	: 0x2d
+cpu MHz		: 2194.921
+cache size	: 3072 KB
+physical id	: 2
+siblings	: 1
+core id		: 0
+cpu cores	: 1
+apicid		: 2
+initial apicid	: 2
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 20
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid rdseed adx smap xsaveopt arat md_clear flush_l1d arch_capabilities
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit srbds
+bogomips	: 4389.84
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 43 bits physical, 48 bits virtual
+power management:
+
+Character devices:
+  1 mem
+  4 /dev/vc/0
+  4 tty
+  4 ttyS
+  5 /dev/tty
+  5 /dev/console
+  5 /dev/ptmx
+  7 vcs
+ 10 misc
+ 13 input
+ 14 sound/midi
+ 14 sound/dmmidi
+ 21 sg
+ 29 fb
+116 alsa
+128 ptm
+136 pts
+153 spi
+180 usb
+189 usb_device
+226 drm
+248 hidraw
+249 aux
+250 cec
+251 bsg
+252 rtc
+253 dax
+254 gpiochip
+
+Arquivos do interrupts
+            CPU0       CPU1       
+   0:          3          0   IO-APIC    2-edge      timer
+   1:          0      15481   IO-APIC    1-edge      i8042
+   8:          1          0   IO-APIC    8-edge      rtc0
+   9:          0          0   IO-APIC    9-fasteoi   acpi
+  12:      61095          0   IO-APIC   12-edge      i8042
+  14:          0          0   IO-APIC   14-edge      ata_piix
+  15:      82516          0   IO-APIC   15-edge      ata_piix
+  16:          0      12211   IO-APIC   16-fasteoi   vmwgfx, snd_ens1371
+  17:          0      40622   IO-APIC   17-fasteoi   ehci_hcd:usb1, ioc0
+  18:         76          0   IO-APIC   18-fasteoi   uhci_hcd:usb2
+  19:      41524          0   IO-APIC   19-fasteoi   eth0
+  24:          0          0   PCI-MSI 344064-edge      PCIe PME, pciehp
+  25:          0          0   PCI-MSI 346112-edge      PCIe PME, pciehp
+  26:          0          0   PCI-MSI 348160-edge      PCIe PME, pciehp
+  27:          0          0   PCI-MSI 350208-edge      PCIe PME, pciehp
+  28:          0          0   PCI-MSI 352256-edge      PCIe PME, pciehp
+  29:          0          0   PCI-MSI 354304-edge      PCIe PME, pciehp
+  30:          0          0   PCI-MSI 356352-edge      PCIe PME, pciehp
+  31:          0          0   PCI-MSI 358400-edge      PCIe PME, pciehp
+  32:          0          0   PCI-MSI 360448-edge      PCIe PME, pciehp
+  33:          0          0   PCI-MSI 362496-edge      PCIe PME, pciehp
+  34:          0          0   PCI-MSI 364544-edge      PCIe PME, pciehp
+  35:          0          0   PCI-MSI 366592-edge      PCIe PME, pciehp
+  36:          0          0   PCI-MSI 368640-edge      PCIe PME, pciehp
+  37:          0          0   PCI-MSI 370688-edge      PCIe PME, pciehp
+  38:          0          0   PCI-MSI 372736-edge      PCIe PME, pciehp
+  39:          0          0   PCI-MSI 374784-edge      PCIe PME, pciehp
+  40:          0          0   PCI-MSI 376832-edge      PCIe PME, pciehp
+  41:          0          0   PCI-MSI 378880-edge      PCIe PME, pciehp
+  42:          0          0   PCI-MSI 380928-edge      PCIe PME, pciehp
+  43:          0          0   PCI-MSI 382976-edge      PCIe PME, pciehp
+  44:          0          0   PCI-MSI 385024-edge      PCIe PME, pciehp
+  45:          0          0   PCI-MSI 387072-edge      PCIe PME, pciehp
+  46:          0          0   PCI-MSI 389120-edge      PCIe PME, pciehp
+  47:          0          0   PCI-MSI 391168-edge      PCIe PME, pciehp
+  48:          0          0   PCI-MSI 393216-edge      PCIe PME, pciehp
+  49:          0          0   PCI-MSI 395264-edge      PCIe PME, pciehp
+  50:          0          0   PCI-MSI 397312-edge      PCIe PME, pciehp
+  51:          0          0   PCI-MSI 399360-edge      PCIe PME, pciehp
+  52:          0          0   PCI-MSI 401408-edge      PCIe PME, pciehp
+  53:          0          0   PCI-MSI 403456-edge      PCIe PME, pciehp
+  54:          0          0   PCI-MSI 405504-edge      PCIe PME, pciehp
+  55:          0          0   PCI-MSI 407552-edge      PCIe PME, pciehp
+  56:      10017          0   PCI-MSI 129024-edge      vmw_vmci
+  57:          0          0   PCI-MSI 129025-edge      vmw_vmci
+ NMI:          0          0   Non-maskable interrupts
+ LOC:    2057687    1774035   Local timer interrupts
+ SPU:          0          0   Spurious interrupts
+ PMI:          0          0   Performance monitoring interrupts
+ IWI:          0          0   IRQ work interrupts
+ RTR:          0          0   APIC ICR read retries
+ RES:       1953       2206   Rescheduling interrupts
+ CAL:     164391     150871   Function call interrupts
+ TLB:        974       1115   TLB shootdowns
+ TRM:          0          0   Thermal event interrupts
+ THR:          0          0   Threshold APIC interrupts
+ DFR:          0          0   Deferred Error APIC interrupts
+ MCE:          0          0   Machine check exceptions
+ MCP:        267        268   Machine check polls
+ ERR:          0
+ MIS:          0
+ PIN:          0          0   Posted-interrupt notification event
+ NPI:          0          0   Nested posted-interrupt event
+ PIW:          0          0   Posted-interrupt wakeup event
+
+OBS: IRQ teclado ps2 pode ser alocada na IRQ1 mouse ps2 IRQ12
+DMA Direct Memory Access - Permite que dispositivos possam ler e escrever dados direto na memoria, atraves de regiões delimitadas
+ 4: cascade
+/proc/partitions
+major minor  #blocks  name
+
+  11        0    4199580 sr0
+   8        0   41943040 sda
+   8        1     584704 sda1
+   8        2          1 sda2
+   8        3   35496960 sda3
+   8        5    3905536 sda5
+   8        6    1951744 sda6
+BOOT_IMAGE=/vmlinuz-5.9.0-kali1-amd64 root=UUID=923a359e-b4b1-4d62-bc54-194ef54faacc ro quiet splash
+Kernel Pode ser monolitico(built-in) ou modular
+arquivo contendo os modulos do kernel compilado /lib/modules/<versão do kernel
+Verificando a versão do kernel
+5.9.0-kali1-amd64
+5.9.0-kali1-amd64
+
+/lib/modules/5.9.0-kali1-amd64:"Modulos do Kernel"
+total 4628
+drwxr-xr-x 12 root root    4096 Jan 21 21:03 kernel
+-rw-r--r--  1 root root 1151496 Jan 21 21:03 modules.alias - Apelido
+-rw-r--r--  1 root root 1097141 Jan 21 21:03 modules.alias.bin
+-rw-r--r--  1 root root    5398 Oct 29 07:03 modules.builtin
+-rw-r--r--  1 root root   11515 Jan 21 21:03 modules.builtin.alias.bin
+-rw-r--r--  1 root root    6627 Jan 21 21:03 modules.builtin.bin
+-rw-r--r--  1 root root   37565 Oct 29 07:03 modules.builtin.modinfo
+-rw-r--r--  1 root root  453084 Jan 21 21:03 modules.dep - Dependencias
+-rw-r--r--  1 root root  613522 Jan 21 21:03 modules.dep.bin
+-rw-r--r--  1 root root     476 Jan 21 21:03 modules.devname
+-rw-r--r--  1 root root  142432 Oct 29 07:03 modules.order
+-rw-r--r--  1 root root     970 Jan 21 21:03 modules.softdep
+-rw-r--r--  1 root root  534233 Jan 21 21:03 modules.symbols Simbolos internos do kernel
+-rw-r--r--  1 root root  655145 Jan 21 21:03 modules.symbols.bin
+
+Listando Modulos carregados no kernel em execução
+#lsmod | grep cdrom
+lsmod
+cdrom                  73728  1 sr_mod
+
+Obtendo informações com modinfo
+
+filename:       /lib/modules/5.9.0-kali1-amd64/kernel/drivers/cdrom/cdrom.ko (ko = Kernel object)
+license:        GPL
+depends:        
+retpoline:      Y
+intree:         Y
+name:           cdrom
+vermagic:       5.9.0-kali1-amd64 SMP mod_unload modversions 
+parm:           debug:bool
+parm:           autoclose:bool
+parm:           autoeject:bool
+parm:           lockdoor:bool
+parm:           check_media_type:bool
+parm:           mrw_format_restart:bool
+
+Obtendo informações especificas (filename) 
+modinfo -F filename cdrom
+/lib/modules/5.9.0-kali1-amd64/kernel/drivers/cdrom/cdrom.ko
+
+Remover modulos carregados
+rmmod cdrom
+ou modprobe -r cdrom
+OBS: se houver dependencias, remover las antes
+rmmod sr_mod ide_cd par depois rmmod cdrom
+
+**Carregando modulo**
+insmod sr_mod
+insmod ide_cd
+insmod cdrom
+
+Usando modprobe
+#modprobe sr_mod
+#modprobe ide_cd
+#modprobe cdrom
+#modprobe -v cdrom - -v mostra detalhes do processo
+
+**Carregando um modulo e alterando o parametro**
+
+modprobe -v cdrom lockdoor=0
+
+Testando o vi na linha de comando
+
+Inspecionando Dispositivos
+00:00.0 Host bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX Host bridge (rev 01)
+00:01.0 PCI bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge (rev 01)
+00:07.0 ISA bridge: Intel Corporation 82371AB/EB/MB PIIX4 ISA (rev 08)
+00:07.1 IDE interface: Intel Corporation 82371AB/EB/MB PIIX4 IDE (rev 01)
+00:07.3 Bridge: Intel Corporation 82371AB/EB/MB PIIX4 ACPI (rev 08)
+00:07.7 System peripheral: VMware Virtual Machine Communication Interface (rev 10)
+00:0f.0 VGA compatible controller: VMware SVGA II Adapter
+00:10.0 SCSI storage controller: Broadcom / LSI 53c1030 PCI-X Fusion-MPT Dual Ultra320 SCSI (rev 01)
+02:00.0 USB controller: VMware USB1.1 UHCI Controller
+02:01.0 Ethernet controller: Intel Corporation 82545EM Gigabit Ethernet Controller (Copper) (rev 01)
+02:02.0 Multimedia audio controller: Ensoniq ES1371/ES1373 / Creative Labs CT2518 (rev 02)
+02:03.0 USB controller: VMware USB2 EHCI Controller
+Saida do lspci -b == lspci
+Identificacao XX = numero Barramento PCI
+ YY: Numero do slot PCI e 
+ Z: Representa a função PCI
+
+Listando dispositivos pci com detalhes
+
+***Verificando o modulo do Kernel***
+
+02:01.0 Ethernet controller: Intel Corporation 82545EM Gigabit Ethernet Controller (Copper) (rev 01)
+	DeviceName: Ethernet0
+	Subsystem: VMware PRO/1000 MT Single Port Adapter
+	Physical Slot: 33
+	Flags: bus master, 66MHz, medium devsel, latency 0, IRQ 19
+	Memory at fd5c0000 (64-bit, non-prefetchable) [size=128K]
+	Memory at fdff0000 (64-bit, non-prefetchable) [size=64K]
+	I/O ports at 2000 [size=64]
+	Expansion ROM at fd500000 [virtual] [disabled] [size=64K]
+	Capabilities: <access denied>
+	Kernel driver in use: e1000
+	Kernel modules: e1000
+
+02:01.0 Ethernet controller: Intel Corporation 82545EM Gigabit Ethernet Controller (Copper) (rev 01)
+	DeviceName: Ethernet0
+	Subsystem: VMware PRO/1000 MT Single Port Adapter
+	Kernel driver in use: e1000
+	Kernel modules: e1000
+
+
+vv Super verboso
+Curiosidade - No /usr/share/misc o arquivo que traduz a identificação numerica pci em nomes legiveis é (***pci.ids***)

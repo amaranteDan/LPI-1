@@ -1,0 +1,488 @@
+Comandos do git hub
+
+Identificando o usuario
+
+git config --global user.name "Daniel Amarante"
+git config --global user.email danz82158@gmail.com
+
+iniciar repositorio vazio
+
+git init 
+
+ver status
+
+git status
+
+para rastrear o repositorio
+
+git add comandos.txt
+
+Criando mensagem para o commit
+
+git commit -m "Criando repositorio no linux"
+
+ver logs
+
+git log ou git log -n // git log --online
+
+git lo --graph
+
+git shortlog -sn (Verifica todos que fizeram commits)
+git show "hash do arquivo"  - Ver modificacoes no arquivo.
+
+Ver alteracoes
+
+git diff  // git diff --staged
+git diff --name-only
+Compartilhar repositorio
+
+git remote add origin https://github.com/amaranteDan/Comandos-Linux.git
+git push origin master 
+
+Atualizacoes no arquivo usar esse comando
+
+git push origin master
+
+-------------------------------------------------------------------------
+Fazendo o clone do arquivo
+
+git clone https://github.com/amarantedana/Comandos-Mysql.git
+
+Para ver modificaoes 
+
+git log
+----------------------------------------------------------
+
+Remover arquivos do git
+
+git rm nome.do.arquivo
+git commit -m "Removendo arquivos"
+-----------------------------------------------------------
+Renomear arquivos
+git mv nome.arquivo novo.nome.arquivo
+git commit -am "Renomeando arquivos"
+----------------------------------------------------------
+Mover um arquivo
+
+git mv nome.arquivo diretorio/nome.arquivo
+git status
+git commit "Movendo arquivo."
+----------------------------------------------------------
+Desfazer alteracoes
+
+git checkout -- nome.arquivo (As que nao estiverem na area do staged)
+git status
+----------------------------------------------------------
+Recuperar arquivos deletados
+
+git checkout -- nome.arquivo
+
+Remover da area do staged
+
+git reset -- nome.arquivo (preserva tudo que foi modificado)
+git reset --hard (desfaz todas as alteracoes no arquivo)
+
+Desfazer alteracoes ja commitadas
+
+git revert --no-edit numero.do ultimo commit
+----------------------------------------------------------
+Criando um Repositorio remoto
+
+Sera criado o arquivo no pc que servira de servidor 
+
+git init --bare Linux.git (--bare para evitar criar que seja criado
+uma working tree e o commits sejam realizados diretamente
+no servidor)
+
+Caso especial - Adicionando o servidor local
+
+git remote add servidor file://192.168.1.\Linux.git (dar cd para entrar no diretorio)
+git remote - para listar os repositorios
+----------------------------------------------------------
+Para renomear respositorios remotos
+
+git remote rename servidor outronome
+git remote para ver o outro nome
+----------------------------------------------------------
+
+Alterar a url
+
+git remote set-url servidor file://192.168.1.10/Linux.git
+git remote -v
+----------------------------------------------------------
+
+Enviar commits para o repositorio remoto
+
+git push servidor master
+----------------------------------------------------------
+Clonar repositorio remoto
+
+git clone file://192.168.1.3/Linux.git
+---------------------------------------------------------
+
+Sincronizar repositorio remoto
+
+git pull servidor master
+---------------------------------------------------------
+Protocolos
+Local - git clone file://192.168.1.3/Linux.git
+
+ssh - usuario@servidor root@192.168.1.3:/Linux.git
+
+
+#############################################################
+Comandos Linux 103 para Leitura de arquivos.
+
+Podemos usar:
+cat 
+head "Visualiza a parte inicial do texto. Pode usar o -3 para deteminar a quantidade de linhas"
+tail -f 
+##############################################################
+
+**************************************************************
+Comandos de Linux para a Certificação LPI
+
+ls - listar diretorios
+ls -al
+cd " change directory"
+pwd - diretorio atual
+mkdir - criar diretorio
+rm - remover arquivo Ex: rm -rf "remove diretorio e arquivos"
+rm -r
+rm -f  "forçando a exclusão"
+rm -rf
+cp - copia de arquivo
+cp -r copia diretorio - 
+mv dupla funcao (usado para renomear ou mover)
+ln -s "arquivo" - criar link  -verificar o comando para desfazer o link
+rm -d "link" - remove o link
+touch - cria ou atualiza arquivo "Ex touch teste.txt"
+
+######################################################################
+Revisao LPI - 
+
+GPL - Gnu General Public License
+
+4 Liberdades
+
+Liberdade 0 - Executar o programa para qualquer proposito.
+Liberdade 1 - Estudar como o programa funciona e adaptar lo a suas necessidades.
+Liberdade 2 - Liberdade de distribuir copias para ajudar o proximo.
+Liberdade 3 - Aperfeiçoar o programa e liberar os seus aperfeiçoamentos de modo que toda a comunidade se beneficie.
+
+FSF - Free Software Foundation
+
+101.1 Determinar e Configurar Hardware.
+
+BIOS - Basc Input/Output - Administrar entrada e saida do hardware via barramentos.
+
+* Arquitetura do Sistema
+
+cat /proc/scsi/scsi
+
+cat /proc/modules
+
+lshw
+lscpu
+lspci
+lspci -v -s 00:1a.0 Ex
+
+* Listar modulos carregados
+
+lsmod
+lsmod |grep ehci_pci
+
+modprobe -r (Insere ou remove modulo)
+modprobe -r ehci_pci
+
+lspci|grep USB
+
+*Habilitar modulo novamente
+
+modprobe ehci_pci
+
+*Remover modulos do kernel
+Ex.
+rmmod usbcore
+
+*Ferramentas para manipular USB
+
+lsusb
+
+lsusb -v -d 1bcf:0007 (descricção detalhada do dispositivo)
+
+lsusb -t
+************************************************************************
+*101.2 Boot do Sistema
+
+Bios - Bootloader
+
+O bios espera os primeiros 440 bytes do primeiro disco de armazenamento
+440 bytes da MBR (Master Boot Record).
+
+Inicialização fica assim:
+
+1- POST é executado;
+2 - O Bios ativa os dispositivos necessario, como teclado, mouse, monitor
+e o dispositivo de armazenamento.
+
+3 - O Bios Carrega o primeiro estagio do bootloader( 440 bytes MBR)
+    
+4 - O primeiro estagio aciona o segundo estagio: Responsavel pelas opções
+    de boot e carregar o Kernel.
+
+UEFI - Unified Extensible Firmware Interface
+
+Uefi ignora dados presentes na MBR, levando em conta definições presentes
+em uma memoria de armazenamento não volatil, (NVRAM)
+(Luciano Antonio Siqueira) Certificação LPI 6 Edição)
+
+
+Os aplicativos EFi devem ser armazenados em sistemas compativeis
+FAT12, FAT16, FAT32 e ISO-9660 midias opticas.
+
+Vantagens:
+So consegue usar sistemas 64bits;
+Secure Boot
+Suporte a GPT
+CSM Compatibility Support Module
+Partição acima de 1GB.
+Verificar se maquina tem modulo
+
+test -d /sys/firmware/uefi && echo "EFI Boot" || "Bios Boot"
+
+Instalar o pacote
+grub-uefi	
+
+
+
+
+************************************************************************
+*Diretorios que podem ser separados da raiz /boot /home /opt /root
+ /tmp /usr /var
+
+*Diretorios que não pode ser separados da raiz
+/bin /dev /etc /lib /media /mnt /proc /sbin /sys
+*
+***********************************************************************
+
+
+102.3 Gerenciando bibliotecas
+
+
+Determinar bibliotecas dinamicas associadas
+
+Ex ldd /bin/ls
+
+ldd /usr/sbin/sshd
+
+ldd ./sshd
+
+*Identificar bibliotecas compartilhadas
+
+ls /usr/lib |grep -F .so
+ls /lib | grep -F .so
+
+*Descobrindo as bibliotecas do comando ps
+
+ldd /bin/ps
+
+Atualizar o cache das bibliotecas
+
+ldconfig
+
+*Listar bibliotecas disponiveis
+
+ldconfig -p
+
+
+Diretorios /proc /sys - Diretorios Virtuais criados na Inicialização.
+
+-> Diretorio /proc.
+
+dr-xr-xr-x  3 root       root                     0 ago 27 00:16 acpi
+dr-xr-xr-x 12 root       root                     0 ago 27 00:17 asound
+-r--r--r--  1 root       root                     0 ago 27 00:43 buddyinfo
+dr-xr-xr-x  4 root       root                     0 ago 27 00:17 bus
+-r--r--r--  1 root       root                     0 ago 27 00:16 cgroups
+-r--r--r--  1 root       root                     0 ago 27 00:16 cmdline
+-r--r--r--  1 root       root                     0 ago 27 00:43 consoles
+-r--r--r--  1 root       root                     0 ago 27 00:17 cpuinfo
+-r--r--r--  1 root       root                     0 ago 27 00:43 crypto
+-r--r--r--  1 root       root                     0 ago 27 00:16 devices
+-r--r--r--  1 root       root                     0 ago 27 00:43 diskstats
+-r--r--r--  1 root       root                     0 ago 27 00:43 dma
+dr-xr-xr-x  3 root       root                     0 ago 27 00:43 driver
+dr-xr-xr-x  3 root       root                     0 ago 27 00:43 dynamic_debug
+-r--r--r--  1 root       root                     0 ago 27 00:43 execdomains
+-r--r--r--  1 root       root                     0 ago 27 00:43 fb
+-r--r--r--  1 root       root                     0 ago 27 00:16 filesystems
+dr-xr-xr-x  5 root       root                     0 ago 27 00:17 fs
+-r--r--r--  1 root       root                     0 ago 27 00:17 interrupts
+-r--r--r--  1 root       root                     0 ago 27 00:43 iomem
+-r--r--r--  1 root       root                     0 ago 27 00:43 ioports
+dr-xr-xr-x 25 root       root                     0 ago 27 00:17 irq
+-r--r--r--  1 root       root                     0 ago 27 00:17 kallsyms
+-r--------  1 root       root       140737471586304 ago 27 00:16 kcore
+-r--r--r--  1 root       root                     0 ago 27 00:43 keys
+-r--r--r--  1 root       root                     0 ago 27 00:43 key-users
+-r--------  1 root       root                     0 ago 27 00:17 kmsg
+-r--------  1 root       root                     0 ago 27 00:43 kpagecgroup
+-r--------  1 root       root                     0 ago 27 00:43 kpagecount
+-r--------  1 root       root                     0 ago 27 00:43 kpageflags
+-r--r--r--  1 root       root                     0 ago 27 00:43 loadavg
+-r--r--r--  1 root       root                     0 ago 27 00:43 locks
+-r--r--r--  1 root       root                     0 ago 27 00:17 meminfo
+-r--r--r--  1 root       root                     0 ago 27 00:43 misc
+-r--r--r--  1 root       root                     0 ago 27 00:17 modules
+lrwxrwxrwx  1 root       root                    11 ago 27 00:17 mounts -> self/mounts
+-rw-r--r--  1 root       root                     0 ago 27 00:17 mtrr
+lrwxrwxrwx  1 root       root                     8 ago 27 00:16 net -> self/net
+-r--------  1 root       root                     0 ago 27 00:43 pagetypeinfo
+-r--r--r--  1 root       root                     0 ago 27 00:43 partitions
+dr-xr-xr-x  5 root       root                     0 ago 27 00:43 pressure
+-r--r--r--  1 root       root                     0 ago 27 00:43 sched_debug
+-r--r--r--  1 root       root                     0 ago 27 00:43 schedstat
+lrwxrwxrwx  1 root       root                     0 ago 27 00:16 self -> 1326
+-r--------  1 root       root                     0 ago 27 00:43 slabinfo
+-r--r--r--  1 root       root                     0 ago 27 00:43 softirqs
+-r--r--r--  1 root       root                     0 ago 27 00:43 stat
+-r--r--r--  1 root       root                     0 ago 27 00:16 swaps
+dr-xr-xr-x  1 root       root                     0 ago 27 00:16 sys
+--w-------  1 root       root                     0 ago 27 00:17 sysrq-trigger
+dr-xr-xr-x  5 root       root                     0 ago 27 00:43 sysvipc
+lrwxrwxrwx  1 root       root                     0 ago 27 00:16 thread-self -> 1326/task/1326
+-r--------  1 root       root                     0 ago 27 00:43 timer_list
+dr-xr-xr-x  6 root       root                     0 ago 27 00:43 tty
+-r--r--r--  1 root       root                     0 ago 27 00:16 uptime
+-r--r--r--  1 root       root                     0 ago 27 00:17 version
+-r--------  1 root       root                     0 ago 27 00:43 vmallocinfo
+-r--r--r--  1 root       root                     0 ago 27 00:43 vmstat
+-r--r--r--  1 root       root                     0 ago 27 00:43 zoneinfo
+
+Diretorio - /sys
+
+drwxr-xr-x   2 root root 0 ago 27 00:16 block
+drwxr-xr-x  32 root root 0 ago 27 00:16 bus
+drwxr-xr-x  48 root root 0 ago 27 00:16 class
+drwxr-xr-x   4 root root 0 ago 27 00:16 dev
+drwxr-xr-x  15 root root 0 ago 27 00:16 devices
+drwxr-xr-x   5 root root 0 ago 27 00:16 firmware
+drwxr-xr-x   7 root root 0 ago 27 00:16 fs
+drwxr-xr-x   2 root root 0 ago 27 00:47 hypervisor
+drwxr-xr-x  13 root root 0 ago 27 00:16 kernel
+drwxr-xr-x 122 root root 0 ago 27 00:16 module
+drwxr-xr-x   3 root root 0 ago 27 00:17 power
+*****************************************************************************************************************
+Gerenciamento de Pacotes Debian.
+
+DPKG - Gerenciamento de pacotes individuais
+
+apt-get busca repositorios remotos
+apt agrega funçoes extras ao apt-get
+
+Repositorio -> /etc/apt/sources.list/
+	      /etc/apt/sources.list.d/
+
+Exemplo de pacote binario:
+deb http://ftp.br.debia.org/debian wheezy main contrib non-free
+--------------------------------|    |    -------------------- categoria
+localização 			|    Versao
+				
+
+*Atualizar repositorios
+
+apt-get update ou apt update
+
+*Adicionar cdrom como repositorio
+apt-cdrom add
+apt-cdrom -d /home/kov /meucdrom add -> Exemplo.
+
+*Instalação de pacotes
+-y indica sim para todas as perguntas
+
+apt-cache search pacote -> procura o pacote
+apt search pacote
+
+apt-get install pacote -> instala pacotes
+apt install pacote
+
+*Instalar pacotes individuais.
+dpkg -i pacote.deb (.deb para pacotes binarios)
+dpkg install pacote.deb
+
+apt-get install -f (força a instalaçao de dependencia)
+
+#Reconfigurando um pacote
+
+dpkg-reconfigure pacote
+apt-get --reinstall install pacote
+
+ex dpkg-reconfigure tzdata
+
+apt reinstall pacote
+
+*Removendo pacotes
+
+apt-get remove pacote
+
+dpkg -r pacote
+dpkg -p pacote (-p de purge: remove arquivos de configuração)
+
+apt-get remove --purge pacote
+
+*Atualizando pacotes
+
+apt-get upgrade pacote
+
+*Atualizando todos os pacotes
+
+apt-get upgrade
+apt safe-upgrade
+
+apt-get -u lista pacotes desatualizados
+
+apt-get dist-upgrade atualizando todos os pacotes e substitui todos os obsoletos
+
+*Inspecionando pacotes
+
+dpkg -l pacote -> mostra estado dos pacotes
+
+dpkg -S procura qual pacote instalou o arquivo
+
+dpkg -L lista arquivos instalados pelo pacote
+
+dpkg --contents pacote.deb lista o conteudo do pacote
+
+apt-cache show pacote
+ apt show pacote
+
+dpkg -p pacote
+
+*Limpando repositorios
+ -> /var/cache/apt/archives (diretorio de cache dos repositorios)
+
+apt-get clean
+apt-get autoclean
+apt autoremove
+
+*Estatisticas dos pacotes
+
+apt-cache stats
+
+* Conhecimento Geral
+
+apt install -d pacote faz download do pactoe sem instalar (caso de verificação)
+
+*Resolvendo dependencias
+
+apt install --fix-missing
+apt update --fix-missing  ou apt update -f missing
+
+
+
+
+
+
+
+

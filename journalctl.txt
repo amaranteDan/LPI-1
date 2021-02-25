@@ -1,0 +1,555 @@
+-- Logs begin at Sat 2020-07-25 20:27:49 -03, end at Thu 2020-08-27 00:32:31 -03. --
+ago 27 00:17:01 kali kernel: Linux version 5.7.0-kali1-amd64 (devel@kali.org) (gcc version 9.3.0 (Debian 9.3.0-14), GNU ld (GNU Binutils for Debian) 2.34) #1 SMP Debian 5.7.6-1kali2 (2020-07-01)
+ago 27 00:17:01 kali kernel: Command line: BOOT_IMAGE=/vmlinuz-5.7.0-kali1-amd64 root=UUID=e4db46aa-4a23-4418-acae-442b1979dae6 ro quiet splash
+ago 27 00:17:01 kali kernel: x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+ago 27 00:17:01 kali kernel: x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+ago 27 00:17:01 kali kernel: x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+ago 27 00:17:01 kali kernel: x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+ago 27 00:17:01 kali kernel: x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'standard' format.
+ago 27 00:17:01 kali kernel: BIOS-provided physical RAM map:
+ago 27 00:17:01 kali kernel: BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+ago 27 00:17:01 kali kernel: BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+ago 27 00:17:01 kali kernel: BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+ago 27 00:17:01 kali kernel: BIOS-e820: [mem 0x0000000000100000-0x000000007ffeffff] usable
+ago 27 00:17:01 kali kernel: BIOS-e820: [mem 0x000000007fff0000-0x000000007fffffff] ACPI data
+ago 27 00:17:01 kali kernel: BIOS-e820: [mem 0x00000000fec00000-0x00000000fec00fff] reserved
+ago 27 00:17:01 kali kernel: BIOS-e820: [mem 0x00000000fee00000-0x00000000fee00fff] reserved
+ago 27 00:17:01 kali kernel: BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+ago 27 00:17:01 kali kernel: NX (Execute Disable) protection: active
+ago 27 00:17:01 kali kernel: SMBIOS 2.5 present.
+ago 27 00:17:01 kali kernel: DMI: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
+ago 27 00:17:01 kali kernel: Hypervisor detected: KVM
+ago 27 00:17:01 kali kernel: kvm-clock: Using msrs 4b564d01 and 4b564d00
+ago 27 00:17:01 kali kernel: kvm-clock: cpu 0, msr 4343e001, primary cpu clock
+ago 27 00:17:01 kali kernel: kvm-clock: using sched offset of 14238298826 cycles
+ago 27 00:17:01 kali kernel: clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+ago 27 00:17:01 kali kernel: tsc: Detected 2194.920 MHz processor
+ago 27 00:17:01 kali kernel: e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+ago 27 00:17:01 kali kernel: e820: remove [mem 0x000a0000-0x000fffff] usable
+ago 27 00:17:01 kali kernel: last_pfn = 0x7fff0 max_arch_pfn = 0x400000000
+ago 27 00:17:01 kali kernel: MTRR default type: uncachable
+ago 27 00:17:01 kali kernel: MTRR variable ranges disabled:
+ago 27 00:17:01 kali kernel: Disabled
+ago 27 00:17:01 kali kernel: x86/PAT: MTRRs disabled, skipping PAT initialization too.
+ago 27 00:17:01 kali kernel: CPU MTRRs all blank - virtualized system.
+ago 27 00:17:01 kali kernel: x86/PAT: Configuration [0-7]: WB  WT  UC- UC  WB  WT  UC- UC  
+ago 27 00:17:01 kali kernel: found SMP MP-table at [mem 0x0009fff0-0x0009ffff]
+ago 27 00:17:01 kali kernel: RAMDISK: [mem 0x3345b000-0x35a24fff]
+ago 27 00:17:01 kali kernel: ACPI: Early table checksum verification disabled
+ago 27 00:17:01 kali kernel: ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+ago 27 00:17:01 kali kernel: ACPI: XSDT 0x000000007FFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+ago 27 00:17:01 kali kernel: ACPI: FACP 0x000000007FFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+ago 27 00:17:01 kali kernel: ACPI: DSDT 0x000000007FFF0470 0022EA (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+ago 27 00:17:01 kali kernel: ACPI: FACS 0x000000007FFF0200 000040
+ago 27 00:17:01 kali kernel: ACPI: FACS 0x000000007FFF0200 000040
+ago 27 00:17:01 kali kernel: ACPI: APIC 0x000000007FFF0240 00005C (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+ago 27 00:17:01 kali kernel: ACPI: SSDT 0x000000007FFF02A0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+ago 27 00:17:01 kali kernel: ACPI: Local APIC address 0xfee00000
+ago 27 00:17:01 kali kernel: No NUMA configuration found
+ago 27 00:17:01 kali kernel: Faking a node at [mem 0x0000000000000000-0x000000007ffeffff]
+ago 27 00:17:01 kali kernel: NODE_DATA(0) allocated [mem 0x7ffeb000-0x7ffeffff]
+ago 27 00:17:01 kali kernel: Zone ranges:
+ago 27 00:17:01 kali kernel:   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+ago 27 00:17:01 kali kernel:   DMA32    [mem 0x0000000001000000-0x000000007ffeffff]
+ago 27 00:17:01 kali kernel:   Normal   empty
+ago 27 00:17:01 kali kernel:   Device   empty
+ago 27 00:17:01 kali kernel: Movable zone start for each node
+ago 27 00:17:01 kali kernel: Early memory node ranges
+ago 27 00:17:01 kali kernel:   node   0: [mem 0x0000000000001000-0x000000000009efff]
+ago 27 00:17:01 kali kernel:   node   0: [mem 0x0000000000100000-0x000000007ffeffff]
+ago 27 00:17:01 kali kernel: Zeroed struct page in unavailable ranges: 114 pages
+ago 27 00:17:01 kali kernel: Initmem setup node 0 [mem 0x0000000000001000-0x000000007ffeffff]
+ago 27 00:17:01 kali kernel: On node 0 totalpages: 524174
+ago 27 00:17:01 kali kernel:   DMA zone: 64 pages used for memmap
+ago 27 00:17:01 kali kernel:   DMA zone: 21 pages reserved
+ago 27 00:17:01 kali kernel:   DMA zone: 3998 pages, LIFO batch:0
+ago 27 00:17:01 kali kernel:   DMA32 zone: 8128 pages used for memmap
+ago 27 00:17:01 kali kernel:   DMA32 zone: 520176 pages, LIFO batch:63
+ago 27 00:17:01 kali kernel: ACPI: PM-Timer IO Port: 0x4008
+ago 27 00:17:01 kali kernel: ACPI: Local APIC address 0xfee00000
+ago 27 00:17:01 kali kernel: IOAPIC[0]: apic_id 2, version 32, address 0xfec00000, GSI 0-23
+ago 27 00:17:01 kali kernel: ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+ago 27 00:17:01 kali kernel: ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+ago 27 00:17:01 kali kernel: ACPI: IRQ0 used by override.
+ago 27 00:17:01 kali kernel: ACPI: IRQ9 used by override.
+ago 27 00:17:01 kali kernel: Using ACPI (MADT) for SMP configuration information
+ago 27 00:17:01 kali kernel: smpboot: Allowing 2 CPUs, 0 hotplug CPUs
+ago 27 00:17:01 kali kernel: PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+ago 27 00:17:01 kali kernel: PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x0009ffff]
+ago 27 00:17:01 kali kernel: PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000effff]
+ago 27 00:17:01 kali kernel: PM: hibernation: Registered nosave memory: [mem 0x000f0000-0x000fffff]
+ago 27 00:17:01 kali kernel: [mem 0x80000000-0xfebfffff] available for PCI devices
+ago 27 00:17:01 kali kernel: Booting paravirtualized kernel on KVM
+ago 27 00:17:01 kali kernel: clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns
+ago 27 00:17:01 kali kernel: setup_percpu: NR_CPUS:512 nr_cpumask_bits:512 nr_cpu_ids:2 nr_node_ids:1
+ago 27 00:17:01 kali kernel: percpu: Embedded 55 pages/cpu s188056 r8192 d29032 u1048576
+ago 27 00:17:01 kali kernel: pcpu-alloc: s188056 r8192 d29032 u1048576 alloc=1*2097152
+ago 27 00:17:01 kali kernel: pcpu-alloc: [0] 0 1 
+ago 27 00:17:01 kali kernel: PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+ago 27 00:17:01 kali kernel: Built 1 zonelists, mobility grouping on.  Total pages: 515961
+ago 27 00:17:01 kali kernel: Policy zone: DMA32
+ago 27 00:17:01 kali kernel: Kernel command line: BOOT_IMAGE=/vmlinuz-5.7.0-kali1-amd64 root=UUID=e4db46aa-4a23-4418-acae-442b1979dae6 ro quiet splash
+ago 27 00:17:01 kali kernel: Dentry cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+ago 27 00:17:01 kali kernel: Inode-cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+ago 27 00:17:01 kali kernel: mem auto-init: stack:off, heap alloc:off, heap free:off
+ago 27 00:17:01 kali kernel: Memory: 261668K/2096696K available (10243K kernel code, 1283K rwdata, 4004K rodata, 1628K init, 1936K bss, 99776K reserved, 0K cma-reserved)
+ago 27 00:17:01 kali kernel: random: get_random_u64 called from __kmem_cache_create+0x3e/0x530 with crng_init=0
+ago 27 00:17:01 kali kernel: SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+ago 27 00:17:01 kali kernel: Kernel/User page tables isolation: enabled
+ago 27 00:17:01 kali kernel: ftrace: allocating 34972 entries in 137 pages
+ago 27 00:17:01 kali kernel: ftrace: allocated 137 pages with 3 groups
+ago 27 00:17:01 kali kernel: rcu: Hierarchical RCU implementation.
+ago 27 00:17:01 kali kernel: rcu:         RCU restricting CPUs from NR_CPUS=512 to nr_cpu_ids=2.
+ago 27 00:17:01 kali kernel: rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+ago 27 00:17:01 kali kernel: rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+ago 27 00:17:01 kali kernel: NR_IRQS: 33024, nr_irqs: 440, preallocated irqs: 16
+ago 27 00:17:01 kali kernel: random: crng done (trusting CPU's manufacturer)
+ago 27 00:17:01 kali kernel: Console: colour VGA+ 80x25
+ago 27 00:17:01 kali kernel: printk: console [tty0] enabled
+ago 27 00:17:01 kali kernel: ACPI: Core revision 20200326
+ago 27 00:17:01 kali kernel: APIC: Switch to symmetric I/O mode setup
+ago 27 00:17:01 kali kernel: x2apic enabled
+ago 27 00:17:01 kali kernel: Switched APIC routing to physical x2apic.
+ago 27 00:17:01 kali kernel: ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+ago 27 00:17:01 kali kernel: clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x1fa373f688b, max_idle_ns: 440795233648 ns
+ago 27 00:17:01 kali kernel: Calibrating delay loop (skipped) preset value.. 4389.84 BogoMIPS (lpj=8779680)
+ago 27 00:17:01 kali kernel: pid_max: default: 32768 minimum: 301
+ago 27 00:17:01 kali kernel: LSM: Security Framework initializing
+ago 27 00:17:01 kali kernel: Yama: disabled by default; enable with sysctl kernel.yama.*
+ago 27 00:17:01 kali kernel: AppArmor: AppArmor initialized
+ago 27 00:17:01 kali kernel: TOMOYO Linux initialized
+ago 27 00:17:01 kali kernel: Mount-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+ago 27 00:17:01 kali kernel: Mountpoint-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+ago 27 00:17:01 kali kernel: unchecked MSR access error: WRMSR to 0x3a (tried to write 0x0000000000000001) at rIP: 0xffffffff918657d4 (native_write_msr+0x4/0x20)
+ago 27 00:17:01 kali kernel: Call Trace:
+ago 27 00:17:01 kali kernel:  init_ia32_feat_ctl+0x72/0x22b
+ago 27 00:17:01 kali kernel:  init_intel+0xda/0x3f0
+ago 27 00:17:01 kali kernel:  identify_cpu+0x2c0/0x5b0
+ago 27 00:17:01 kali kernel:  identify_boot_cpu+0xc/0x94
+ago 27 00:17:01 kali kernel:  check_bugs+0x26/0x9b7
+ago 27 00:17:01 kali kernel:  ? __get_locked_pte+0xad/0xf0
+ago 27 00:17:01 kali kernel:  start_kernel+0x66c/0x6a5
+ago 27 00:17:01 kali kernel:  secondary_startup_64+0xa4/0xb0
+ago 27 00:17:01 kali kernel: Last level iTLB entries: 4KB 64, 2MB 8, 4MB 8
+ago 27 00:17:01 kali kernel: Last level dTLB entries: 4KB 64, 2MB 0, 4MB 0, 1GB 4
+ago 27 00:17:01 kali kernel: Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+ago 27 00:17:01 kali kernel: Spectre V2 : Mitigation: Full generic retpoline
+ago 27 00:17:01 kali kernel: Spectre V2 : Spectre v2 / SpectreRSB mitigation: Filling RSB on context switch
+ago 27 00:17:01 kali kernel: Speculative Store Bypass: Vulnerable
+ago 27 00:17:01 kali kernel: SRBDS: Unknown: Dependent on hypervisor status
+ago 27 00:17:01 kali kernel: MDS: Mitigation: Clear CPU buffers
+ago 27 00:17:01 kali kernel: Freeing SMP alternatives memory: 32K
+ago 27 00:17:01 kali kernel: smpboot: CPU0: Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz (family: 0x6, model: 0x3d, stepping: 0x4)
+ago 27 00:17:01 kali kernel: Performance Events: unsupported p6 CPU model 61 no PMU driver, software events only.
+ago 27 00:17:01 kali kernel: rcu: Hierarchical SRCU implementation.
+ago 27 00:17:01 kali kernel: NMI watchdog: Perf NMI watchdog permanently disabled
+ago 27 00:17:01 kali kernel: smp: Bringing up secondary CPUs ...
+ago 27 00:17:01 kali kernel: x86: Booting SMP configuration:
+ago 27 00:17:01 kali kernel: .... node  #0, CPUs:      #1
+ago 27 00:17:01 kali kernel: kvm-clock: cpu 1, msr 4343e041, secondary cpu clock
+ago 27 00:17:01 kali kernel: smp: Brought up 1 node, 2 CPUs
+ago 27 00:17:01 kali kernel: smpboot: Max logical packages: 1
+ago 27 00:17:01 kali kernel: smpboot: Total of 2 processors activated (8779.68 BogoMIPS)
+ago 27 00:17:01 kali kernel: node 0 initialised, 433813 pages in 20ms
+ago 27 00:17:01 kali kernel: devtmpfs: initialized
+ago 27 00:17:01 kali kernel: x86/mm: Memory block size: 128MB
+ago 27 00:17:01 kali kernel: clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+ago 27 00:17:01 kali kernel: futex hash table entries: 512 (order: 3, 32768 bytes, linear)
+ago 27 00:17:01 kali kernel: pinctrl core: initialized pinctrl subsystem
+ago 27 00:17:01 kali kernel: thermal_sys: Registered thermal governor 'fair_share'
+ago 27 00:17:01 kali kernel: thermal_sys: Registered thermal governor 'bang_bang'
+ago 27 00:17:01 kali kernel: thermal_sys: Registered thermal governor 'step_wise'
+ago 27 00:17:01 kali kernel: thermal_sys: Registered thermal governor 'user_space'
+ago 27 00:17:01 kali kernel: NET: Registered protocol family 16
+ago 27 00:17:01 kali kernel: audit: initializing netlink subsys (disabled)
+ago 27 00:17:01 kali kernel: audit: type=2000 audit(1598498224.742:1): state=initialized audit_enabled=0 res=1
+ago 27 00:17:01 kali kernel: cpuidle: using governor ladder
+ago 27 00:17:01 kali kernel: cpuidle: using governor menu
+ago 27 00:17:01 kali kernel: ACPI: bus type PCI registered
+ago 27 00:17:01 kali kernel: acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+ago 27 00:17:01 kali kernel: PCI: Using configuration type 1 for base access
+ago 27 00:17:01 kali kernel: HugeTLB registered 2.00 MiB page size, pre-allocated 0 pages
+ago 27 00:17:01 kali kernel: ACPI: Added _OSI(Module Device)
+ago 27 00:17:01 kali kernel: ACPI: Added _OSI(Processor Device)
+ago 27 00:17:01 kali kernel: ACPI: Added _OSI(3.0 _SCP Extensions)
+ago 27 00:17:01 kali kernel: ACPI: Added _OSI(Processor Aggregator Device)
+ago 27 00:17:01 kali kernel: ACPI: Added _OSI(Linux-Dell-Video)
+ago 27 00:17:01 kali kernel: ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+ago 27 00:17:01 kali kernel: ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+ago 27 00:17:01 kali kernel: ACPI: 2 ACPI AML tables successfully acquired and loaded
+ago 27 00:17:01 kali kernel: ACPI: Interpreter enabled
+ago 27 00:17:01 kali kernel: ACPI: (supports S0 S5)
+ago 27 00:17:01 kali kernel: ACPI: Using IOAPIC for interrupt routing
+ago 27 00:17:01 kali kernel: PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+ago 27 00:17:01 kali kernel: ACPI: Enabled 2 GPEs in block 00 to 07
+ago 27 00:17:01 kali kernel: ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+ago 27 00:17:01 kali kernel: acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Segments MSI HPX-Type3]
+ago 27 00:17:01 kali kernel: acpi PNP0A03:00: _OSC: not requesting OS control; OS requires [ExtendedConfig ASPM ClockPM MSI]
+ago 27 00:17:01 kali kernel: acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.
+ago 27 00:17:01 kali kernel: PCI host bridge to bus 0000:00
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: root bus resource [mem 0x80000000-0xfdffffff window]
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: root bus resource [bus 00-ff]
+ago 27 00:17:01 kali kernel: pci 0000:00:00.0: [8086:1237] type 00 class 0x060000
+ago 27 00:17:01 kali kernel: pci 0000:00:01.0: [8086:7000] type 00 class 0x060100
+ago 27 00:17:01 kali kernel: pci 0000:00:01.1: [8086:7111] type 00 class 0x01018a
+ago 27 00:17:01 kali kernel: pci 0000:00:01.1: reg 0x20: [io  0xd000-0xd00f]
+ago 27 00:17:01 kali kernel: pci 0000:00:01.1: legacy IDE quirk: reg 0x10: [io  0x01f0-0x01f7]
+ago 27 00:17:01 kali kernel: pci 0000:00:01.1: legacy IDE quirk: reg 0x14: [io  0x03f6]
+ago 27 00:17:01 kali kernel: pci 0000:00:01.1: legacy IDE quirk: reg 0x18: [io  0x0170-0x0177]
+ago 27 00:17:01 kali kernel: pci 0000:00:01.1: legacy IDE quirk: reg 0x1c: [io  0x0376]
+ago 27 00:17:01 kali kernel: pci 0000:00:02.0: [15ad:0405] type 00 class 0x030000
+ago 27 00:17:01 kali kernel: pci 0000:00:02.0: reg 0x10: [io  0xd010-0xd01f]
+ago 27 00:17:01 kali kernel: pci 0000:00:02.0: reg 0x14: [mem 0xf0000000-0xf0ffffff]
+ago 27 00:17:01 kali kernel: pci 0000:00:02.0: reg 0x18: [mem 0xf1000000-0xf11fffff]
+ago 27 00:17:01 kali kernel: pci 0000:00:03.0: [8086:100e] type 00 class 0x020000
+ago 27 00:17:01 kali kernel: pci 0000:00:03.0: reg 0x10: [mem 0xf1200000-0xf121ffff]
+ago 27 00:17:01 kali kernel: pci 0000:00:03.0: reg 0x18: [io  0xd020-0xd027]
+ago 27 00:17:01 kali kernel: pci 0000:00:04.0: [80ee:cafe] type 00 class 0x088000
+ago 27 00:17:01 kali kernel: pci 0000:00:04.0: reg 0x10: [io  0xd040-0xd05f]
+ago 27 00:17:01 kali kernel: pci 0000:00:04.0: reg 0x14: [mem 0xf1400000-0xf17fffff]
+ago 27 00:17:01 kali kernel: pci 0000:00:04.0: reg 0x18: [mem 0xf1800000-0xf1803fff pref]
+ago 27 00:17:01 kali kernel: pci 0000:00:05.0: [8086:2415] type 00 class 0x040100
+ago 27 00:17:01 kali kernel: pci 0000:00:05.0: reg 0x10: [io  0xd100-0xd1ff]
+ago 27 00:17:01 kali kernel: pci 0000:00:05.0: reg 0x14: [io  0xd200-0xd23f]
+ago 27 00:17:01 kali kernel: pci 0000:00:06.0: [106b:003f] type 00 class 0x0c0310
+ago 27 00:17:01 kali kernel: pci 0000:00:06.0: reg 0x10: [mem 0xf1804000-0xf1804fff]
+ago 27 00:17:01 kali kernel: pci 0000:00:07.0: [8086:7113] type 00 class 0x068000
+ago 27 00:17:01 kali kernel: pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+ago 27 00:17:01 kali kernel: pci 0000:00:07.0: quirk: [io  0x4100-0x410f] claimed by PIIX4 SMB
+ago 27 00:17:01 kali kernel: pci 0000:00:08.0: [8086:100e] type 00 class 0x020000
+ago 27 00:17:01 kali kernel: pci 0000:00:08.0: reg 0x10: [mem 0xf1820000-0xf183ffff]
+ago 27 00:17:01 kali kernel: pci 0000:00:08.0: reg 0x18: [io  0xd240-0xd247]
+ago 27 00:17:01 kali kernel: pci 0000:00:0d.0: [8086:2829] type 00 class 0x010601
+ago 27 00:17:01 kali kernel: pci 0000:00:0d.0: reg 0x10: [io  0xd248-0xd24f]
+ago 27 00:17:01 kali kernel: pci 0000:00:0d.0: reg 0x14: [io  0xd250-0xd253]
+ago 27 00:17:01 kali kernel: pci 0000:00:0d.0: reg 0x18: [io  0xd258-0xd25f]
+ago 27 00:17:01 kali kernel: pci 0000:00:0d.0: reg 0x1c: [io  0xd260-0xd263]
+ago 27 00:17:01 kali kernel: pci 0000:00:0d.0: reg 0x20: [io  0xd270-0xd27f]
+ago 27 00:17:01 kali kernel: pci 0000:00:0d.0: reg 0x24: [mem 0xf1840000-0xf1841fff]
+ago 27 00:17:01 kali kernel: ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+ago 27 00:17:01 kali kernel: ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+ago 27 00:17:01 kali kernel: ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+ago 27 00:17:01 kali kernel: ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+ago 27 00:17:01 kali kernel: iommu: Default domain type: Translated 
+ago 27 00:17:01 kali kernel: pci 0000:00:02.0: vgaarb: setting as boot VGA device
+ago 27 00:17:01 kali kernel: pci 0000:00:02.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
+ago 27 00:17:01 kali kernel: pci 0000:00:02.0: vgaarb: bridge control possible
+ago 27 00:17:01 kali kernel: vgaarb: loaded
+ago 27 00:17:01 kali kernel: EDAC MC: Ver: 3.0.0
+ago 27 00:17:01 kali kernel: PCI: Using ACPI for IRQ routing
+ago 27 00:17:01 kali kernel: PCI: pci_cache_line_size set to 64 bytes
+ago 27 00:17:01 kali kernel: e820: reserve RAM buffer [mem 0x0009fc00-0x0009ffff]
+ago 27 00:17:01 kali kernel: e820: reserve RAM buffer [mem 0x7fff0000-0x7fffffff]
+ago 27 00:17:01 kali kernel: NetLabel: Initializing
+ago 27 00:17:01 kali kernel: NetLabel:  domain hash size = 128
+ago 27 00:17:01 kali kernel: NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+ago 27 00:17:01 kali kernel: NetLabel:  unlabeled traffic allowed by default
+ago 27 00:17:01 kali kernel: clocksource: Switched to clocksource kvm-clock
+ago 27 00:17:01 kali kernel: VFS: Disk quotas dquot_6.6.0
+ago 27 00:17:01 kali kernel: VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+ago 27 00:17:01 kali kernel: AppArmor: AppArmor Filesystem Enabled
+ago 27 00:17:01 kali kernel: pnp: PnP ACPI init
+ago 27 00:17:01 kali kernel: pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+ago 27 00:17:01 kali kernel: pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+ago 27 00:17:01 kali kernel: pnp: PnP ACPI: found 2 devices
+ago 27 00:17:01 kali kernel: clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+ago 27 00:17:01 kali kernel: pci_bus 0000:00: resource 7 [mem 0x80000000-0xfdffffff window]
+ago 27 00:17:01 kali kernel: NET: Registered protocol family 2
+ago 27 00:17:01 kali kernel: tcp_listen_portaddr_hash hash table entries: 1024 (order: 2, 16384 bytes, linear)
+ago 27 00:17:01 kali kernel: TCP established hash table entries: 16384 (order: 5, 131072 bytes, linear)
+ago 27 00:17:01 kali kernel: TCP bind hash table entries: 16384 (order: 6, 262144 bytes, linear)
+ago 27 00:17:01 kali kernel: TCP: Hash tables configured (established 16384 bind 16384)
+ago 27 00:17:01 kali kernel: UDP hash table entries: 1024 (order: 3, 32768 bytes, linear)
+ago 27 00:17:01 kali kernel: UDP-Lite hash table entries: 1024 (order: 3, 32768 bytes, linear)
+ago 27 00:17:01 kali kernel: NET: Registered protocol family 1
+ago 27 00:17:01 kali kernel: NET: Registered protocol family 44
+ago 27 00:17:01 kali kernel: pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+ago 27 00:17:01 kali kernel: pci 0000:00:01.0: Activating ISA DMA hang workarounds
+ago 27 00:17:01 kali kernel: pci 0000:00:02.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+ago 27 00:17:01 kali kernel: PCI: CLS 0 bytes, default 64
+ago 27 00:17:01 kali kernel: Trying to unpack rootfs image as initramfs...
+ago 27 00:17:01 kali kernel: Freeing initrd memory: 38696K
+ago 27 00:17:01 kali kernel: clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fa373f688b, max_idle_ns: 440795233648 ns
+ago 27 00:17:01 kali kernel: clocksource: Switched to clocksource tsc
+ago 27 00:17:01 kali kernel: platform rtc_cmos: registered platform RTC device (no PNP device found)
+ago 27 00:17:01 kali kernel: Initialise system trusted keyrings
+ago 27 00:17:01 kali kernel: Key type blacklist registered
+ago 27 00:17:01 kali kernel: workingset: timestamp_bits=40 max_order=19 bucket_order=0
+ago 27 00:17:01 kali kernel: zbud: loaded
+ago 27 00:17:01 kali kernel: integrity: Platform Keyring initialized
+ago 27 00:17:01 kali kernel: Key type asymmetric registered
+ago 27 00:17:01 kali kernel: Asymmetric key parser 'x509' registered
+ago 27 00:17:01 kali kernel: Block layer SCSI generic (bsg) driver version 0.4 loaded (major 251)
+ago 27 00:17:01 kali kernel: io scheduler mq-deadline registered
+ago 27 00:17:01 kali kernel: shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+ago 27 00:17:01 kali kernel: intel_idle: Please enable MWAIT in BIOS SETUP
+ago 27 00:17:01 kali kernel: Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+ago 27 00:17:01 kali kernel: Linux agpgart interface v0.103
+ago 27 00:17:01 kali kernel: AMD-Vi: AMD IOMMUv2 driver by Joerg Roedel <jroedel@suse.de>
+ago 27 00:17:01 kali kernel: AMD-Vi: AMD IOMMUv2 functionality not available on this system
+ago 27 00:17:01 kali kernel: i8042: PNP: PS/2 Controller [PNP0303:PS2K,PNP0f03:PS2M] at 0x60,0x64 irq 1,12
+ago 27 00:17:01 kali kernel: serio: i8042 KBD port at 0x60,0x64 irq 1
+ago 27 00:17:01 kali kernel: serio: i8042 AUX port at 0x60,0x64 irq 12
+ago 27 00:17:01 kali kernel: mousedev: PS/2 mouse device common for all mice
+ago 27 00:17:01 kali kernel: input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input0
+ago 27 00:17:01 kali kernel: rtc_cmos rtc_cmos: registered as rtc0
+ago 27 00:17:01 kali kernel: rtc_cmos rtc_cmos: setting system clock to 2020-08-27T03:16:51 UTC (1598498211)
+ago 27 00:17:01 kali kernel: rtc_cmos rtc_cmos: alarms up to one day, 114 bytes nvram
+ago 27 00:17:01 kali kernel: intel_pstate: CPU model not supported
+ago 27 00:17:01 kali kernel: ledtrig-cpu: registered to indicate activity on CPUs
+ago 27 00:17:01 kali kernel: NET: Registered protocol family 10
+ago 27 00:17:01 kali kernel: Segment Routing with IPv6
+ago 27 00:17:01 kali kernel: mip6: Mobile IPv6
+ago 27 00:17:01 kali kernel: NET: Registered protocol family 17
+ago 27 00:17:01 kali kernel: mpls_gso: MPLS GSO support
+ago 27 00:17:01 kali kernel: IPI shorthand broadcast: enabled
+ago 27 00:17:01 kali kernel: sched_clock: Marking stable (2876818123, 34777516)->(2914007414, -2411775)
+ago 27 00:17:01 kali kernel: registered taskstats version 1
+ago 27 00:17:01 kali kernel: Loading compiled-in X.509 certificates
+ago 27 00:17:01 kali kernel: Loaded X.509 cert 'Debian Secure Boot CA: 6ccece7e4c6c0d1f6149f3dd27dfcc5cbb419ea1'
+ago 27 00:17:01 kali kernel: Loaded X.509 cert 'Debian Secure Boot Signer: 00a7468def'
+ago 27 00:17:01 kali kernel: zswap: loaded using pool lzo/zbud
+ago 27 00:17:01 kali kernel: Key type ._fscrypt registered
+ago 27 00:17:01 kali kernel: Key type .fscrypt registered
+ago 27 00:17:01 kali kernel: Key type fscrypt-provisioning registered
+ago 27 00:17:01 kali kernel: AppArmor: AppArmor sha1 policy hashing enabled
+ago 27 00:17:01 kali kernel: Freeing unused kernel image (initmem) memory: 1628K
+ago 27 00:17:01 kali kernel: Write protecting the kernel read-only data: 16384k
+ago 27 00:17:01 kali kernel: Freeing unused kernel image (text/rodata gap) memory: 2044K
+ago 27 00:17:01 kali kernel: Freeing unused kernel image (rodata/data gap) memory: 92K
+ago 27 00:17:01 kali kernel: x86/mm: Checked W+X mappings: passed, no W+X pages found.
+ago 27 00:17:01 kali kernel: x86/mm: Checking user space page tables
+ago 27 00:17:01 kali kernel: x86/mm: Checked W+X mappings: passed, no W+X pages found.
+ago 27 00:17:01 kali kernel: Run /init as init process
+ago 27 00:17:01 kali kernel:   with arguments:
+ago 27 00:17:01 kali kernel:     /init
+ago 27 00:17:01 kali kernel:     splash
+ago 27 00:17:01 kali kernel:   with environment:
+ago 27 00:17:01 kali kernel:     HOME=/
+ago 27 00:17:01 kali kernel:     TERM=linux
+ago 27 00:17:01 kali kernel:     BOOT_IMAGE=/vmlinuz-5.7.0-kali1-amd64
+ago 27 00:17:01 kali kernel: button: module verification failed: signature and/or required key missing - tainting kernel
+ago 27 00:17:01 kali kernel: input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input2
+ago 27 00:17:01 kali kernel: ACPI: Power Button [PWRF]
+ago 27 00:17:01 kali kernel: input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input3
+ago 27 00:17:01 kali kernel: ACPI: Sleep Button [SLPF]
+ago 27 00:17:01 kali kernel: ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+ago 27 00:17:01 kali kernel: input: Video Bus as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/LNXVIDEO:00/input/input4
+ago 27 00:17:01 kali kernel: battery: ACPI: Battery Slot [BAT0] (battery present)
+ago 27 00:17:01 kali kernel: SCSI subsystem initialized
+ago 27 00:17:01 kali kernel: e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+ago 27 00:17:01 kali kernel: e1000: Copyright (c) 1999-2006 Intel Corporation.
+ago 27 00:17:01 kali kernel: piix4_smbus 0000:00:07.0: SMBus Host Controller at 0x4100, revision 0
+ago 27 00:17:01 kali kernel: libata version 3.00 loaded.
+ago 27 00:17:01 kali kernel: ata_piix 0000:00:01.1: version 2.13
+ago 27 00:17:01 kali kernel: ahci 0000:00:0d.0: version 3.0
+ago 27 00:17:01 kali kernel: ahci 0000:00:0d.0: SSS flag set, parallel bus scan disabled
+ago 27 00:17:01 kali kernel: ahci 0000:00:0d.0: AHCI 0001.0100 32 slots 1 ports 3 Gbps 0x1 impl SATA mode
+ago 27 00:17:01 kali kernel: ahci 0000:00:0d.0: flags: 64bit ncq stag only ccc 
+ago 27 00:17:01 kali kernel: scsi host0: ata_piix
+ago 27 00:17:01 kali kernel: scsi host1: ahci
+ago 27 00:17:01 kali kernel: ata3: SATA max UDMA/133 abar m8192@0xf1840000 port 0xf1840100 irq 21
+ago 27 00:17:01 kali kernel: scsi host2: ata_piix
+ago 27 00:17:01 kali kernel: ata1: PATA max UDMA/33 cmd 0x1f0 ctl 0x3f6 bmdma 0xd000 irq 14
+ago 27 00:17:01 kali kernel: ata2: PATA max UDMA/33 cmd 0x170 ctl 0x376 bmdma 0xd008 irq 15
+ago 27 00:17:01 kali kernel: ACPI: bus type USB registered
+ago 27 00:17:01 kali kernel: usbcore: registered new interface driver usbfs
+ago 27 00:17:01 kali kernel: usbcore: registered new interface driver hub
+ago 27 00:17:01 kali kernel: usbcore: registered new device driver usb
+ago 27 00:17:01 kali kernel: ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+ago 27 00:17:01 kali kernel: ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+ago 27 00:17:01 kali kernel: ehci-pci: EHCI PCI platform driver
+ago 27 00:17:01 kali kernel: ohci-pci: OHCI PCI platform driver
+ago 27 00:17:01 kali kernel: ohci-pci 0000:00:06.0: OHCI PCI host controller
+ago 27 00:17:01 kali kernel: ohci-pci 0000:00:06.0: new USB bus registered, assigned bus number 1
+ago 27 00:17:01 kali kernel: ohci-pci 0000:00:06.0: irq 22, io mem 0xf1804000
+ago 27 00:17:01 kali kernel: [drm] DMA map mode: Caching DMA mappings.
+ago 27 00:17:01 kali kernel: [drm] Capabilities:
+ago 27 00:17:01 kali kernel: [drm]   Cursor.
+ago 27 00:17:01 kali kernel: [drm]   Cursor bypass 2.
+ago 27 00:17:01 kali kernel: [drm]   Alpha cursor.
+ago 27 00:17:01 kali kernel: [drm]   3D.
+ago 27 00:17:01 kali kernel: [drm]   Extended Fifo.
+ago 27 00:17:01 kali kernel: [drm]   Pitchlock.
+ago 27 00:17:01 kali kernel: [drm]   Irq mask.
+ago 27 00:17:01 kali kernel: [drm]   GMR.
+ago 27 00:17:01 kali kernel: [drm]   Traces.
+ago 27 00:17:01 kali kernel: [drm]   GMR2.
+ago 27 00:17:01 kali kernel: [drm]   Screen Object 2.
+ago 27 00:17:01 kali kernel: [drm] Max GMR ids is 8192
+ago 27 00:17:01 kali kernel: [drm] Max number of GMR pages is 1048576
+ago 27 00:17:01 kali kernel: [drm] Max dedicated hypervisor surface memory is 507904 kiB
+ago 27 00:17:01 kali kernel: [drm] Maximum display memory size is 16384 kiB
+ago 27 00:17:01 kali kernel: [drm] VRAM at 0xf0000000 size is 16384 kiB
+ago 27 00:17:01 kali kernel: [drm] MMIO at 0xf1000000 size is 2048 kiB
+ago 27 00:17:01 kali kernel: [TTM] Zone  kernel: Available graphics memory: 1019706 KiB
+ago 27 00:17:01 kali kernel: [TTM] Initializing pool allocator
+ago 27 00:17:01 kali kernel: [TTM] Initializing DMA pool allocator
+ago 27 00:17:01 kali kernel: [drm] Supports vblank timestamp caching Rev 2 (21.10.2013).
+ago 27 00:17:01 kali kernel: [drm] Screen Objects Display Unit initialized
+ago 27 00:17:01 kali kernel: [drm] width 720
+ago 27 00:17:01 kali kernel: [drm] height 400
+ago 27 00:17:01 kali kernel: [drm] bpp 32
+ago 27 00:17:01 kali kernel: [drm] Fifo max 0x00200000 min 0x00001000 cap 0x00000355
+ago 27 00:17:01 kali kernel: [drm] Atomic: yes.
+ago 27 00:17:01 kali kernel: [drm:vmw_host_log [vmwgfx]] *ERROR* Failed to send host log message.
+ago 27 00:17:01 kali kernel: [drm:vmw_host_log [vmwgfx]] *ERROR* Failed to send host log message.
+ago 27 00:17:01 kali kernel: fbcon: svgadrmfb (fb0) is primary device
+ago 27 00:17:01 kali kernel: Console: switching to colour frame buffer device 100x37
+ago 27 00:17:01 kali kernel: usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 5.07
+ago 27 00:17:01 kali kernel: usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+ago 27 00:17:01 kali kernel: usb usb1: Product: OHCI PCI host controller
+ago 27 00:17:01 kali kernel: usb usb1: Manufacturer: Linux 5.7.0-kali1-amd64 ohci_hcd
+ago 27 00:17:01 kali kernel: usb usb1: SerialNumber: 0000:00:06.0
+ago 27 00:17:01 kali kernel: hub 1-0:1.0: USB hub found
+ago 27 00:17:01 kali kernel: hub 1-0:1.0: 12 ports detected
+ago 27 00:17:01 kali kernel: [drm] Initialized vmwgfx 2.18.0 20200114 for 0000:00:02.0 on minor 0
+ago 27 00:17:01 kali kernel: ata2.00: ATAPI: VBOX CD-ROM, 1.0, max UDMA/133
+ago 27 00:17:01 kali kernel: input: ImExPS/2 Generic Explorer Mouse as /devices/platform/i8042/serio1/input/input5
+ago 27 00:17:01 kali kernel: ata3: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
+ago 27 00:17:01 kali kernel: ata3.00: ATA-6: VBOX HARDDISK, 1.0, max UDMA/133
+ago 27 00:17:01 kali kernel: ata3.00: 83886080 sectors, multi 128: LBA48 NCQ (depth 32)
+ago 27 00:17:01 kali kernel: ata3.00: configured for UDMA/133
+ago 27 00:17:01 kali kernel: scsi 1:0:0:0: Direct-Access     ATA      VBOX HARDDISK    1.0  PQ: 0 ANSI: 5
+ago 27 00:17:01 kali kernel: scsi 2:0:0:0: CD-ROM            VBOX     CD-ROM           1.0  PQ: 0 ANSI: 5
+ago 27 00:17:01 kali kernel: sd 1:0:0:0: [sda] 83886080 512-byte logical blocks: (42.9 GB/40.0 GiB)
+ago 27 00:17:01 kali kernel: sd 1:0:0:0: [sda] Write Protect is off
+ago 27 00:17:01 kali kernel: sd 1:0:0:0: [sda] Mode Sense: 00 3a 00 00
+ago 27 00:17:01 kali kernel: sd 1:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+ago 27 00:17:01 kali kernel:  sda: sda1 sda2 < sda5 sda6 sda7 > sda3
+ago 27 00:17:01 kali kernel: sd 1:0:0:0: [sda] Attached SCSI disk
+ago 27 00:17:01 kali kernel: sr 2:0:0:0: [sr0] scsi3-mmc drive: 32x/32x xa/form2 tray
+ago 27 00:17:01 kali kernel: cdrom: Uniform CD-ROM driver Revision: 3.20
+ago 27 00:17:01 kali kernel: sr 2:0:0:0: Attached scsi CD-ROM sr0
+ago 27 00:17:01 kali kernel: usb 1-1: new full-speed USB device number 2 using ohci-pci
+ago 27 00:17:01 kali kernel: e1000 0000:00:03.0 eth0: (PCI:33MHz:32-bit) 08:00:27:37:d6:e1
+ago 27 00:17:01 kali kernel: e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
+ago 27 00:17:01 kali kernel: usb 1-1: New USB device found, idVendor=80ee, idProduct=0021, bcdDevice= 1.00
+ago 27 00:17:01 kali kernel: usb 1-1: New USB device strings: Mfr=1, Product=3, SerialNumber=0
+ago 27 00:17:01 kali kernel: usb 1-1: Product: USB Tablet
+ago 27 00:17:01 kali kernel: usb 1-1: Manufacturer: VirtualBox
+ago 27 00:17:01 kali kernel: hid: raw HID events driver (C) Jiri Kosina
+ago 27 00:17:01 kali kernel: usbcore: registered new interface driver usbhid
+ago 27 00:17:01 kali kernel: usbhid: USB HID core driver
+ago 27 00:17:01 kali kernel: input: VirtualBox USB Tablet as /devices/pci0000:00/0000:00:06.0/usb1/1-1/1-1:1.0/0003:80EE:0021.0001/input/input6
+ago 27 00:17:01 kali kernel: hid-generic 0003:80EE:0021.0001: input,hidraw0: USB HID v1.10 Mouse [VirtualBox USB Tablet] on usb-0000:00:06.0-1/input0
+ago 27 00:17:01 kali kernel: e1000 0000:00:08.0 eth1: (PCI:33MHz:32-bit) 08:00:27:53:0e:64
+ago 27 00:17:01 kali kernel: e1000 0000:00:08.0 eth1: Intel(R) PRO/1000 Network Connection
+ago 27 00:17:01 kali kernel: process '/usr/bin/fstype' started with executable stack
+ago 27 00:17:01 kali kernel: EXT4-fs (sda3): mounted filesystem with ordered data mode. Opts: (null)
+ago 27 00:17:01 kali kernel: EXT4-fs (sda6): mounted filesystem with ordered data mode. Opts: (null)
+ago 27 00:17:01 kali kernel: Not activating Mandatory Access Control as /sbin/tomoyo-init does not exist.
+ago 27 00:17:01 kali systemd[1]: Inserted module 'autofs4'
+ago 27 00:17:01 kali systemd[1]: systemd 245.6-2 running in system mode. (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD +IDN2 -IDN +PCRE2 default-hierarchy=hybrid)
+ago 27 00:17:01 kali systemd[1]: Detected virtualization oracle.
+ago 27 00:17:01 kali systemd[1]: Detected architecture x86-64.
+ago 27 00:17:01 kali systemd[1]: Set hostname to <kali>.
+ago 27 00:17:01 kali systemd[1]: usr.mount: Unit is bound to inactive unit dev-sda6.device. Stopping, too.
+ago 27 00:17:01 kali systemd[1]: Created slice system-getty.slice.
+ago 27 00:17:01 kali systemd[1]: Created slice system-modprobe.slice.
+ago 27 00:17:01 kali systemd[1]: Created slice system-systemd\x2dfsck.slice.
+ago 27 00:17:01 kali systemd[1]: Created slice User and Session Slice.
+ago 27 00:17:01 kali systemd[1]: Started Forward Password Requests to Wall Directory Watch.
+ago 27 00:17:01 kali systemd[1]: Set up automount Arbitrary Executable File Formats File System Automount Point.
+ago 27 00:17:01 kali systemd[1]: Reached target Remote File Systems.
+ago 27 00:17:01 kali systemd[1]: Reached target Slices.
+ago 27 00:17:01 kali systemd[1]: Reached target Swap.
+ago 27 00:17:01 kali systemd[1]: Reached target System Time Set.
+ago 27 00:17:01 kali systemd[1]: Reached target System Time Synchronized.
+ago 27 00:17:01 kali systemd[1]: Listening on Syslog Socket.
+ago 27 00:17:01 kali systemd[1]: Listening on fsck to fsckd communication Socket.
+ago 27 00:17:01 kali systemd[1]: Listening on initctl Compatibility Named Pipe.
+ago 27 00:17:01 kali systemd[1]: Listening on Journal Audit Socket.
+ago 27 00:17:01 kali systemd[1]: Listening on Journal Socket (/dev/log).
+ago 27 00:17:01 kali systemd[1]: Listening on Journal Socket.
+ago 27 00:17:01 kali systemd[1]: Listening on udev Control Socket.
+ago 27 00:17:01 kali systemd[1]: Listening on udev Kernel Socket.
+ago 27 00:17:01 kali systemd[1]: Mounting Huge Pages File System...
+ago 27 00:17:01 kali systemd[1]: Mounting POSIX Message Queue File System...
+ago 27 00:17:01 kali systemd[1]: Mounting Kernel Debug File System...
+ago 27 00:17:01 kali systemd[1]: Mounting Kernel Trace File System...
+ago 27 00:17:01 kali systemd[1]: Starting Set the console keyboard layout...
+ago 27 00:17:01 kali systemd[1]: Starting Create list of static device nodes for the current kernel...
+ago 27 00:17:01 kali systemd[1]: Condition check resulted in Load Kernel Module drm being skipped.
+ago 27 00:17:01 kali systemd[1]: Condition check resulted in Set Up Additional Binary Formats being skipped.
+ago 27 00:17:01 kali systemd[1]: Condition check resulted in File System Check on Root Device being skipped.
+ago 27 00:17:01 kali systemd[1]: Starting Journal Service...
+ago 27 00:17:01 kali systemd[1]: Starting Load Kernel Modules...
+ago 27 00:17:01 kali systemd[1]: Starting Remount Root and Kernel File Systems...
+ago 27 00:17:01 kali systemd[1]: Starting udev Coldplug all Devices...
+ago 27 00:17:01 kali systemd[1]: Mounted Huge Pages File System.
+ago 27 00:17:01 kali systemd[1]: Mounted POSIX Message Queue File System.
+ago 27 00:17:01 kali systemd[1]: Mounted Kernel Debug File System.
+ago 27 00:17:01 kali systemd[1]: Mounted Kernel Trace File System.
+ago 27 00:17:01 kali systemd[1]: Finished Create list of static device nodes for the current kernel.
+ago 27 00:17:01 kali systemd[1]: Finished Load Kernel Modules.
+ago 27 00:17:01 kali systemd[1]: Condition check resulted in FUSE Control File System being skipped.
+ago 27 00:17:01 kali systemd[1]: Condition check resulted in Kernel Configuration File System being skipped.
+ago 27 00:17:01 kali systemd[1]: Starting Apply Kernel Variables...
+ago 27 00:17:01 kali kernel: EXT4-fs (sda6): re-mounted. Opts: (null)
+ago 27 00:17:01 kali systemd[1]: Condition check resulted in /usr being skipped.
+ago 27 00:17:01 kali systemd[1]: Unnecessary job for VBOX_HARDDISK 6 was removed.
+ago 27 00:17:01 kali kernel: EXT4-fs (sda3): re-mounted. Opts: errors=remount-ro
+ago 27 00:17:01 kali systemd[1]: Finished Remount Root and Kernel File Systems.
+ago 27 00:17:01 kali systemd[1]: Condition check resulted in Rebuild Hardware Database being skipped.
+ago 27 00:17:01 kali systemd[1]: Starting Create System Users...
+ago 27 00:17:01 kali systemd[1]: Finished Apply Kernel Variables.
+ago 27 00:17:01 kali systemd[1]: Finished udev Coldplug all Devices.
+ago 27 00:17:01 kali systemd[1]: Starting Helper to synchronize boot up for ifupdown...
+ago 27 00:17:01 kali systemd[1]: Finished Create System Users.
+ago 27 00:17:01 kali systemd[1]: Starting Create Static Device Nodes in /dev...
+ago 27 00:17:01 kali systemd[1]: Finished Helper to synchronize boot up for ifupdown.
+ago 27 00:17:01 kali systemd[1]: Finished Create Static Device Nodes in /dev.
+ago 27 00:17:01 kali systemd[1]: Starting udev Kernel Device Manager...
+ago 27 00:17:01 kali systemd[1]: Finished Set the console keyboard layout.
+ago 27 00:17:01 kali systemd[1]: Reached target Local File Systems (Pre).
+ago 27 00:17:01 kali systemd[1]: Started udev Kernel Device Manager.
+ago 27 00:17:01 kali systemd[1]: Starting Show Plymouth Boot Screen...
+ago 27 00:17:01 kali systemd[1]: Started Show Plymouth Boot Screen.
+ago 27 00:17:01 kali systemd[1]: Condition check resulted in Dispatch Password Requests to Console Directory Watch being skipped.
+ago 27 00:17:01 kali systemd[1]: Started Forward Password Requests to Plymouth Directory Watch.
+ago 27 00:17:01 kali systemd[1]: Reached target Local Encrypted Volumes.
+ago 27 00:17:01 kali systemd[1]: Reached target Paths.
+ago 27 00:17:01 kali kernel: ACPI: AC Adapter [AC] (off-line)
+ago 27 00:17:01 kali kernel: vboxguest: loading out-of-tree module taints kernel.
+ago 27 00:17:01 kali kernel: vgdrvHeartbeatInit: Setting up heartbeat to trigger every 2000 milliseconds
+ago 27 00:17:01 kali kernel: input: Unspecified device as /devices/pci0000:00/0000:00:04.0/input/input7
+ago 27 00:17:01 kali kernel: vboxguest: Successfully loaded version 6.1.12_Debian
+ago 27 00:17:01 kali kernel: vboxguest: misc device minor 61, IRQ 20, I/O port d040, MMIO at 00000000f1400000 (size 0x400000)
+ago 27 00:17:01 kali kernel: vboxguest: Successfully loaded version 6.1.12_Debian (interface 0x00010004)
+ago 27 00:17:01 kali kernel: input: PC Speaker as /devices/platform/pcspkr/input/input8
+ago 27 00:17:01 kali kernel: sd 1:0:0:0: Attached scsi generic sg0 type 0
+ago 27 00:17:01 kali kernel: sr 2:0:0:0: Attached scsi generic sg1 type 5
+ago 27 00:17:01 kali kernel: RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+ago 27 00:17:01 kali kernel: cryptd: max_cpu_qlen set to 1000
+ago 27 00:17:01 kali kernel: AVX2 version of gcm_enc/dec engaged.
+ago 27 00:17:01 kali kernel: AES CTR mode by8 optimization enabled
+ago 27 00:17:02 kali systemd[1]: Started Journal Service.
+ago 27 00:17:04 kali kernel: snd_intel8x0 0000:00:05.0: white list rate for 1028:0177 is 48000
+ago 27 00:17:04 kali kernel: EXT4-fs (sda7): mounted filesystem with ordered data mode. Opts: (null)
+ago 27 00:17:04 kali kernel: EXT4-fs (sda5): mounted filesystem with ordered data mode. Opts: (null)
+ago 27 00:17:07 kali kernel: EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+ago 27 00:17:09 kali kernel: vboxsf: g_fHostFeatures=0x8000000f g_fSfFeatures=0x1 g_uSfLastFunction=29
+ago 27 00:17:09 kali kernel: vboxsf: Successfully loaded version 6.1.12_Debian
+ago 27 00:17:09 kali kernel: vboxsf: Successfully loaded version 6.1.12_Debian on 5.7.0-kali1-amd64 SMP mod_unload modversions  (LINUX_VERSION_CODE=0x50706)
+ago 27 00:17:10 kali kernel: 03:17:10.735453 main     VBoxService 6.1.12_Debian r139181 (verbosity: 0) linux.amd64 (Jul 15 2020 11:37:52) release log
+                             03:17:10.735469 main     Log opened 2020-08-27T03:17:10.735400000Z
+ago 27 00:17:10 kali kernel: 03:17:10.736084 main     OS Product: Linux
+ago 27 00:17:10 kali kernel: 03:17:10.736408 main     OS Release: 5.7.0-kali1-amd64
+ago 27 00:17:10 kali kernel: 03:17:10.737071 main     OS Version: #1 SMP Debian 5.7.6-1kali2 (2020-07-01)
+ago 27 00:17:10 kali kernel: 03:17:10.737336 main     Executable: /usr/sbin/VBoxService
+                             03:17:10.737343 main     Process ID: 451
+                             03:17:10.737349 main     Package type: LINUX_64BITS_GENERIC (OSE)
+ago 27 00:17:10 kali kernel: 03:17:10.746038 main     6.1.12_Debian r139181 started. Verbose level = 0
+ago 27 00:17:10 kali kernel: 03:17:10.767542 main     vbglR3GuestCtrlDetectPeekGetCancelSupport: Supported (#1)
+ago 27 00:17:13 kali kernel: e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+ago 27 00:17:13 kali kernel: IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+ago 27 00:17:13 kali kernel: e1000: eth1 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+ago 27 00:17:13 kali kernel: IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
+ago 27 00:17:21 kali kernel: fuse: init (API version 7.31)

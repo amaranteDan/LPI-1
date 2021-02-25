@@ -1,0 +1,127 @@
+#110.1 Tarefas administrativas de Segurança
+
+Verificações de permissão.
+
+Checando permissões de Suid e Guid
+
+Usando comando find
+
+
+ find / -perm -4000 -or -perm -2000  "4000 Permissão SUID 2000 Permissao GUID"
+ find / \( -perm -4000 -or -perm -2000 \) \ -exec ls -l '{}' \; > /var/log/setuid-$(date +%F) "lista detalhada"
+
+********************************
+
+"Controle de Senhas de Usuarios"*
+
+********************************
+
+Uso: passwd [opções] [LOGIN]
+
+Opções:
+  -a, --all                     reportar estado de senhas em toda as contas
+  -d, --delete                  remover a senha para a conta indicada
+  -e, --expire                  forçar expiração da senha para a conta indicada
+  -h, --help                    mostrar esta mensagem de ajuda e sair
+  -k, --keep-tokens             mudar senha somente caso expirada
+  -i, --inactive INATIVO        definir senha inativa após expiração para
+                                INATIVO
+  -l, --lock                    trava a conta indicada
+  -n, --mindays MIN_DIAS        define número mínimo de dias antes da troca
+                                de senhas para MIN_DIAS
+  -q, --quiet                   modo silencioso
+  -r, --repository REPOSITÓRIO  mudar senha no repositório REPOSITÓRIO
+  -R, --root CHROOT_DIR		directório para onde fazer chroot
+  -S, --status                  reportar estado de senha para a conta indicada
+  -u, --unlock                  destravar a conta indicada
+  -w, --warndays DIAS_AVISO     define dias de aviso de expiração para
+                                DIAS_AVISO
+  -x, --maxdays MAX_DIAS        define número máximo de dias antes da troca
+                                de senhas para MAX_DIAS
+
+Uso: usermod [opções] LOGIN
+
+Opções:
+  -b, --badnames                allow bad names
+  -c, --comment COMENTÁRIO      novo valor do campo GECOS
+  -d, --home DIR_PESSOAL        novo diretório de login para a nova conta de
+                                usuário
+  -e, --expiredate DATA_EXPIRA  define data de expiração de conta para
+                                DATA_EXPIRA
+  -f, --inactive INATIVO        define inatividade de senha após expiração
+                                para INATIVO
+  -g, --gid GRUPO               forçar usar GRUPO como novo grupo primário
+  -G, --groups GRUPOS           nova lista de GRUPOS suplementares
+  -a, --append                  anexa o usuário para os GRUPOS suplementares
+                                mencionados pela opção -G sem remove-lo de
+                                outros grupos
+  -h, --help                    mostrar esta mensagem de ajuda e sair
+  -l, --login LOGIN             novo valor do nome de login
+  -L, --lock                    trava a conta de usuário
+  -m, --move-home               move o conteúdo do diretório pessoal para
+                                a novo localização (use somente com -d)
+  -o, --non-unique              permitir usar UID duplicados (não-únicos)
+  -p, --password SENHA          usar senha criptografada para a nova senha
+  -R, --root CHROOT_DIR		directório para onde fazer chroot
+  -P, --prefix PREFIX_DIR       prefix directory where are located the /etc/* files
+  -s, --shell SHELL             novo shell de login para a conta de usuário
+  -u, --uid UID                 novo UID para a conta de usuário
+  -U, --unlock                  destravar a conta de usuário
+  -v, --add-subuids FIRST-LAST  add range of subordinate uids
+  -V, --del-subuids FIRST-LAST  remove range of subordinate uids
+  -w, --add-subgids FIRST-LAST  add range of subordinate gids
+  -W, --del-subgids FIRST-LAST  remove range of subordinate gids
+  -Z, --selinux-user SEUSER	novo mapeamento de utilizador SELinux para a conta do utilizador
+
+
+Uso: chage [opções] LOGIN
+
+Opções:
+  -d, --lastday ULTIMO_DIA      define última mudança de senha para ULTIMO_DIA
+  -E, --expiredate DATA_EXPIRAÇÃO
+                                define data de expiração de conta para
+                                DATA_EXPIRAÇÃO
+  -h, --help                    mostrar esta mensagem de ajuda e sair
+  -i, --iso8601                 use YYYY-MM-DD when printing dates
+  -I, --inactive INATIVO        define senha inativa após expiração
+                                para INATIVO
+  -l, --list                    exibe informação sobre idade da conta
+  -m, --mindays MIN_DIAS        define número mínimo de dias antes da
+                                troca de senha para MIN_DIAS
+  -M, --maxdays MAX_DAYS        set maximum number of days before password
+                                change to MAX_DAYS
+  -R, --root CHROOT_DIR		directório para onde fazer chroot
+  -W, --warndays DIAS_AVISO     definir para DIAS_AVISO o número de dias
+                                para aviso de caducar
+
+
+********************************************
+*                                          *
+*     Arquivo do /etc/shadow               *
+*                                          *
+
+
+*********************************************************************************************************************************************************************
+
+  1         2      3         4                                      5                             6                       7                     8             9       
+User:* Senha Hash: ID  :Dias Minimo para troca senha: Maximo  dias para troca senha:Notificacão expiração senha :Senha exp. bloqueio Conta: bloqueio conta : Futuro 
+     *
+root:* $DzOeR/   :18469:               0            :           99999              :             7              :                         :                :         
+
+daniel:$6$oxY2w3 :18507:               0            :           99999              :             7              :                         :                :
+********************************************************************************************************************************************************************
+
+
+
+*****************************
+*                           *
+*   Arquivo /etc/passwd     *
+
+
+
+ 1        2                         3      4          5                      6                             7
+
+User: Indica uso /etc/shadow     :  UID   : GID   : Informações:             Home                :   Programa iniciado ao fazer login:
+root:              x             :     0  :  0    :          root           :/root               :          /bin/bash
+aluno:             x             :   1000 : 1000  :          aluno,,,       :/home/aluno         :          /bin/bash
+daniel:            x             :   1001 : 1001  :Daniel Amarante,,,       :/home/daniel        :          /bin/bash

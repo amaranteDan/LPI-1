@@ -1,0 +1,107 @@
+#Repositorio Debian
+
+Gerenciamento de Pacotes Debian.
+
+DPKG - Gerenciamento de pacotes individuais
+
+apt-get busca repositorios remotos
+apt agrega funçoes extras ao apt-get
+
+Repositorio -> /etc/apt/sources.list/
+	      /etc/apt/sources.list.d/
+
+Exemplo de pacote binario:
+deb http://ftp.br.debia.org/debian wheezy main contrib non-free
+--------------------------------|    |    -------------------- categoria
+localização 			|    Versao
+				
+
+*Atualizar repositorios
+
+apt-get update ou apt update
+
+*Adicionar cdrom como repositorio
+apt-cdrom add
+apt-cdrom -d /home/kov /meucdrom add -> Exemplo.
+
+*Instalação de pacotes
+-y indica sim para todas as perguntas
+
+apt-cache search pacote -> procura o pacote
+apt search pacote
+
+apt-get install pacote -> instala pacotes
+apt install pacote
+
+*Instalar pacotes individuais.
+dpkg -i pacote.deb (.deb para pacotes binarios)
+dpkg install pacote.deb
+
+apt-get install -f (força a instalaçao de dependencia)
+
+#Reconfigurando um pacote
+
+dpkg-reconfigure pacote
+apt-get --reinstall install pacote
+
+ex dpkg-reconfigure tzdata
+
+apt reinstall pacote
+
+*Removendo pacotes
+
+apt-get remove pacote
+
+dpkg -r pacote
+dpkg -p pacote (-p de purge: remove arquivos de configuração)
+
+apt-get remove --purge pacote
+
+*Atualizando pacotes
+
+apt-get upgrade pacote
+
+*Atualizando todos os pacotes
+
+apt-get upgrade
+apt safe-upgrade
+
+apt-get -u lista pacotes desatualizados
+
+apt-get dist-upgrade atualizando todos os pacotes e substitui todos os obsoletos
+
+*Inspecionando pacotes
+
+dpkg -l pacote -> mostra estado dos pacotes
+
+dpkg -S procura qual pacote instalou o arquivo
+
+dpkg -L lista arquivos instalados pelo pacote
+
+dpkg --contents pacote.deb lista o conteudo do pacote
+
+apt-cache show pacote
+ apt show pacote
+
+dpkg -p pacote
+
+*Limpando repositorios
+ -> /var/cache/apt/archives (diretorio de cache dos repositorios)
+
+apt-get clean
+apt-get autoclean
+apt autoremove
+
+*Estatisticas dos pacotes
+
+apt-cache stats
+
+* Conhecimento Geral
+
+apt install -d pacote faz download do pactoe sem instalar (caso de verificação)
+
+*Resolvendo dependencias
+
+apt install --fix-missing
+apt update --fix-missing  ou apt update -f missing
+
