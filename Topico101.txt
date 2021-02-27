@@ -325,6 +325,11 @@ Usando modprobe
 **Carregando um modulo e alterando o parametro**
 
 modprobe -v cdrom lockdoor=0
+*** Diretorio de configuração do modprobe -> /etc/modprobe.conf / etc/modprobe.d 
+Lista de modulos que podem causar problemas de compatibilidade /etc/modprobe.d/blacklist.conf
+Ex blacklist nouveau - Adicionando modulo a lista de erros de compatibilidade
+
+Sysfs - Quando um dispositivo é identificado o udev se encarrega de criar regras. /etc/udev/rules.d
 
 Testando o vi na linha de comando
 
@@ -372,3 +377,255 @@ Listando dispositivos pci com detalhes
 
 vv Super verboso
 Curiosidade - No /usr/share/misc o arquivo que traduz a identificação numerica pci em nomes legiveis é (***pci.ids***)
+
+
+[    4.634054] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+[    4.634553] ehci-pci: EHCI PCI platform driver
+[    4.635322] ehci-pci 0000:02:03.0: EHCI Host Controller
+[    4.648086] ehci-pci 0000:02:03.0: USB 2.0 started, EHCI 1.00
+[    4.648255] usb usb1: Product: EHCI Host Controller
+[    4.653456] uhci_hcd 0000:02:00.0: UHCI Host Controller
+[    4.654809] usb usb2: Product: UHCI Host Controller
+[    4.634054] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+[    4.634553] ehci-pci: EHCI PCI platform driver
+[    4.635322] ehci-pci 0000:02:03.0: EHCI Host Controller
+[    4.648086] ehci-pci 0000:02:03.0: USB 2.0 started, EHCI 1.00
+[    4.648255] usb usb1: Product: EHCI Host Controller
+[    4.653456] uhci_hcd 0000:02:00.0: UHCI Host Controller
+[    4.654809] usb usb2: Product: UHCI Host Controller
+
+*** Diretorio do usb /sys/bus/usb/devices ***
+    /proc/bus/usb/input ou pci /devices
+
+
+Topologia da Usb 
+ T: Topologia 
+D: Descritor do dispositivo 
+P: Mesmo proposito D 
+S: Strings identificação Fabricante 
+C: Configuração 
+I: Interface 
+E: Descritor de finalização
+Bus 001 Device 002: ID 8644:800f Intenso GmbG USB Flash Disk
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 003: ID 0e0f:0002 VMware, Inc. Virtual USB Hub
+Bus 002 Device 002: ID 0e0f:0003 VMware, Inc. Virtual Mouse
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+
+lsusb -v -s 1:2 Descrever uma usb especifica (Bus 001: Dispositivo 002)
+
+Bus 001 Device 002: ID 8644:800f Intenso GmbG USB Flash Disk
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  idVendor           0x8644 Intenso GmbG
+  idProduct          0x800f 
+  bcdDevice            1.00
+  iManufacturer           1 General
+  iProduct                2 USB Flash Disk
+  iSerial                 3 134400000002CB82
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0020
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     80 Bulk-Only
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+Device Status:     0x0000
+  (Bus Powered)
+lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
+    |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 2: Dev 3, If 0, Class=Hub, Driver=hub/7p, 12M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/6p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=usb-storage, 480M
+
+***lsusb -v -d ID - Verificando o dispositivo com o ID*** 
+
+Bus 001 Device 002: ID 8644:800f Intenso GmbG USB Flash Disk
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  idVendor           0x8644 Intenso GmbG
+  idProduct          0x800f 
+  bcdDevice            1.00
+  iManufacturer           1 General
+  iProduct                2 USB Flash Disk
+  iSerial                 3 134400000002CB82
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0020
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     80 Bulk-Only
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+Device Status:     0x0000
+  (Bus Powered)
+
+****Verificando Dispositivos Scsi (Small Computer system interface)****
+
+4 Niveis 
+Host: Numero da controladora scsi
+Bus: Numero do Canal Scsi na controladora
+Target: Numero do Dispositivo SCSI no canal (SCSI ID)
+LUN: Numero da Unidade Logica (logical Unit Number)
+
+
+Comando lsscsi
+
+[1:0:0:0]    cd/dvd  NECVMWar VMware IDE CDR10 1.00  /dev/sr0 
+[2:0:0:0]    disk    VMware,  VMware Virtual S 1.0   /dev/sda 
+[3:0:0:0]    disk    General  USB Flash Disk   1.0   /dev/sdb 
+
+****Entendo as partições MSDOS *****
+Partiçoes Primarias 1 - 4 Maximo 4 partiçoes primarias - Não aceita partiçoes maiores de 2TB. Pode ter apenas partiçoes logicas e extendidas
+Partições Logicas   5 -69 Contagem (64 logicas)
+Partiçoes Extendidas 1 - 4 Cada extendida pode ter 16 Logicas.  
+
+
+OBS: SCSI Maximo 15 partiçoes logicas(LUN)
+
+
+      |      |        |      |             |                              IDE Integrade Drive Eletronics
+HOST  |	BUS  | Target |	LUN  |	Dispositivo|
+ 0    |	0    |	 0    | 0    | /dev/sda    |
+ 0    | 0    |   5    | 0    | /dev/sdb    |
+      |      |        |      |             |
+
+
+/dev/sda  refere se a todo disco
+/dev/sda1 Primeiro dispositivo SCSI/SATA, primeira partição primaria(1)   
+/dev/sda2 Primeiro dispositivo SCSI/SATA, segunda partição primaria(2)   
+/dev/sda3 Primeiro dispositivo SCSI/SATA, Terceira partição primaria(3)   
+/dev/sda4 Primeiro dispositivo SCSI/SATA, quarta partição primaria(4)   
+
+/dev/sda5 Primeiro dispositivo SCSI/SATA, primeira partição logica(l1)
+/dev/sda6 Primeiro dispositivo SCSI/SATA, segunda partição logica(l2)
+
+/dev/sdb1 Segundo dispositivo SCSI/SATA, primeira partição primaria
+/dev/sdb4 Segundo dispositivo SCSI/SATA, quarta partição primaria
+
+
+
+
+
+IDE Integrated Drive Electronics 
+
+/dev/hda1  Primeira partição do disco master no primeiro canal IDE
+/dev/hda2  Segunda partição 
+/dev/hdb1
+/dev/hdb2
+/dev/hdc1
+/dev/hdc2
+/dev/hdd2
+
+
+****Sistema de particionamento GPT até 128 partiçoes primarias limitadas a 2TB.
+
+128 partiçoes
+Partiçoes primarias
++ de 2 TB
+
+
+
+
+
+
+
+
