@@ -92,6 +92,8 @@ Verificando alguns arquivos do /proc
 
 BOOT_IMAGE=/vmlinuz-5.9.0-kali1-amd64 root=UUID=923a359e-b4b1-4d62-bc54-194ef54faacc ro quiet splash
 
+cat /proc/cpuinfo
+
 processor	: 0
 vendor_id	: GenuineIntel
 cpu family	: 6
@@ -256,15 +258,22 @@ major minor  #blocks  name
    8        3   35496960 sda3
    8        5    3905536 sda5
    8        6    1951744 sda6
-BOOT_IMAGE=/vmlinuz-5.9.0-kali1-amd64 root=UUID=923a359e-b4b1-4d62-bc54-194ef54faacc ro quiet splash
+
 Kernel Pode ser monolitico(built-in) ou modular
 arquivo contendo os modulos do kernel compilado /lib/modules/<versão do kernel
+
 Verificando a versão do kernel
-5.9.0-kali1-amd64
+
+uname -r
 5.9.0-kali1-amd64
 
+cat /proc/sys/kernel/osrelease
+5.9.0-kali1-amd64
+
+cd /lib/modules/versaodo kernel
+
 /lib/modules/5.9.0-kali1-amd64:"Modulos do Kernel"
-total 4628
+
 drwxr-xr-x 12 root root    4096 Jan 21 21:03 kernel
 -rw-r--r--  1 root root 1151496 Jan 21 21:03 modules.alias - Apelido
 -rw-r--r--  1 root root 1097141 Jan 21 21:03 modules.alias.bin
@@ -346,6 +355,7 @@ Inspecionando Dispositivos
 02:01.0 Ethernet controller: Intel Corporation 82545EM Gigabit Ethernet Controller (Copper) (rev 01)
 02:02.0 Multimedia audio controller: Ensoniq ES1371/ES1373 / Creative Labs CT2518 (rev 02)
 02:03.0 USB controller: VMware USB2 EHCI Controller
+
 Saida do lspci -b == lspci
 Identificacao XX = numero Barramento PCI
  YY: Numero do slot PCI e 
@@ -353,7 +363,6 @@ Identificacao XX = numero Barramento PCI
 
 Listando dispositivos pci com detalhes
 
-***Verificando o modulo do Kernel***
 
 02:01.0 Ethernet controller: Intel Corporation 82545EM Gigabit Ethernet Controller (Copper) (rev 01)
 	DeviceName: Ethernet0
@@ -481,6 +490,7 @@ Device Qualifier (for other device speed):
   bNumConfigurations      1
 Device Status:     0x0000
   (Bus Powered)
+
 lsusb -t
 /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
     |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
@@ -608,22 +618,271 @@ HOST  |	BUS  | Target |	LUN  |	Dispositivo|
 IDE Integrated Drive Electronics 
 
 /dev/hda1  Primeira partição do disco master no primeiro canal IDE
-/dev/hda2  Segunda partição 
-/dev/hdb1
-/dev/hdb2
-/dev/hdc1
-/dev/hdc2
-/dev/hdd2
+/dev/hda2  Segunda partição do disco master no primeiro canal IDE 
+/dev/hdb1  Primeira partição do disco slave do primeiro canal IDE
+/dev/hdb2  Segunda partição do disco slave do primeiro canal IDE
+/dev/hdc1  Primeira partição do disco master do segundo canal IDE
+/dev/hdc2  Segunda partição do disco master do segundo canal IDE
+/dev/hdd1  Primeira partição do disco slave do segundo canal IDE
+/dev/hdd2  Segunda partição do disco slave do segundo canal IDE
 
+Disquete
+/dev/fd0 Disquete A
+/dev/fd1 Disquete B
 
-****Sistema de particionamento GPT até 128 partiçoes primarias limitadas a 2TB.
+****Sistema de particionamento GPT até 128 partiçoes primarias maiores de  2TB.
 
 128 partiçoes
 Partiçoes primarias
 + de 2 TB
 
+Consulta dos dispositivo scsi " dmesg | grep -i scsi"
 
 
+[    4.004679] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 251)
+[    4.625013] SCSI subsystem initialized
+[    4.699363] scsi host0: ata_piix
+[    4.715143] scsi host1: ata_piix
+[    4.899434] scsi 1:0:0:0: CD-ROM            NECVMWar VMware IDE CDR10 1.00 PQ: 0 ANSI: 5
+[    4.906089] sr 1:0:0:0: [sr0] scsi3-mmc drive: 1x/1x writer dvd-ram cd/rw xa/form2 cdda tray
+[    5.025016] sr 1:0:0:0: Attached scsi CD-ROM sr0
+[    5.068944] scsi host2: ioc0: LSI53C1030 B0, FwRev=01032920h, Ports=1, MaxQ=128, IRQ=17
+[    5.238971] scsi 2:0:0:0: Direct-Access     VMware,  VMware Virtual S 1.0  PQ: 0 ANSI: 2
+[    5.249077] scsi target2:0:0: Beginning Domain Validation
+[    5.252000] scsi target2:0:0: Domain Validation skipping write tests
+[    5.252001] scsi target2:0:0: Ending Domain Validation
+[    5.252123] scsi target2:0:0: FAST-40 WIDE SCSI 80.0 MB/s ST (25 ns, offset 127)
+[    5.335595] sd 2:0:0:0: [sda] Attached SCSI disk
+[   12.357482] sr 1:0:0:0: Attached scsi generic sg0 type 5
+[   12.357549] sd 2:0:0:0: Attached scsi generic sg1 type 0
+[308812.467686] scsi host3: usb-storage 1-1:1.0
+[308814.186189] scsi 3:0:0:0: Direct-Access     General  USB Flash Disk   1.0  PQ: 0 ANSI: 2
+[308814.460923] sd 3:0:0:0: Attached scsi generic sg2 type 0
+[308815.374683] sd 3:0:0:0: [sdb] Attached SCSI removable disk
+[322258.365835] scsi host3: usb-storage 1-1:1.0
+
+#lsscsi
+
+[1:0:0:0]    cd/dvd  NECVMWar VMware IDE CDR10 1.00  /dev/sr0 
+[2:0:0:0]    disk    VMware,  VMware Virtual S 1.0   /dev/sda 
+
+#lsscsi -l
+
+[1:0:0:0]    cd/dvd  NECVMWar VMware IDE CDR10 1.00  /dev/sr0 
+  state=running queue_depth=1 scsi_level=6 type=5 device_blocked=0 timeout=30
+[2:0:0:0]    disk    VMware,  VMware Virtual S 1.0   /dev/sda 
+  state=running queue_depth=32 scsi_level=3 type=0 device_blocked=0 timeout=180
+
+#lsscsi -H
+
+[0]    ata_piix      
+[1]    ata_piix      
+[2]    mptspi        
+
+***Listando disposistivos scsi
+# scsiinfo -l
+# scsiinfo -i /dev/sda
+
+Gerenciador de Dispositivos UDEV
+Substitui o devfs a partir da versão 2.6.12 do Kernel
+
+
+D-Bus (Desktop Bus) Barramento de software distribuido que permite que aplicativos de desktop enviem mensagensa uns ao outros e que recebam mensagens do kernel
+
+#systemctl
+
+# systemctl status dbus
+
+● dbus.service - D-Bus System Message Bus
+     Loaded: loaded (/lib/systemd/system/dbus.service; static)
+     Active: active (running) since Tue 2021-02-23 19:51:11 EST; 3 days ago
+TriggeredBy: ● dbus.socket
+       Docs: man:dbus-daemon(1)
+   Main PID: 496 (dbus-daemon)
+      Tasks: 1 (limit: 2275)
+     Memory: 3.0M
+     CGroup: /system.slice/dbus.service
+             └─496 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+
+Feb 27 17:58:53 dublin dbus-daemon[496]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.3' (uid=0 pid=497 comm="/usr/sbin/NetworkManager --no-daemon ")
+Feb 27 17:58:53 dublin dbus-daemon[496]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Feb 27 18:13:53 dublin dbus-daemon[496]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.3' (uid=0 pid=497 comm="/usr/sbin/NetworkManager --no-daemon ")
+Feb 27 18:13:53 dublin dbus-daemon[496]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Feb 27 18:28:53 dublin dbus-daemon[496]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.3' (uid=0 pid=497 comm="/usr/sbin/NetworkManager --no-daemon ")
+Feb 27 18:28:53 dublin dbus-daemon[496]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Feb 27 18:43:53 dublin dbus-daemon[496]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.3' (uid=0 pid=497 comm="/usr/sbin/NetworkManager --no-daemon ")
+Feb 27 18:43:53 dublin dbus-daemon[496]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Feb 27 18:58:53 dublin dbus-daemon[496]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.3' (uid=0 pid=497 comm="/usr/sbin/NetworkManager --no-daemon ")
+Feb 27 18:58:53 dublin dbus-daemon[496]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+
+
+##########################################################################
+101.2 Inicializando o sistema
+peso 3.
+
+Processo de Inicialização da arquitetura PC em 5 etapas
+
+1 - Ligou a maquina POST (Power on self test) e uma porção minima dos 512 bytes (MBR) são carregados
+2 - A BIOS carregar os dispositivos basicos, como teclado, monitor e dispositivos de armazenamento. MBR carregada, inicia segundo estagio do bootloader
+3 - O segundo estagio do bootloader faz a carga do SO carrega o kernel e a initrd.
+4 - Kernel carregado na memoria (vmlinuz) pelo bootloader é executado /sbin/init
+5 - O /sbin/init ou systemD le o arquivo de configuração /etc/inittab e se encarregar de inicializar o sistema
+
+OBS: *** /proc/cmdline -> Arquivo que contém parametros que são passados para o Gerenciador de Boot
+ 
+***UEFI***
+Unified Extensible Firmware Interface diferente da BIOS
+o UEFI ignora arquivos presentes na MBR, usando aplicativos EFI e leva em conta arquivos na NVRAM
+Executado a partir do menu de boot
+Arquivos compativos com UEFI: fat12, fat16, fat32, ISO 9660
+
+*Processo de Inicialização do UEFI
+1 - POST
+2 - UEFI ativa dispositivos necessarios para caregamento do sistema, como monitor, teclado e armazenamento
+3 - O firmware do UEFI le os arquivos armazenadas na NVRAM para localizar o sistema de arquivos da partição ESP e executar o aplicativo EFI.
+ 1 Estagio bootloader
+4 - Aplicativo EFI predefinido no bootloader, kernel sera carregado e inicio do SO.
+
+***MBR Master Boot Record - 512 bytes
+
+446 bytes usado no (stage 1) do bootloader ou LILO
+64 bytes usados pela tabela de particionamento do disco rigido
+2 bytes restantes armazena a assinatura hexadecimal (0XAA55)
+
+Botão Ligar -> BIOS -> MBR -> Bootloader -> Kernel -> initrd(initial ram disk) -> /sbin/init
+
+Bootloader - Mais utilizado em sistemas Linux GRUB - Grand Unified Bootloader. Atual GRUB2 - 2 versão.
+
+GRUB é invocado pela Bios ou UEFI
+Apresenta uma lista para inicialização
+
+acpi = Lig/desliga suporte ACPI
+init = define outro inicializador padrão init=/bin/bash - Coloca o bash como padrão
+system.unit = Define o alvo. Ex system.unit=graphical.target
+mem = Define o quanto de memoria Ex mem=512M
+maxcpus = Maquinas com suporte a multiprocessadores Ex maxcpus=2 Valor 0 desliga ou usar parâmetro nomsp
+quiet = Não exibe mensagens durante o boot
+vga = Seleciona um mode de video EX vga=ask - Exibira uma lista de opções
+root = Define uma partição raiz diferente da predeterminada EX root=/dev/sda3
+rootflags - Opção de montagem de arquivos raiz
+ro = Realiza a montagem inicial como apenas leitura
+rw = Ativa a partição raiz como escrita.
+
+Arquivos para definir alterações definitivas
+/etc/default/grub GRUB_CMDLINE_LINUX 
+Após a alteração é necessario alterar o configurar de boot com o comando #grub-mkconfig -o /boot/grub/grub.cfg
+Apos iso o arquivo /proc/cmdline passa os novos parametros para o kernel
+
+As partiçoes são indicadas no /etc/fstab
+
+Verificando a Inicialização 
+#dmesg - Aqui o kernel Buffer Ring é consultado.
+#journalctl -b ou --boot
+#journalctl -k 
+
+
+***Apagar o Kernel Buffer Ring
+dmesg --clear
+
+
+Informações de Log
+/var/log
+
+*****101.3 Alternar runlevels /boot targets, desligar e reiniciar o sistema
+
+Modo Halt
+0 - Desligamento
+1 ou S Single mode - Monousuario
+2 a 4 Multiusuario
+5 - Modo grafico
+6 - Reinicio do sistema
+
+O /sbin/init - componente principal do linux. Guia a inicialização do sistema para o runlevel especificado. Faz a leitura do /etc/inittab
+
+/etc/init.d  - Contem scripts de inicialização.
+
+boot - Processo executado durante o carregamento do sistema
+bootwait - Processo executado durante carregamentodo sistema. Init aguarda o encerramento para prosseguir. Runlevels ignorados
+sysinit - Processo executado durante o carregamento do sistema.
+wait - O processo sera executado, o programa init aguardara seu termino para prosseguir
+respawn - O processo sera reiniciado caso interrompido
+crtlaltdel - recebe sinal SIGINT
+
+Pode usra o comando telinit para altera o runlevel
+Ex telinit 1 - monousuario
+Ex telinit s - monousuario
+Ex telinit 6 - reinicio
+
+***Systemd - gerenciador de sistemas e serviços modernizado mas compativel com o SysV.
+
+Caracteristica - Paralelização de serviços por sockets, disparo sob demanda de daemons, 
+processos por cgroups, suporte a snapshots, restauro dos estado do sistema, controle dos pontos de montagem e implementa uma logica elaborada de controle de serviços baseada em dependencias das transações.
+
+Systemd usa o conceito de units
+
+service - serviços iniciados
+socket - 
+device
+mount 
+automount - ponto de montagem automatica
+target
+snapshot - Apenas aponta para outras unidades.
+
+Administrando com systemctl
+
+systemctl start
+systemctl stop
+systemctl restart
+systemctl status
+systemctl enable - habilita no boot
+systemctl disable - desabilita no boot
+systemctl is-enabled - Verifica se unidade é ativada no carregamento
+
+systemctl list-unit-files --type=service - Lista todos os serviços
+systemctl list-unit-files --type=target - Lista todos os targets
+
+systemctl reboot - Reinicio do sistema - Comandos do root
+systemctl poweroff - Desligamento
+
+***Controlando alvos
+
+multi-user = runlevel 5
+
+Ex: systemctl isolate multi-user.target
+Arquivos de configuração
+/lib/systemd/system
+
+Gerenciamento de Energia
+
+/etc/systemd/logind.conf arquivos separados
+/etc/systemd/logind.conf.d diretorio
+
+Upstart - Gerenciador de serviços substituto ao tradicional init
+
+*Adotado pelo Ubuntu
+Scripts de inicialização no /etc/init
+#initctl list - Usado para listar serviços
+
+Ações 
+#start tty6 -  Inicia terminal 6
+
+#status tty6 - Verificando status
+
+#stop tty6 - Parando o serviço
+
+Não utiliza o /etc/inittab mas usa os comandos tradicionais: runlevel e telinit 
+
+***Desligamento do Sistema
+
+shutdown 
+
+Ex: shutdown -q -r +120 "O sistema vai cair ..." - Sistema será reiniciado (-r) 120 minutos
+-h horario
+-m mensagem
+
+wall manda mensagem de broadcast a todos os usuarios conectados
+
+Ex wall "With the Great power comes with  great responsabilities - Be hurry"
 
 
 
