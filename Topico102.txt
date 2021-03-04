@@ -1,0 +1,456 @@
+Objetivo 102.1 Particionamento de Disco
+
+MSDOS
+
+OBS: Discos SCSI maximo 15 partiçoes lógicas
+Discos SATA - até 63 partições lógicas
+
+Dispositivos IDE também considera CDROM ou unidades ZIP
+
+Partição Primaria(Principal) - 1 - 4
+Partição extendida (Partiçoes Secundarias) Só será possivel criar caso não seja utilizada todas partiçoes primarias.Não recebe dados
+Partiçoes lógicas são criadas dentro das partiçoes extendidas 
+
+Dispositivos IDE
+
+Controladora			Dispositivo
+Primaria -Master                /dev/hda
+	 -Slave			/dev/hdb
+
+Secundaria
+	-Master			/dev/hdc
+	-Slave			/dev/hdd
+
+
+ Sistemas de arquivos
+
+Ext2 - (Second extended File System) Não possui Journaling
+Blocos do mesmo tamanho
+Partição ate 4 TB
+Até 255 caracteres por nome de arquivo;
+5% para o root
+
+
+Ext3 - possui journaling(log chamado journal)
+Permite utilizar sistema de cotas
+Blocos de 1,2 e 4 Kb;
+Tamanho maximo 2TB.
+
+Ext4 - Melhoria do Ext3, como tolerancia a falhas, desempenho, maior volume, maior numero de subdiretorios
+
+Possui melhor desempenho
+Alocação multipla
+Journaling
+Numero ilimitado de diretorios;
+Tamanho maximo 16 TB.
+
+Reiserfs - Nucleo baseado em arvore balanceada B+
+Utiliza journaling;
+blocos de 4Kb;
+Tamanho maximo partição 1 EB.
+
+Xfs - Sistema de arquivos com journaling otimizado para escalabilidade
+Usado em sistemas com fibra optica e HD SCSI
+Sucetivel a falhas de energia e consequente perda de dados;
+Sistema de arquivos mais potente;
+Journaling a um endereçamento de 64 bits;
+Blocos de ate 64 bytes;
+Tamanho maximo 32 bits = 16 TB / 64 bits 8,58 EB.
+
+
+LVM - Logical Volume Management
+
+Metodo para alocar espaço de disco rigidos em volumes logicos.
+Facilidade de redimensionar;
+Suporte ao LVM deve ser compilado no kernel.
+
+Id da partição 8e (Linux LVM)
+
+VG: Volume Group
+PV: Phisical Volume
+LV: Logical Volume
+PE: Phisical Extent
+LE: Logical Extent
+
+Criando Volume Group(Grupo de Volume)
+-Criar primeiro o Volume fisico
+Ex:# pvcreate /dev/sdb1
+   # pvcreate /dev/sdb2	
+-Criando o grupo de volume
+# vgcreate system  /dev/sdb1 /dev/sdb2
+-s especifica uma tamanho PE diferente de 4MB
+
+Ex: vgcreate system -s 2 /dev/sdb1.
+
+Fazendo a ativação para uso.
+#vgchange -a y system
+
+Mostrando as informações do VG criado
+#vgdisplay system
+#vgs
+
+Especificando o tamanho do volume
+#lvcreate -l "total_disponivel" system
+#lvcreate -L 1GB system  - Definindo um tamanho
+
+Exibindo o volume logico disponivel no sistema
+#lvs
+#lvdisplay
+OBS: -l usa o tamanho total
+     -L usa o tamnaho especificado
+
+Localização dentro do sistema de arquivos.
+/dev: /dev/system/lvol0, /dev/system/lvol1.
+
+Com os lV prontos, formatar usando #mkfs.
+
+***Extendendo Grupo de Volume
+#vgextend system /dev/hde1
+
+#lvextend -L +50MB /dev/storage/dados
+*sempre desmontar o sistema de arquivos.
+
+*Reduzir o volume logico
+#lvreduce -L 180M /dev/storage/dados
+
+*Removendo Volumes lógicos
+#lvremove -v /dev/storage/temp
+
+*Removendo volumes fisicos
+1 - Carregar o pvmove
+
+#modprobe dm-mirror
+#vgreduce storage /dev/loop0
+
+*Renomear volumes logicos
+#lvrename /dev/storage/dados /dev/storage/data
+
+*Renomear o Grupo de volume
+#lvchange -an storage - desabilita todos os volumes logicos
+
+#vgrename storage local
+
+Pontos de Montagem
+/bin - Binarios
+/boot - Arquivos do boot, incluido o kernel, arquivo initrd, pasta EFI, utilizado na BIOS pelo UEFI.
+/dev - Dispositivos gerais. Gerenciado pelo daemon udev, que cuida da configuração dos dispositivos como teclado, mouse. monitor, discos rigidos, pendrives.
+/etc - Arquivos de configuração
+/home - Arquivo onde aramazena arquivos pessoais do usuario.
+/lib - Diretorio de bibliotecas, dependencias dos binarios en /bin e /sbin
+/media - Diretorio de montagem das partiçoes para usb e cdrom
+/mnt - Ponto de montagem temporaria para copia de arquivos e etc.
+/opt - Area de armazenamento generico para programas que não sao 100% compativeis com a estrutura de diretorios do linux.
+/proc - Sistemas de arquivo virtual onde coleta informações do hardware e kernel. Aqui é possivel ver informações da memoria, cpu, parametros do kernel.
+/run - Arquivos utilizados pelo processo runtime, pricipalmente para o boot.
+/sbi - Arquivos do super binario, como o fsck, dump2fs, debugfs. Utilizado no modo de recuperação do sistema.
+/srv - Serviços com FTP, APACHE, SAMBA
+/sys - Informações do kernel, dispositivos e drivers.
+/usr - A maior estrutura do linux. Contem binarios, documentação, imagens utilizadas pelo sistema. Somente-leitura. Evitar gravações. Partição separada. Local base para 
+compilação do kernel. Aumento da segurança.
+/var - Arquivos variaveis, como logs, cache, spool de impressão. Colocar em uma partição separada.
+/tmp - Diretorio para montagem temporario. Gravar como noexec. Partição separada é considerada boa pratica.
+
+Pergunta de Prova.
+As partiçoes  /etc, /bin, /sbin, não devem ser montados em partiçoes diferentes da /. 
+
+UEFI - Unified Extensible Firmware Interface
+Projeto INtel boot
+Gerenciamento de firmware de maneira consolidada
+Segurança para o gerenciamento do boot
+Suporte a essa tecnologia a partir do kernel 2.6
+Acesso a interfaces graficas da inicialização
+suporte a IPV6
+Bios apenas carrega a MBR do primeiro HD, onde fica o gerenciador de boot
+Aumenta da eficiencia da inicialização
+Secure boot, impedindo programas afetem o pre boot
+Suporte a GPT
+UEFI tem um boot mais rapido
+Inclusão de capacidades nativas como gerenciamento de hardware, suporte a rede, banco de dados e utilitarios em ambiente pré-OS
+Modulo CSM - Compatibility Support Module que permite a emulação de um sistema BIOS-MBR permitindo que sistemas legados possam ser executados em hardware UEFI da classe3, que são UEFI nativos.
+
+Para usar o UEFI
+Disco de 64 bits
+Validar versões do Linux que podem usar o UEFI
+Padrãoo UEFI usa partições FAT12, FAT16, FAT32 - Similar ao stage2 do Grub
+Durante o boot, o GRUB vai buscar a initrd e a vmlinuz no /boot
+
+Verificar e Criar partição UEFI
+
+[ -d /sys/firmware/efi } && echo "EFI boot on HDD" || echo "Legacy boot on HDD"
+
+Verificar /etc/fstab se tem uma partição UEFI /boot /efi
+
+Instalar o boot UEFI
+sudo apt install grub-efi
+
+Monte a partição EFI sobre o diretorio /boot Ex /dev/sda6
+#mount /dev/sda6 /boot
+
+Instalar gestor do boot
+
+sudo gurb-install /dev/sda --target=x86_64-efi --efi-directory=/boot
+
+Verificando com o comando #efibootmgr
+
+Mudar ordem de boot # efibootmgr -o <bootnum>
+
+Deletando uma entrada boot
+#efibootmgr -b <bootnum> -B
+
+Ativar entrada
+#efibootmgr <bootnum> -a
+-a = ativa
+-A = desativa
+
+Secure boot - A função é evitar que drivers e loaders não autorizados sejam executados, criando falhas de segurança, exploradas por malwares do tipo bootkit.
+Como funciona. No boot seguro, permite um chave PKI po chave PK (Platform Key) seja gravada.
+Após, o boot secure entra em modo user. Apenas drivers e loaders asinados por chaves KEK(Key Exchange Key) são carregadas.
+Ou pode ser colocado em modo CUSTOM, onde chaves publicas adicionais são incluidas. MOK (Machine OWNER Keys), certificando os programas seguros.
+Chaves KEK são certificadas X509 ou RSA 2048, ou usando um hash SHA-256 presente em DB e sem assinatura presente DBX.
+Banco  de dados na NVRAM do firmware.
+DB Banco de Assinaturas
+DBX Banco de assinaturas proibidas, onde drivers que contem nesse banco tem sua execução NEGADA.
+
+
+****Objetivo 102.2 Instalar um gerenciador de Boot
+
+GRUB2 - GRand Unified Bootloader
+
+Stage1 - Primeiro setores do dispositivo de Boot. Carregar o essential do bootloader. Usa os 446 bytes. 
+Stage 1.5 Sera usado caso o stage1 nao consiga iniciar toda a inicialização. /boot/grub
+Stage2 - Ultima etapa. Lê o /boot/grub/menu.lst. Caso não consiga, será exibido o prompt de comando do GRUB
+              |------> partição (de 0 a 3) partiçoes primarias  
+No grub. (hd0,1)       partição (de 4 em diante) partições extendidas
+           |
+           |-------Hard disk(0) Inicia no zero
+
+Ex: (hd0,1) Primeiro disco, na segunda primaria
+
+Ex: (hd1,5) Segundo disco, na segunda partição extendida.
+
+
+Arquivo de consulta do GRUB 
+/boot/grub/menu.lst
+
+**2 parametros para dar atenção
+default: Define a entrada de inicialização padrão
+timeout: define o tempo limite para que a entrada de inicialização seja selecionada.
+
+Arquivo grub.conf
+
+Configuração de interface do menu Grub é /boot/grub/grub.conf
+
+***Instalando o Grub
+
+Verificar se existe o arquivo /boot/grub
+Ou copiar o diretorio /usr/lib/grub/i386-pc. Algumas distribuiçoes limpam essa arquivo caso o grub não seja o bootloader padrão.
+
+Fazendo backup
+# dd if=/dev/sda of=/boot/MBR-bkp.bin bs=512 count=1
+
+Retornando backup
+# dd if/boot/MBR-bkp.bin of=/dev/sda bs=512 count=1
+
+Em seguida, gravando o grub
+
+#grub-install /dev/sda
+
+ou
+#grub-install '(hd0)'
+
+Verificando /grub/device.map
+
+#cat /boot/grub/device.map
+
+***Parametros para o GRUB
+>root (hd0,2)
+> kernel (hd0,2) /boot/vmlinuz-4.0.19 vga=769 quiet
+>boot
+
+
+Arquivo de consulta do GRUB2
+/boot/grub/grub.cfg em alguns casos /etc/grub2
+Stage 1.5 foi eliminado
+
+Arquivo de configuração
+/etc/default/grub
+
+Configurações avançadas
+/et/grub.d/
+
+Partições começam com 1
+
+Instalar o grub
+
+#grub-install /dev/sda
+
+Sistemas UEFI
+# grub-install --efi-directory=/boot/efi --bootloader-id=Linux - Criada entrada de boot na NVRAM do UEFI 
+# efibootmgr necessita estar instalado
+# partição ESP montada /boot/efi
+Apos, o GRUB le o arquivo /biit/grub/grub.cfg
+
+Configurações Personalizada /boot/grub/grub.cfg
+
+menuentry "Linux Personalizado"{
+  linux /boot/vmlinuz root=/dev/sad2 rw
+  initrd /boot/initramfs.img	
+}
+
+linux = indicada caminho para o kernel e seus parametros e a partição raiz
+initrd indica a imagem initrd
+
+chainloader - Bootloader alternativo
+cryptomount - Partição cripografada, fica disponivel para o Grub
+source - Executa o conteudo de outro arquivo de configuração dentro do mesmo grub
+insmod - Carrega um modulo. Ex lvm, mod, ntfs.mod, btrfs.mod
+
+***Arquivo de alterações do grub
+/etc/default/grub - A partir daui é gerado o /boot/grub/grub.cfg
+
+***Conhecendo alguns arquivos
+
+GRUB_DEFAULT - O sistema iniciado por padrão. Inicia no 0
+
+GRUB_SAVEDEFAULT - Caso definido como true, usa o ultimo item alterado como saved.
+
+GRUB_HIDDEN_TIMEOUT - Quantos segundos aguardar sem mostrar o menu do Grub
+
+GRUB_HIDDEN_TIMEOUT_QUIET - Se true, o contador para chamar o grub não é exibido
+
+GRUB_TIMEOUT - Tempo para exibir o menu grub
+
+GRUB_DISTRIBUTOR - Nome descritivo do item
+
+*GRUB_CMDLINE_LINUX - Linha essencial para parametros do kernel(cmdline). Tanto para o modo normal como para recuperação.
+
+GRUB_CMDLINE_LINUX_DEFAULT - Linha de parametros para o kernel(cmdline) modo normal.
+
+GRUB_DISABLE_LINUX_UUID - Se true, não localiza dispositivos por UUID.
+
+GRUB GFXMODE - Resolução de Tela. Ex 1024X768. Profundidade da caro 1024X768X16, 1024X768X24
+
+GRUB_DISABLE_LINUX_RECOVERY - Se true, não exibe opção de recuperação.
+
+GRUB_INIT_TUNE - Tocar som no speaker interno do menu GRUB
+
+GRUB_DISBLE_OS_PROBER - Descarta a busca automatica por outros sistemas operacionais.
+
+***Após qualquer alteração no /etc/default/grub grub.cfg  rodar os comandos.
+update-grub se não disponivel
+grub-mkconfig -o /boot/grub/grub.cfg ou
+grub2-mkconfig -o /boot/grub/grub.cfg
+
+***Recuperando o Grub
+
+>linux (hd1,2)/vmlinuz root=/dev/sda4
+>initrd (hd1,2)/initramfs.img
+>boot
+
+***Fazendo backup da MBR
+dd =if/dev/hda of=mbr.backup bs=512 count=1
+
+***Restaurando backup
+
+dd if=mbr.backup of=/dev/hda
+
+102.3 Controle das bibliotecas compartilhadas
+
+Bibliotecas de ligação estática - Sã bibliotecas ligas ao programa em tempo de execução.
+Bibliotecas ligação dinamica - Bibliotecas cuja ligação ocorre sob demanda.
+
+As libs tem uma S.O (Shared Object)
+
+Diretorio das libs
+
+/lib     Bibliotecas usadas por programas e na inicialização
+/usr/lib Bibliotecas usada por programas do sistema geral
+/usr/local/lib - Bibliotecas usadas por programas que não são parte do sistema.
+
+***Usando o ldconfig. 
+Usado para configurar as ligações em tempo de execução do link dinâmico. Cria sonames como link simbolicos. Atualiza o cache /etc/ld.so.conf
+
+#ldconfig -v - Verboso
+#ldconfig -p Print cache
+
+Saida do comando ldconfig -p | grep -i ssh
+
+
+	libssh2.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libssh2.so.1
+	libssh.so.4 (libc6,x86-64) => /lib/x86_64-linux-gnu/libssh.so.4
+	libssh-gcrypt.so.4 (libc6,x86-64) => /lib/x86_64-linux-gnu/libssh-gcrypt.so.4
+
+Obs: caso seja apgado o /etc/ld.so.conf rodar o ldconfig par atualizar o cache
+
+Atenção. Distribuições do Red Hat não costuma incluir /usr/local/lib no /etc/ld.so.conf.
+Assim é necessario adicionar manualmente o caminho /usr/local/lib no /etc/ld.so.conf
+
+***Variaveis de Ambiente
+LD_LIBRARY_PATH - Contem lista de diretorios separados por ponto e virgula
+
+LD_PRELOAD - Mesma função /etc/ld.so.preload. Bibliotecas de sobreposição
+
+LD_DEBUG - Bibliotecas usadas por desenvolvedores
+
+***Identificando bibliotecas compartilhadas.
+
+Ex: ldd /usr/bin/vi
+
+
+
+	linux-vdso.so.1 (0x00007ffff07b0000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f43f9ef9000)
+	libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f43f9eca000)
+	libselinux.so.1 => /lib/x86_64-linux-gnu/libselinux.so.1 (0x00007f43f9e9e000)
+	libcanberra.so.0 => /lib/x86_64-linux-gnu/libcanberra.so.0 (0x00007f43f9e8a000)
+	libacl.so.1 => /lib/x86_64-linux-gnu/libacl.so.1 (0x00007f43f9e7f000)
+	libgpm.so.2 => /lib/x86_64-linux-gnu/libgpm.so.2 (0x00007f43f9e77000)
+	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f43f9e6f000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f43f9caa000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f43fa35c000)
+	libpcre2-8.so.0 => /lib/x86_64-linux-gnu/libpcre2-8.so.0 (0x00007f43f9c1a000)
+	libvorbisfile.so.3 => /lib/x86_64-linux-gnu/libvorbisfile.so.3 (0x00007f43f9c0f000)
+	libtdb.so.1 => /lib/x86_64-linux-gnu/libtdb.so.1 (0x00007f43f9bf6000)
+	libltdl.so.7 => /lib/x86_64-linux-gnu/libltdl.so.7 (0x00007f43f9beb000)
+	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f43f9bc7000)
+	libvorbis.so.0 => /lib/x86_64-linux-gnu/libvorbis.so.0 (0x00007f43f9b9a000)
+	libogg.so.0 => /lib/x86_64-linux-gnu/libogg.so.0 (0x00007f43f9991000)
+
+
+2 Ex: ldd /usr/bin/ssh
+
+	linux-vdso.so.1 (0x00007ffc345d0000)
+	libcrypto.so.1.1 => /lib/x86_64-linux-gnu/libcrypto.so.1.1 (0x00007f9ad8193000)
+	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f9ad818d000)
+	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f9ad8170000)
+	libresolv.so.2 => /lib/x86_64-linux-gnu/libresolv.so.2 (0x00007f9ad8156000)
+	libselinux.so.1 => /lib/x86_64-linux-gnu/libselinux.so.1 (0x00007f9ad812a000)
+	libgssapi_krb5.so.2 => /lib/x86_64-linux-gnu/libgssapi_krb5.so.2 (0x00007f9ad80dd000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f9ad7f16000)
+	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f9ad7ef4000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f9ad855e000)
+	libpcre2-8.so.0 => /lib/x86_64-linux-gnu/libpcre2-8.so.0 (0x00007f9ad7e64000)
+	libkrb5.so.3 => /lib/x86_64-linux-gnu/libkrb5.so.3 (0x00007f9ad7d85000)
+	libk5crypto.so.3 => /lib/x86_64-linux-gnu/libk5crypto.so.3 (0x00007f9ad7d55000)
+	libcom_err.so.2 => /lib/x86_64-linux-gnu/libcom_err.so.2 (0x00007f9ad7d4f000)
+	libkrb5support.so.0 => /lib/x86_64-linux-gnu/libkrb5support.so.0 (0x00007f9ad7d3e000)
+	libkeyutils.so.1 => /lib/x86_64-linux-gnu/libkeyutils.so.1 (0x00007f9ad7d37000)
+
+Localização das bibliotecas
+
+o ld.so localiza o /etc/ld.so.cache
+*Diretorios /lib /usr/lib em sistemas 32 bits
+
+/usr/lib64 e /li64 em sistemas 64 Bits
+
+Bibliotecas adicionais
+/etc/ld.so.conf
+
+o ldconfig altera /etc/ld.so.conf e atualiza o /etc/ld.so.cache
+
+Exportando um biblioteca para ser carregada pela ld.so
+
+ex: export LD_LIBRARY_PATH=caminho_da_biblioteca - acesso temporário
+
+
+
