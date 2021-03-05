@@ -452,5 +452,311 @@ Exportando um biblioteca para ser carregada pela ld.so
 
 ex: export LD_LIBRARY_PATH=caminho_da_biblioteca - acesso temporário
 
+***102.4 Gerenciamento de Pacotes Debian
+
+#Repositorio Debian
+
+Gerenciamento de Pacotes Debian.
+
+DPKG - Gerenciamento de pacotes individuais
+
+apt-get busca repositorios remotos
+apt agrega funçoes extras ao apt-get
+
+Repositorio -> /etc/apt/sources.list/
+	      /etc/apt/sources.list.d/
+
+Exemplo de pacote binario:
+deb http://ftp.br.debia.org/debian wheezy main contrib non-free
+--------------------------------|    |    -------------------- categoria
+localização 			|    Versao
+				
+
+*Atualizar repositorios
+
+apt-get update ou apt update
+
+*Adicionar cdrom como repositorio
+apt-cdrom add
+apt-cdrom -d /home/kov /meucdrom add -> Exemplo.
+
+*Instalação de pacotes
+-y indica sim para todas as perguntas
+
+apt-cache search pacote -> procura o pacote
+apt search pacote
+
+apt-get install pacote -> instala pacotes
+apt install pacote
+
+*Instalar pacotes individuais.
+dpkg -i pacote.deb (.deb para pacotes binarios)
+dpkg install pacote.deb
+
+apt-get install -f (força a instalaçao de dependencia)
+
+#Reconfigurando um pacote
+
+dpkg-reconfigure pacote
+apt-get --reinstall install pacote
+
+ex dpkg-reconfigure tzdata
+
+apt reinstall pacote
+
+*Removendo pacotes
+
+apt-get remove pacote
+
+dpkg -r pacote
+dpkg -p pacote (-p de purge: remove arquivos de configuração)
+
+apt-get remove --purge pacote
+
+*Atualizando pacotes
+
+apt-get upgrade pacote
+
+*Atualizando todos os pacotes
+
+apt-get upgrade
+apt safe-upgrade
+
+apt-get -u lista pacotes desatualizados
+
+apt-get dist-upgrade atualizando todos os pacotes e substitui todos os obsoletos
+
+*Inspecionando pacotes
+
+dpkg -l pacote -> mostra estado dos pacotes
+
+dpkg -S procura qual pacote instalou o arquivo
+
+dpkg -L lista arquivos instalados pelo pacote
+
+dpkg --contents pacote.deb lista o conteudo do pacote
+
+apt-cache show pacote
+ apt show pacote
+
+dpkg -p pacote
+
+*Limpando repositorios
+ -> /var/cache/apt/archives (diretorio de cache dos repositorios)
+
+apt-get clean
+apt-get autoclean
+apt autoremove
+
+*Estatisticas dos pacotes
+
+apt-cache stats
+
+* Conhecimento Geral
+
+apt install -d pacote faz download do pactoe sem instalar (caso de verificação)
+
+*Resolvendo dependencias
+
+apt install --fix-missing
+apt update --fix-missing  ou apt update -f missing
+
+102.5 Gerenciamento de Pacotes YUM/RPM
+
+***Instalando pacotes
+
+rpm -ivh nome_do_pacote.rpm
+
+-i --install - instalar
+
+-U --update - Atualiza e instala
+
+Ex: rpm -Uvh pacote.rpm
+ou rpm -ivh --replacepkgs pacote.rpm -Vai instalar em cima do que esta, mesmo sendo a mesma versão.
+
+rpm -ivh --replacefiles pacote.rpm - Instala mesmo sendo o pacote antigo
+
+rpm -uvh --oldpackages pacote.rpm
+****
+Banco de dados do rpm redhat-rpmdb --redhatprovides
+
+-F --freshen - Atualiza
+rpm -Fvh *.rpm
+
+-V --verify - Verifica arquivos criados na instalação.
+rpm -Vf /bin/vi - Pesquisa pacote proprietario do arquivo
+
+-e --erase - Desinstala um pacote
+rpm -e pacote
+
+-q ou --query Inspeciona pacotes
+
+***Comando rpm com sub-opções
+
+rpm -qa ou rpm --quer --all - Consulta  pacotes instalados
+
+rpm -qc pacote ou rpm --query --configfiles - Lista arquivos de configuração do pacote
+
+rpm -qd pacote ou rpm --query --docfiles - Lista a documentação do pacote
+
+rpm -qf caminho_do_arquivo ou rpm --query --file caminho_do_arquivo - Informações sobre qual pacote instalou o arquivo
+
+rpm -qi nome_do_pacote ou rpm --query --info nomedopacote - Informção sobre o pacote, versão etc
+
+rpm -ql nomedopacote ou rpm --query --list nomedopacote -Lista os arquivos contidos no pacote
+
+rpm -qp pacote.rpm ou rpm --query --package pacote.rpm - Faz a inspeção de um pacote não instalado.
+
+rpm -qR nomedopacote ou rpm --query -requires nomedopacote - Mostra pacotes necessarios(dependencias) para o pacote indicado
+
+rpm --quer --whatrequires nomedopacote - Lista quais programas dependem do pacote
+
+***Subopções
+
+rpm -qpR pacote.rpm - Para mostrar dependencias
+
+as opçoes --nodeps e --force devem ser usadas com cautela. Pode causar efeitos indesejados nos progrmas em funcionamento
+
+--test pode ser usado para saber qual será o resultado de uma instalação.
+
+***Verificar todo os pacotes instalados
+
+rpm -Va
+
+Verificar pacote instalado sobre um arquivo
+
+rpm -Vp pacote.rpm
+
+***Importar a chave GPG da redHat
+
+rpm --import /usr/share/rhn/RPM-GPG-KEY
+
+***Exibir a lista das chaves importadas
+
+rpm -qa gpg-pubkey*
+
+***Exibindo detalhes de uma chave
+
+rpm -qi gpg-pubkey-d77777888-uyuyuy
+
+***Verificar um assinatura do pacote
+
+rpm -k --nogpg pacote
+
+rpm -K arquivo.rpm
+
+
+***YUM 
+
+yum check-update - Verificando de pacotes disponiveis para atualização.
+
+***Atualizando pacote unico
+yum update glibc
+
+
+yum update - Atualiza todos os pacotes e dependencias
+
+***Listando pacotes
+
+yum list all - Pacotes disponiveis para instalação
+
+yum list installed - Lista de pacotes instalados
+
+yum list available - Lista pacotes candidatos para instalação
+
+yum grupolist - Lista de grupo de pacotes conhecidos
+
+yum repolist - Identifica respositorio 
+
+***Obs: Ao listar pacotes é possivel usar caracteres coringa. Não esquecer de escapar
+
+Ex yum lista available gimp\*plugin\*
+
+yum list installed "krb?-*"
+
+***Pesquisando pacotes
+
+yum search meld kompare - Yum search usado quando não se sabe exatamente o nome do pacote
+
+yum info abrt - Busca informação do pacote 
+
+Dica
+
+É possivelbuscar informação de mais de um pacote no mesmo comando. Ex yum info foo bar
+
+***Instalando pacotes com YUM
+
+yum install pacote
+
+ou Multiplos
+
+yum install pacote outro_pacote
+
+
+***Verificando se pacote tem determinado arquivo
+
+yum install /usr/bin/named
+
+Usando coringa
+
+yum provides "*bin/named"
+
+Para saber quais pacotes proveem determinados arquivos.
+
+yum provides ou
+yum whatprovides
+
+***INstalando grupo de pacotes
+
+yum -v grouplist kde\*
+
+ou
+yum groupinstall kde-desktop
+
+ou
+yum install @kde-desktop
+
+***Desinstalando pacotes
+
+yum remove pacote
+
+yum groupremove "KDE (K Desktop Environment) - Removendo grupo de pacotes
+
+ou 
+yum groupremove kde-desktop
+
+ou
+yum remove @kde-desktop
+
+***Yumdownloader - Utilitario que permite fazer download dos arquivos rpm a partir de repositorios YUM e salvar local
+
+Ex yumdownloader --dstdir /tmp/pacote --resolve foo
+
+
+Configurando o YUM
+
+/etc/yum.conf centro de configuração do YUM
+/etc/yum.repos.d - repositorio
+
+***Plugins do yum
+
+yum info yum - Consultando os plugins
+
+***Desabilitando o plugn em tempo de execução
+
+yum update --disableplugin=presto
+
+
+***DNF - Gerenciador de pacotes que instala, atualiza e remove pacotes rpm.
+
+Veio para suprir o yum
+
+
+
+
+
+
+
+
 
 
