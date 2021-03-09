@@ -1,0 +1,175 @@
+Tópico 104 - Dispositivos de Sistemas de arquivos Linux e padrão FHS
+
+***104.1 Criar partiçoes e sistemas de Arquivos.
+
+fdisk
+
+ex fdisk -l /dev/sdb
+
+
+Disk /dev/sda: 40 GiB, 42949672960 bytes, 83886080 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xf789de7a
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048  1171455  1169408  571M 83 Linux
+/dev/sda2        1173502 12890111 11716610  5.6G  5 Extended
+/dev/sda3       12890112 83884031 70993920 33.9G 83 Linux
+/dev/sda5        1173504  8984575  7811072  3.7G 83 Linux
+/dev/sda6        8986624 12890111  3903488  1.9G 82 Linux swap / Solaris
+
+Partition table entries are not in disk order.
+
+
+Disk /dev/sdb: 7.47 GiB, 8022654976 bytes, 15669248 sectors
+Disk model: USB Flash Disk  
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xea8b1415
+
+Device     Boot Start      End  Sectors  Size Id Type
+/dev/sdb1  *       63 15667217 15667155  7.5G  7 HPFS/NTFS/exFAT
+
+
+***Usando o gdisk
+
+Ex: sudo gdisk /dev/sdb
+
+
+GPT fdisk (gdisk) version 1.0.5
+
+Partition table scan:
+  MBR: MBR only
+  BSD: not present
+  APM: not present
+  GPT: not present
+
+
+***************************************************************
+Found invalid GPT and valid MBR; converting MBR to GPT format
+in memory. THIS OPERATION IS POTENTIALLY DESTRUCTIVE! Exit by
+typing 'q' if you don't want to convert your MBR partitions
+to GPT format!
+***************************************************************
+
+
+Command (? for help): Using 1
+Partition GUID code: EBD0A0A2-B9E5-4433-87C0-68B6B72699C7 (Microsoft basic data)
+Partition unique GUID: 46878199-FABF-4B1A-8568-71A73B3D2360
+First sector: 63 (at 31.5 KiB)
+Last sector: 15667217 (at 7.5 GiB)
+Partition size: 15667155 sectors (7.5 GiB)
+Attribute flags: 0000000000000000
+Partition name: 'Microsoft basic data'
+
+Command (? for help): 
+
+? Para help
+i Para mostrar detalhes da partição
+l - Para listar as partiçoes
+p - Imprimir tabela de partições
+n - Adicionar nova partição
+d - deletar partição
+c - Mudar uma partição.
+o - Criar nova partição GPT
+w - Gravar partição
+
+***No gdisk as partições conhecidas são:
+
+
+Type search string, or <Enter> to show all codes: 
+0700 Microsoft basic data                0c01 Microsoft reserved                
+2700 Windows RE                          3000 ONIE boot                         
+3001 ONIE config                         3900 Plan 9                            
+4100 PowerPC PReP boot                   4200 Windows LDM data                  
+4201 Windows LDM metadata                4202 Windows Storage Spaces            
+7501 IBM GPFS                            7f00 ChromeOS kernel                   
+7f01 ChromeOS root                       7f02 ChromeOS reserved                 
+8200 Linux swap                          8300 Linux filesystem                  
+8301 Linux reserved                      8302 Linux /home                       
+8303 Linux x86 root (/)                  8304 Linux x86-64 root (/)             
+8305 Linux ARM64 root (/)                8306 Linux /srv                        
+8307 Linux ARM32 root (/)                8308 Linux dm-crypt                    
+8309 Linux LUKS                          830a Linux IA-64 root (/)              
+830b Linux x86 root verity               830c Linux x86-64 root verity          
+830d Linux ARM32 root verity             830e Linux ARM64 root verity           
+830f Linux IA-64 root verity             8310 Linux /var                        
+8311 Linux /var/tmp                      8400 Intel Rapid Start                 
+8500 Container Linux /usr                8501 Container Linux resizable rootfs  
+8502 Container Linux /OEM customization  8503 Container Linux root on RAID      
+8e00 Linux LVM                           a000 Android bootloader                
+a001 Android bootloader 2                a002 Android boot 1     
+
+#sudo gdisk -l /dev/sdb
+
+Disk /dev/sdb: 15669248 sectors, 7.5 GiB
+Model: USB Flash Disk  
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 4A45903D-AA0E-4BFA-8DF6-C4B2D7BA68DC
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 15669214
+Partitions will be aligned on 1-sector boundaries
+Total free space is 2026 sectors (1013.0 KiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              63        15667217   7.5 GiB     0700  Microsoft basic data
+
+
+***Usando parted
+
+#parted /dev/sdb
+
+help - ajuda
+GNU Parted 3.3
+Using /dev/sdb
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted) help                                                             
+  align-check TYPE N                       check partition N for TYPE(min|opt) alignment
+  help [COMMAND]                           print general help, or help on COMMAND
+  mklabel,mktable LABEL-TYPE               create a new disklabel (partition table)
+  mkpart PART-TYPE [FS-TYPE] START END     make a partition
+  name NUMBER NAME                         name partition NUMBER as NAME
+  print [devices|free|list,all|NUMBER]     display the partition table, available devices, free
+        space, all found partitions, or a particular partition
+  quit                                     exit program
+  rescue START END                         rescue a lost partition near START and END
+  resizepart NUMBER END                    resize partition NUMBER
+  rm NUMBER                                delete partition NUMBER
+  select DEVICE                            choose the device to edit
+  disk_set FLAG STATE                      change the FLAG on selected device
+  disk_toggle [FLAG]                       toggle the state of FLAG on selected device
+  set NUMBER FLAG STATE                    change the FLAG on partition NUMBER
+  toggle [NUMBER [FLAG]]                   toggle the state of FLAG on partition NUMBER
+  unit UNIT                                set the default unit to UNIT
+  version                                  display the version number and copyright information
+        of GNU Parted
+
+print                                                            
+Model: General USB Flash Disk (scsi)
+Disk /dev/sdb: 8023MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      32.3kB  8022MB  8022MB  primary  ntfs         boot
+
+version                                                          
+
+GNU Parted 3.3
+
+Copyright (C) 1998 - 2006 Free Software Foundation, Inc.
+This program is free software, covered by the GNU General Public License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
