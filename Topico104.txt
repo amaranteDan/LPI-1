@@ -121,6 +121,13 @@ Total free space is 2026 sectors (1013.0 KiB)
 Number  Start (sector)    End (sector)  Size       Code  Name
    1              63        15667217   7.5 GiB     0700  Microsoft basic data
 
+***Pergunta de Prova?
+Como é reconhecido (ou o codigo) uma partição efi no gdisk?
+R: ef00 EFI SYSTEM
+
+Qual o codigo de uma partição msdos no gdisk?
+R: Bios boot partition
+
 
 ***Usando parted
 
@@ -173,3 +180,529 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
+***Redimensionar partiçoes com /dev/sdb
+#parted /dev/sdb
+
+resizepart 1 500GB
+Warning: Shring a partition can cause data los, are you sure you want to continue?
+
+***Criando Novas partiçoes a partir do proprio parted
+
+parted mkpart primary ext4 500GB 1100GB
+	|	|	|	   |->Definen o começo e o final da partição	
+	|	|	|->
+	|	-> primaria
+	|-> mkpart(mkpartfs	       
+
+***Criação de Sistemas de arquivos
+
+
+#mkfs.ext4 /dev/sdb1 - Formatando a partição para uso do ext4
+
+***Excluindo a partição
+
+parted select /dev/sdb
+
+print
+
+rm 1 - Remove a 1 partição
+
+***Resgatar uma partição perdida
+
+(parted) rescue
+Start? 0MB
+End? 1024MB
+
+
+***Criando Sistemas de Arquivos
+
+#ls /sbin/mkfs.*
+
+
+/sbin/mkfs.bfs
+/sbin/mkfs.cramfs
+/sbin/mkfs.exfat
+/sbin/mkfs.ext2
+/sbin/mkfs.ext3
+/sbin/mkfs.ext4
+/sbin/mkfs.fat
+/sbin/mkfs.jffs2
+/sbin/mkfs.minix
+/sbin/mkfs.msdos
+/sbin/mkfs.ntfs
+/sbin/mkfs.ubifs
+/sbin/mkfs.vfat
+
+
+#ls /sbin/mkfs* | egrep -o 'mkfs.[a-z0-9]+' | cut -d. -f2
+
+bfs
+cramfs
+exfat
+ext2
+ext3
+ext4
+fat
+jffs2
+minix
+msdos
+ntfs
+ubifs
+vfat
+
+EXT3  
+#mkfs -t ext3 /dev/sda5
+ou
+#mkfs.ext3 /dev/sda5 mkfs.ext2
+
+***Adicionando a label a partição criada
+
+#e2label /dev/sda5 storage
+
+***Formatando e definindo label
+
+mke2fs -j -L storage /dev/sda5
+
+Obs: a label não pode ultrapassar de 16 caracteres.
+
+Ext3 - suporta journaling, o ext2 não
+
+***Partição com reiserfs
+
+mkfs.reiserfs /dev/sda5
+
+reiserfstune -l storage /dev/sda5 - Criando uma label e ativando partição
+
+Area de Swap
+
+Tipo 82 swap
+
+mkswap /dev/sda6
+
+#cat /proc/swaps
+
+***Ativando a swap
+
+swapon /dev/sda6
+
+#cat /proc/swaps
+
+#free -mot
+
+***Desativando a partição swap
+
+#swapoff /dev/sda6
+
+cat /proc/swaps
+
+#free -mot
+
+***Criando um arquivo como swap
+
+# dd if=/dev/zero of=/swap bs=1M count=100
+
+***Formatando como swap
+
+mkswap /swap
+
+***ativando a swap arquivo
+
+swapon /swap
+
+
+cat /proc/swaps
+
+***Desativando
+
+#swapoff /swap
+
+***104.2 Integridade do sistema
+
+***Verificando espaço livre
+df -hT
+
+df /
+Filesystem     1K-blocks    Used Available Use% Mounted on
+/dev/sda3       34677352 8930640  23955480  28% /
+
+df -i - Informações de Uso de inodes
+
+
+Filesystem      Inodes  IUsed   IFree IUse% Mounted on
+
+udev            242685    411  242274    1% /dev
+tmpfs           251093    680  250413    1% /run
+/dev/sda3      2220032 298560 1921472   14% /
+tmpfs           251093      1  251092    1% /dev/shm
+tmpfs           251093      2  251091    1% /run/lock
+tmpfs             1024     17    1007    2% /sys/fs/cgroup
+/dev/sda1        36560    317   36243    1% /boot
+/dev/sda5       244320  11894  232426    5% /var
+tmpfs            50218     65   50153    1% /run/user/1000
+
+
+#df -hT
+
+
+Filesystem     Type      Size  Used Avail Use% Mounted on
+udev           devtmpfs  948M     0  948M   0% /dev
+tmpfs          tmpfs     197M  1.2M  196M   1% /run
+/dev/sda3      ext4       34G  8.6G   23G  28% /
+tmpfs          tmpfs     981M     0  981M   0% /dev/shm
+tmpfs          tmpfs     5.0M     0  5.0M   0% /run/lock
+tmpfs          tmpfs     4.0M     0  4.0M   0% /sys/fs/cgroup
+/dev/sda1      ext4      547M   79M  428M  16% /boot
+/dev/sda5      ext4      3.7G  2.3G  1.2G  68% /var
+tmpfs          tmpfs     197M   56K  197M   1% /run/user/1000
+
+
+
+***du - Disk Usage
+
+-s Exibe sumariamente informações de tamanho
+-c Exibe soma total
+-h Formato humano
+
+#du -hs *
+
+|------------------------> tamanho dos arquivos
+|
+16K	comandos.txt
+40K	dmesg.txt
+12K	grubcfg.txt
+4.0K	grub.txt
+44K	journalctl.txt
+4.0K	repo_debian
+40K	Topico101.txt
+24K	Topico102.txt
+8.0K	Topico103-Comandos.txt
+12K	Topico104.txt
+8.0K	Topico110.txt
+
+#du -hc *
+
+
+16K	comandos.txt
+40K	dmesg.txt
+12K	grubcfg.txt
+4.0K	grub.txt
+44K	journalctl.txt
+4.0K	repo_debian
+40K	Topico101.txt
+24K	Topico102.txt
+8.0K	Topico103-Comandos.txt
+12K	Topico104.txt
+8.0K	Topico110.txt
+212K	total
+
+#sudo du -hc /var/log
+
+***Verificando a integridade do Sistema
+
+#ls /sbin/fsck.*
+
+***Verificando a integridade do Sistema
+
+#ls /sbin/fsck.*
+
+***Verificando a integridade do Sistema
+
+#ls /sbin/fsck.*
+
+***Verificando a integridade do Sistema
+
+#ls /sbin/fsck.*
+
+***Verificando a integridade do Sistema
+
+#ls /sbin/fsck.*
+
+***Verificando a integridade do Sistema
+
+#ls /sbin/fsck.*
+
+***Verificando a integridade do Sistema
+
+#ls /sbin/fsck.*
+
+***Verificando a integridade do Sistema
+
+fsck - verificar o arquivo /etc/fstab
+
+#ls /sbin/fsck.*
+
+
+/sbin/fsck.cramfs
+/sbin/fsck.exfat
+/sbin/fsck.ext2
+/sbin/fsck.ext3
+/sbin/fsck.ext4
+/sbin/fsck.fat
+/sbin/fsck.minix
+/sbin/fsck.msdos
+/sbin/fsck.vfat
+
+#fsck /dev/sda5 - Verificando a partição
+
+#fsck -f /dev/sda5
+
+
+***Reparando o sistema
+
+***Cada tipo de arquivo disponibiliza uma ferramenta de manutenção.
+
+
+tune2fs - Para ext2/ext3/ext4. Pode ser usada para adicionar journaling na ext2 e tranformar loem ext3.
+
+dumpe2fs - Exibe informação dos grupos de supreblocos do EXT2/3/4.
+
+debugfs - Depurador do EXT2/3/4.
+
+reiserfstune - Para sistemas reiserFs.
+
+debugreiserfs - Depurador para reiserfs
+
+xfs_info - Informações do xfs
+xfs_growfs -Mesclar partiçoes XFS em unico sistema de arquivos
+
+xfs_admin - Alterar parametros do xfs
+xfs_repair - Modo de reparo do xfs
+
+***mke2fs - Utilizado para criar arquivos, ext2, ext3 e ext4
+
+mke2fs
+
+Opçoes
+-F   Força a execução
+-j   Cria um sistema ext3
+-c   Varredura do disco em busca de blocos ruins
+-L   Atribui rotulo
+-v   Exibe detalhes da execução
+-V   Exibe a versão do comando
+
+Ex
+#mke2fs -j -v /dev/sdb1
+
+***Comando tune2fs - POde configurar parametros para o sistema ext2,3,4.
+
+tune2fs
+-c *Configurar numero maximo de montagens
+-g *Configura grupo de usuarios que podera utilizar blocos reservados
+-j *Adiciona o journal ao sistema de arquivos
+-l *Exibe conteudo
+-m <numero_blocos> *Configura a porcentagem de blocos reservados
+-u *Define usuario
+-C *Esta oção mostra a quantidade de vezes que o sistema ja foi montado
+-L *Informa a label
+
+Ex:
+tune2fs -c 15 /dev/sdb1
+
+tune2fs -L Backup /dev/sdb1
+
+tune2fs -m 10 /dev/sdb1
+
+***Comandos com XFS
+
+xfs_repair [opção] <dispositivo>
+
+-n Apenas informar os erros
+-v Exibe detalhes da saida do comando
+
+# xfs_repair /dev/sdb1
+
+xfs_fsr - Utilitario de desfragmentação
+*Usado com o sistema montado e ativo
+
+Ex:
+# xfs_db -c frag -r /dev/sdb1
+
+#xfs_fsr /dev/sdb1
+
+***Visualizar numero de fragmentos existentes
+xfs_bmap -v /dev/sdb1
+
+Obs: xfs_db -r Podemos criar um arquivo contendo toda a fragmentação do disco
+
+***103.4 Controla Montagens e desmontagens do sistema de arquivos
+
+
+Ex
+# mkdir /storage
+
+# mount /dev/sda5 /storage
+
+# df -hT
+
+# cp -v /etc/hosts /storage
+
+Obs: arquivo lost+found - Arquivo do sistema no ponto raiz que é gerado durante o processo do fsck e armazena fragmentos de arquivos recuperados
+
+*Verificando os pontos de montagem
+# mount
+
+-t Especificar um ou mais pontos de montagem 
+
+ex
+# mount -t ext3,ext4,devpts
+
+-o Permite definir opções de montagem
+
+ro Somente leitura
+rw leitura e escrita
+
+Ex
+# mount -o remount,ro /storage
+# mount -t ext3
+
+***Testando os dados
+
+rm -f /storage/hosts
+
+***Desmontando. Para manutençao, sempre desmontar
+# umount /storage
+
+Arquivo /etc/fstab
+
+
+
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+
+# / was on /dev/sda3 during installation
+UUID=923a359e-b4b1-4d62-bc54-194ef54faacc /               ext4    errors=remount-ro 0       1
+# /boot was on /dev/sda1 during installation
+UUID=ccbb56ac-0bc9-4432-97db-e7ef888cc9ec /boot           ext4    defaults        0       2
+# /var was on /dev/sda5 during installation
+UUID=7f74f184-23c0-4715-94b3-42310d9c8875 /var            ext4    defaults        0       2
+# swap was on /dev/sda6 during installation
+UUID=0a29a596-3668-415a-982a-b7df2ef40284 none            swap    sw              0       0
+/dev/sr0        /media/cdrom0   udf,iso9660 user,noauto     0       0
+
+***104.5 Gerenciamento de permissões
+
+Usuarios e grupo
+
+# whoami
+
+***Grupos a que pertenço
+# groups
+
+dublin cdrom floppy sudo audio dip video plugdev netdev bluetooth scanner kaboxer
+
+id -Verificando o id 
+
+uid=1000(dublin) gid=1000(dublin) groups=1000(dublin),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),109(netdev),118(bluetooth),133(scanner),141(kaboxer)
+
+Donos de arquivos e permissões
+
+# ls -l /bin/bash /home/dublin/ .basrc
+
+***Realizando a leitura do arquivo
+
+- Ausencia de permissão
+r - leitura
+w - escrita
+x - execução
+
+***Definição dos arquivos
+
+- Arquivo comum
+d - Diretorio
+l - link simbolico
+c - Dispositivo de caractere
+b - Dispositivo de bloco
+p - FIFO(pipe)
+s - soquete
+
+***Definindo permissão
+
+#chmod
+Ex # chmod +x olamundo.sh
+
+ou chmod +rwx olamundo.sh
+
+***Entendendo as permissões
+u - usuario dono
+g - grupo dono
+o - outros usuarios
+a - define permissões a todos os usuarios
+
+Ex
+#chmod ug+wx olamundo.sh - Definindo permissão para usuario dono/grupo dono escrita/execução
+
+***Removendo as permissões
+
+#chmod o-rwx olamundo.sh Removando todas as permissões para outros usuarios do script olamundo.sh
+
+***Pode adiconar permissões paa mais de um arquivo com a opção -R ou --recursive
+
+***Permissões especificas de um arquivo
+Ex # chmod o= olamundo.sh
+# chmod ug=rwx olamundo.sh Definindo ao usuario e grupo donos as permissões rwx para olamundo.sh
+# chmod o=rw olamundo.sh Definindo a outros usuarios as permissões rw no arquivo olamundo.sh
+
+***Entendendo as permissões octal
+
+r = 4
+w = 2
+x = 1
+
+umask de arquivos  666
+umask de diretorio 777
+
+Locais onde são definidos a umask
+/etc/login.defs
+
+Mascara padrão - 0002 Em sistemas onde os grupos iniciais são particulares
+Mascara padrão - 0022 Em sistemas onde o grupo inicial pertencem a todos os usuarios
+Ex 0777
+-  0002
+   0775 Permissão do diretorio - Siginifca que usuario dono permissão total/grupo, outros leitura e execução.
+
+Ex 0666
+-  0002
+   0664 Permissão do arquivo - Significa que 
+
+#umask - Comando que verifica valor padrão.
+022
+
+Permissões suid e guid
+
+São permissões especiais herdadas do mesmo dono do comando
+
+chmod u+s comando - Adiciono a permissão suid 
+
+A letra s vai no lugar da x, indicando permissão suid
+
+Sgid - atua nos grupos
+
+chmod g+s comando
+
+São as permissões forem adicionadas, aparecera a letra S
+s aparecem nas permissões suid e sgid no dono do arquivo e grupo
+
+Permissão sticky
+
+Evitar que usuarios que não são donos do arquivos o apaguem.
+
+ex
+ls -l /tmp
+
+drwxrwxrwt 16 root root 4096 Mar 10 09:09 /tmp
+
+***Adicionando a permissão sticky
+
+chmod o+t olamundo.sh
+
+Permissões especiais em formato numerico
+
+tabela
+
+Digito	suid=4	sgid=2	sticky=1
+o	-	-	-	
+4	sim	-	-
+6	sim	sim	-	
+7	sim	sim	sim
+chmod u=rwx,g=rwxs,o=rw olumundo.sh equivale a chmod 2775 olamundo.sh
+
+chmod u=rwx,g=rwx,o=rwxt olamundo.sh equivale a chmod1777 olamundo.sh 
