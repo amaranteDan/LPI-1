@@ -354,6 +354,29 @@ dd =if/dev/hda of=mbr.backup bs=512 count=1
 
 dd if=mbr.backup of=/dev/hda
 
+***Realizando a leitura do arquivo /etc/fstab
+
+# /etc/fstab: static file system information.
+#
+#
+# <file system> <mount point>                            <type>  <options>       <dump>  <pass>
+# /             /dev/sda3 
+UUID=923a359e-b4b1-4d62-bc54-194ef54faacc /               ext4   errors=remount-ro 0       1
+
+# /boot        /dev/sda1 
+UUID=ccbb56ac-0bc9-4432-97db-e7ef888cc9ec /boot           ext4    defaults        0       2
+
+# /var        /dev/sda5
+UUID=7f74f184-23c0-4715-94b3-42310d9c8875 /var            ext4    defaults        0       2
+
+# swap       /dev/sda6 
+UUID=0a29a596-3668-415a-982a-b7df2ef40284 none            swap    sw              0       0
+
+/dev/sr0        /media/cdrom0   udf,iso9660 user,noauto     0       0
+
+
+
+
 102.3 Controle das bibliotecas compartilhadas
 
 Bibliotecas de ligação estática - Sã bibliotecas ligas ao programa em tempo de execução.
