@@ -1,0 +1,564 @@
+#Topico 103 - Comandos Gnu e Unix
+
+Shell padrão do Linux - BASH - Born again Shell
+Tipos de shell - ksh / sh / csh
+set - define ou altera as opçoes do shell Ex set -o noclobber ou set -C impede que arquivos sejam sobrescritos
+set -- a b c atribui valores a b c para as variaveis $1, $2, $3
+unset - remove valores e atributos da variavel.
+chsh -s /bin/sh - Muda shell do usuario (Somente o root altera o shell)
+exit - encerra o shell atual
+logout - encerra todo os niveis do shell
+Echo - imprime na tela - Ex: echo $PATH / echo "Bem vindo ao Linux"
+***********************************************************************************
+env - trabalha com variaveis de ambiente locais: Sem argumentos mostra as variaveis
+env [opcao] <variavel>
+-i  --ignore-envirinment: ignora ambiente
+-u  --unset : remove variavel do ambiente
+-h  ajuda
+-v  --debug: imprime informacao para cada processo
+**********************************************************************************
+export Define uma variavel e exporta Ex export PATH=$PATH:/usr/local/bin
+declare Define valores e atributos a um variavel Ex declare -x $PATH
+exec Substitui o shel com o comando fornecido. Usado em scripts
+type verifica se comando é interno ou externo Ex type man saida: man é /usr/bin/man
+type cd - cd é um comando interno do shell.
+*********************************************************************************
+Declarando uma variavel
+
+Ex: lpi="Linux Professional Institu"
+echo $lpi - ver variavel
+Variaveis Conhecidas:
+LANG: idioma
+DISPLAY: Determina qual display do X
+HISTFILE: caminho do historico de comandos($HOME/.bash_history)
+USER: Usuario
+HOME: Home do usuario
+LOGNAME: nome que usuario usou para logar
+PATH: Lista de diretorios
+PWD: diretorio atual
+SHELL: shell usado
+TERM: Tipo de emulador se é X ou tty.
+
+***********************************************************************************
+Variaveis Reservadas.
+
+$* ou $@ - contem parametros de posição.
+$# Traz quantidade de parametros.
+$! Traz o ID do processo
+$$ Id do shell atual
+$? Traz estatus da saida do ultimo comando
+$0 Nome do shel ou do shell script.
+Parametros de Posição.
+Pode usar: $1,$2,$3 .... acima do 9 usara chaves ${10}, ${11}, ${12} etc.
+
+*********************************************************************************
+Caminho absoluto e caminho relativo
+Absoluto: /root
+/usr/bin/man/....
+/var/log/syslog
+
+relativo
+
+../script/
+./log/syslog
+
+*****************************************************************************
+Atalhos do Bash
+
+ctrl + r procura historio a partir da palavra digitada
+ctrl + g sai do modo de procura
+!! repete ultimo comando
+!$ Recupera o ultimo argumento.
+
+ctrl + a Inicio da linha
+ctrl + e Final da linha
+alt + b : Avanca o cursor na palavra
+alt + d: apaga a partir da posição do cursor
+alt + f: Avanca a cursor
+alt + backspace: Apagar a partir da posição do cursor para tras
+ctrl + shif + c: copia texto selecionado no terminal
+ctrl + shift + v: cola em outro terminal o texto selecionado
+ctrl + w: Copia e apaga da posição do cursor ate o inicio da palavra antes do cursor
+ctrl + k: apaga do cursor ate o final.
+ctrl + x ou u: copia
+ctrl + y: cola
+ctrl + d: encerra o comando (EOF=END OF FILE) 
+***************************************************************************
+Ajuda
+
+uname --help
+whatis man - Traz o manual
+man 3 printf - acessar uma seção especifica do manual
+Manuais localizado em /usr/man e /usr/share/man
+
+apropos traz informação do comando a ser utilizado. Ex apropos route
+
+
+****************************************************************************
+chsh -s /bin/sh - Muda shell do usuario (Somente o root altera o shell)
+exit - encerra o shell atual
+logout - encerra todo os niveis do shell
+Echo - imprime na tela - Ex: echo $PATH / echo "Bem vindo ao Linux"
+PWD - mostra diretorio atual
+**************************************************************************
+
+103.2 Processar fluxos de Textos com filtros
+
+cat - mostra conteudo do arquivo
+cat -n mostra numeros de linhas do arquivo
+tac - mostra conteudo de tras para frente
+head - mostra começo dos arquivos - padrao mostrar 10 linhas sem argumento
+Ex head -n30 mostra quantidade de linhas 
+tail - mostra final do arquivo - Argumento -n numero de linhas,
+-c caracteres a serem mostrados
+-f(follow) para que o final do arquivo seja mostrado continuamente
++ output the last NUM lines, instead of the last 10; or use -n +NUM to output starting with line NUM
+Ex tail -n +50 - saida a partir da linha 50.
+
+wc - conta linhas, palavras ou caracteres
+wc -l, -w e -c.
+
+nl - Numera as linhas. (semelhante cat -b). Argumento "ba" numera todas as linhas.  bt numera linhas que estejam em branco.
+
+expand - substitui espaços de tabulação por espaços simples. 
+hexdump - mostra arquivos binarios. -C torna a saida mais legivel
+
+od - Converte entre diferentes formatos de dados.
+
+octal é o padrão.
+
+
+Traditional format specifications may be intermixed; they accumulate:
+  -a   same as -t a,  select named characters, ignoring high-order bit
+  -b   same as -t o1, select octal bytes
+  -c   same as -t c,  select printable characters or backslash escapes
+  -d   same as -t u2, select unsigned decimal 2-byte units
+  -f   same as -t fF, select floats
+  -i   same as -t dI, select decimal ints
+  -l   same as -t dL, select decimal longs
+  -o   same as -t o2, select octal 2-byte units
+  -s   same as -t d2, select decimal 2-byte units
+  -x   same as -t x2, select hexadecimal 2-byte units
+
+Ex od -d texto2.txt (ver o arquivo em formato decimal)
+
+#od texto2.txt
+0000000 004471 020011 062555 060554 061556 060551 031412 004440
+0000020 061011 067141 067141 020141 030412 004460 020011 062555
+0000040 060554 061556 060551 000012
+0000047
+
+
+#od -A d -t c texto2.txt 
+0000000   9  \t  \t       m   e   l   a   n   c   i   a  \n   3      \t
+0000016  \t   b   a   n   a   n   a      \n   1   0  \t  \t       m   e
+0000032   l   a   n   c   i   a  \n
+0000039
+
+
+#od -A n -t a texto2.txt
+   9  ht  ht  sp   m   e   l   a   n   c   i   a  nl   3  sp  ht
+  ht   b   a   n   a   n   a  sp  nl   1   0  ht  ht  sp   u   v
+   a  nl
+
+split - Divide um arquivo em outros menores. -l indica numero de linhas. -b indica qual o tamnaho de cada parte - Tamanho padrao - 1.000 linhas por parte.
+usa o cat para junta no novo arquivo Ex: split -l 2 teste.txt parte_ ( aqui divido o arquivo maximo 2 linhas do arquivo teste.txt como parte_)
+para juntar tudo em otro arquivo uso (Ex: cat parte_* > teste2.txt)
+
+Ex split -l 2 texto1.txt -Vai divir o arquivo a cada 2 linhas. Resultado criado 2 arquivos: xaa xab.
+
+split -b 17 texto2.txt y - Vai dividir o texto2.txt a cada 17 bytes. Resultado arquivo yaa e yab de 17 bytes cada.
+
+wc - (word count)
+
+wc -l texto*
+ 1 xaa
+ 2 xab
+ 3 total
+
+#sudo dmesg | wc                   
+[sudo] password for dublin: 
+   1491   13957  103150
+
+#sudo dmesg | tail                 
+[   12.185867] VMCI host device registered (name=vmci, major=10, minor=61)
+[   12.185867] Initialized host personality
+[   12.260404] input: PC Speaker as /devices/platform/pcspkr/input/input6
+[   12.741534] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+[   12.939464] Adding 1951740k swap on /dev/sda6.  Priority:-2 extents:1 across:1951740k FS
+[   13.511272] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+[   13.577419] EXT4-fs (sda5): mounted filesystem with ordered data mode. Opts: (null)
+[   17.480904] NET: Registered protocol family 40
+[   22.893864] e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: None
+[   22.914042] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+
+#sudo dmesg | tail -n15 |head -n 6 
+[   12.112421] sr 1:0:0:0: Attached scsi generic sg0 type 5
+[   12.112463] sd 2:0:0:0: Attached scsi generic sg1 type 0
+[   12.184426] vmw_vmci 0000:00:07.7: Found VMCI PCI device at 0x11080, irq 16
+[   12.184586] vmw_vmci 0000:00:07.7: Using capabilities 0xc
+[   12.185825] Guest personality initialized and is active
+[   12.185867] VMCI host device registered (name=vmci, major=10, minor=61)
+
+
+#sudo tail -f /var/log/auth.log                                                                                                                                1 ⨯
+Mar 18 17:22:39 dublin sudo: pam_unix(sudo:session): session closed for user root
+Mar 18 17:23:41 dublin sudo:   dublin : TTY=pts/1 ; PWD=/home/dublin/Documents/LPI-1 ; USER=root ; COMMAND=/usr/bin/dmesg
+Mar 18 17:23:41 dublin sudo: pam_unix(sudo:session): session opened for user root by (uid=0)
+Mar 18 17:23:41 dublin sudo: pam_unix(sudo:session): session closed for user root
+Mar 18 17:25:01 dublin CRON[1608]: pam_unix(cron:session): session opened for user root by (uid=0)
+Mar 18 17:25:01 dublin CRON[1608]: pam_unix(cron:session): session closed for user root
+Mar 18 17:26:14 dublin sudo:   dublin : TTY=pts/1 ; PWD=/home/dublin/Documents/LPI-1 ; USER=root ; COMMAND=/usr/bin/dmesg
+Mar 18 17:26:14 dublin sudo: pam_unix(sudo:session): session opened for user root by (uid=0)
+Mar 18 17:26:14 dublin sudo: pam_unix(sudo:session): session closed for user root
+Mar 18 17:27:42 dublin sudo:   dublin : TTY=pts/1 ; PWD=/home/dublin/Documents/LPI-1 ; USER=root ; COMMAND=/usr/bin/tail -f /var/log/auth.log
+Mar 18 17:27:42 dublin sudo: pam_unix(sudo:session): session opened for user root by (uid=0)
+
+
+uniq - mostra conteudo dos arquivos. opção -u mostra apenas as linhas que não se repetem.
+Ex:# uniq -iu texto5.txt - -i ignore-case -u mostra apenas uma vezes palavras repetidas.
+amor
+carro
+camelo
+carcaça
+cadeira
+
+
+
+cut - Filtra arquivos em coluna, por caracteres ou por posição de campo.
+
+Ex: cut -d ':' -f 1,3 /etc/group - mostrar campos posição 1,3 separados por : do /etc/group
+Ex2 cut -d ':' -f 1,3 --output-delimiter ' = ' /etc/group - Troco o separador original por =
+
+paste - Concatena arquivos lado a lado.
+Ex paste um.txt dois.txt (Observação - cada linha tem que estar numerada)
+
+join - Similar ao paste, mas trabalha especificamente com campos.
+Ex join -1 1 -2 1 -o '1.2 2.2' um.txt dois.txt
+-o Especifica qual campo quero mostrar - No exemplo 1 coluna de cada arquivo
+-1 / -2 se refere aos arquivos 1 se refere a coluna.
+
+Expand - Define a Tabulação. opção -t
+Ex expand -t 1 texto2.txt - Retira a tabulação
+
+cat texto2.txt 
+9                melancia
+3               banana 
+10               uva
+
+expand -t 1 texto2.txt                                   
+9   melancia
+3   banana 
+10   uvaexpand -t10 texto2.txt 
+9                    melancia
+3                   banana 
+10                   uva
+
+
+
+tr - converter caracteres 
+Ex echo HOJE E DIA DE JOGO | tr '[A-Z]' '[a-z]' - O que esta em maisculo p/ minusculo
+Ex2 echo HOJE E DIA DE JOGO DO SANTOS | tr '[:upper:]' '[:lower:]'
+Ex3 echo HoJe E DIa dE jOgO dO sAnToS | tr '[:upper:]' '[:lower]' | tr '[:blank:]' '_'
+tr -s - elimina espaços em branco
+tr -d elimina terminações de textos windows
+
+pr Prepara arquivo para impressão - Padrao 66 linhas por pagina
+pr -l altera a quantidade de linhas por pagina
+pr -w altera o comprimento maximo das linhas.
+
+#pr texto2.txt|head                                                                                                                                            1 ⨯
+
+
+2021-03-18 17:04                    texto2.txt                    Page 1
+
+
+9                melancia
+3               banana 
+10               uva
+
+# nl texto2.txt |pr -m - texto1.txt | head 
+
+2021-03-18 17:45                                                  Page 1
+
+
+     1  9                melancia                   1 melancia
+     2  3               banana                      2 pera
+     3  10               uva                        3 banana
+
+fmt - formata um texto para um padrao de caracteres por linha. Padrão 75
+#fmt -w 60 texto3.txt texto4.txt - O comando vai formatar a saida em no maximo 60 caracteres de largura.
+
+Uma frase qualquer.  Uma frase qualquer.
+Outra frase qualquer.
+
+sort Ordena alfabeticamente.
+sort -n ordena numericamente
+
+sed - Editor de texto poderoso. Trabalha como filtro. O sed carrega linhas de entrada na memoria.
+*Pode usar expressoes regulares.
+
+s de substitui
+
+# sed 's/a/A/' texto2.txt - Nesse caso o s de substituir a por A.      
+9                melAncia
+3               bAnana 
+10               uvA
+
+g de global.
+
+#sed 's/a/A/g' texto*   
+1 melAnciA
+2 perA 
+3 bAnAnA
+9                melAnciA
+3               bAnAnA 
+10               uvA
+9                melAnciA
+3               bAnAnA 
+10               uvA
+OutrA 
+frAse 
+quAlquer.
+Amor 
+Amor 
+Amor
+cArro
+cAmelo
+cArcAçA
+cAdeirA
+
+d de delete - Para excluir linhas da saida
+
+#sed '2d;$s/a/A/g' texto*  - Nesse caso usamos o 2d para excluir a linha 2, ; para separar comandossed '2d;$s/a/A/g' texto*
+1 melancia
+3 banana
+9                melancia
+3               banana 
+10               uva
+9                melancia
+3               banana 
+10               uva
+Outra 
+frase 
+qualquer.
+Amor 
+amor 
+amor
+carro
+camelo
+carcaça
+cAdeirA
+
+1 melancia
+3 banana
+9                melancia
+3               banana 
+10               uva
+9                melancia
+3               banana 
+10               uva
+Outra 
+frase 
+qualquer.
+Amor 
+amor 
+amor
+carro
+camelo
+carcaça
+cAdeirA
+
+#sed -e '2,${' -e 's/a/A/g' -e '}' texto*                                                                                                                               1 ⨯
+1 melancia
+2 perA 
+3 bAnAnA
+9                melAnciA
+3               bAnAnA 
+10               uvA
+9                melAnciA
+3               bAnAnA 
+10               uvA
+OutrA 
+frAse 
+quAlquer.
+Amor 
+Amor 
+Amor
+cArro
+cAmelo
+cArcAçA
+cAdeirA
+
+
+-e para inserir multiplos comandos.
+
+#sed -e '/per/,/bana/{' -e 's/a/A/g' -e '}' texto*                                                                                                                      1 ⨯
+1 melancia
+2 perA 
+3 bAnAnA
+9                melancia
+3               banana 
+10               uva
+9                melancia
+3               banana 
+10               uva
+Outra 
+frase 
+qualquer.
+Amor 
+amor 
+amor
+carro
+camelo
+carcaça
+cadeira
+
+
+#echo -e "s/ /\t/g">sedtab                                                 
+                                                                                                                                                                       
+
+# cat sedtab                   
+s/ /    /g
+                                                                                                                                                                               
+-f Para tabulação.
+# sed -f sedtab texto1.txt                         
+1       melancia
+2       pera
+3       banana
+                                                                                                                                                                               
+= para numera as saidas e filtar 
+
+#sed '=' texto2.txt      
+1
+9                melancia
+2
+3               banana 
+3
+10               uva
+
+
+
+
+Paginador less | more
+/ voltar a fazer pesquisa
+? busca retroativa
+shift + f incluir texto
+ctrl + c leitura convencional
+
+Verificar checksum
+md5sum
+sha256sum
+sha512sum
+-c opcao para indicar arquivo
+********************************************************************************************
+103.3 Gerenciamento Basico de arquivos - Peso 4
+
+ls
+ls -l
+ls -lh
+* representa qualquer sequencia
+? substitui um caracter Ex ls /dev/sda? Mostra todos exceto sda
+[] permite indicar uma lista de caracteres - Ex ls /dev/sd[abc]
+{} lista de termos que podem ser separados por virgula Ex ls /dev/{hda,fd0}
+! exclui da operação
+\ escape - caracter escapado
+
+#ls -l /
+
+#ls -l /etc/host*
+
+#ls -l /etc*     
+total 1236
+-rw-r--r--  1 root     root      2981 Jan 21 21:01 adduser.conf
+-rw-r--r--  1 root     root        44 Jan 21 21:59 adjtime
+drwxr-xr-x  3 root     root      4096 Jan 21 21:17 alsa
+drwxr-xr-x  2 root     root     20480 Jan 21 21:51 alternatives
+drwxr-xr-x  8 root     root      4096 Jan 21 21:50 apache2
+drwxr-xr-x  3 root     root      4096 Jan 21 21:14 apparmor
+drwxr-xr-x  8 root     root      4096 Jan 21 21:51 apparmor.d
+drwxr-xr-x  7 root     root      4096 Jan 21 21:59 apt
+drwxr-xr-x  3 root     root      4096 Jan 21 21:46 avahi
+-rw-r--r--  1 root     root      1994 Nov  4 12:01 bash.bashrc
+-rw-r--r--  1 root     root        45 Jan 24  2020 bash_completion
+
+#ls -a
+#ls -la
+#ls -ld ../texto1.txt yaa sedtab xaa - Listando varios arquivos
+#ls -l -S - Listando por ordem
+#ls -Slr - Listando do menor para o maior
+
+ls -R /home/aluno -Listagem Recursiva - Da pra simular a matriz com ls -R / ... :)
+
+
+#ls -lt - Listando de maneira ordenada
+
+
+#ls /dev/hd[abc]
+
+#ls -l /dev/sd*
+#ls -l /dev/sd?
+
+
+
+
+Identificação de Arquivos
+
+file - identificar o tipo de arquivo Ex - file /boot/memtest86+-5.01
+
+#file System.map-5.9.0-kali1-amd64 
+System.map-5.9.0-kali1-amd64: ASCII text
+
+
+touch - Altera o timestamp de um arquivo.
+alterar data de modificacao -m
+altera data de acesso -a
+outros valores de tempo -t
+ ex: touch -m arquivo altera para a data atual
+ex: touch -m -t 200012251425 arquivo - altera para a data desejada
+ex touch -a -d "Jan 1 12:00:00 1999" arquivo
+
+cp - Copia de arquivo
+cp -i origem destino -i Copia interativa
+-p copia atributos
+-r copia recursiva
+
+
+mv Comando usado para mover ou renomear
+
+-f ou --force - Força a movimentação do alvo existente
+-i ou --interactive
+-b ou --backup - Faz copia de quasquer arquivos a serem sobrescritos.
+
+
+
+rm - remover arquivos ou diretorios - Mesmo com conteudo
+-r recursivamente
+
+
+rmdir - remover apenas diretorios vazios.
+
+mkdir -v dir1 dir2 - Cria o dir1 e dir2 ao mesmo tempo.
+
+-p cria todos os diretorios inexistentes
+
+mkdir -v -p d1/d2/d3
+
+***Caracteres Curingas
+
+? QUalquer caracter
+* Combina com qualquer string, inclusive vazia
+[] Introduz uma classe de caracter
+- hífen - intervalo a ser pesquisado
+! quando primeiro, inverte a função do intervalo. Ex [!0-9] - Combina qualquer caracter menos 0 e 9.
+[0-9 a-f A-F] representa 3 intervalos distintos
+
+echo  texto* - Lista todos os arquivos texto do diretorio a ser realizado a busca
+
+
+
+
+
+stat Topico103-Comandos.txt
+
+************************************************************************
