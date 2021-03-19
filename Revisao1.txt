@@ -1,0 +1,125 @@
+***Conhecimentos que precisam ser melhorados para a proxima prova da Utah/LPI
+
+comando tee
+
+comando tar
+
+nice/renice
+
+bg/fg
+
+
+Perguntas do Simulado 2 Ricardo Prudenciato
+
+60-Qual elemento tem a função de melhorar a performance e a usabilidade dos sistemas operacionais nas maquinas virtuais, ou S.O Guest?
+
+Guest Driver - Usando Guest Additions VmBox e VmWare tools no VmWare
+
+55- Qual comando irá definir o usuario analista1 e grupo dev como proprietarios do arquivo controle_ambiente?
+
+chown analista1.dev controle_ambiente
+
+chown pode aceitar chown: ou chown .
+
+47 - Qual comando ira remover o diretorio aula1 e todos os arquivos e subdiretorios?
+
+rm -r aula1.
+
+rmdir - Usado para remover diretorios vazios
+
+43 - Qual comando mostra todos os registros do arquivo /etc/passwd exceto os que tiverem a string "/bin/false"?
+
+grep -v "/bin/false" /etc/passwd
+
+No grep/egrep/fgrep a opção -v não exibe a string ou demais resultados da expressão utilizada.
+
+40 - Qual símbolo deve ser usado após um comando para que o mesmo entre em execução background?
+&  no final do comando.
+
+39 - Qual o código numerico do sinal SGHUP?
+
+1 SIGHUP
+9 SIGKILL
+15 SIGTERM
+10 SIGUSR1
+
+38 - O arquivo file1 é um link simbolico do arquivo file2. Qual das afirmações abaixo estão corretas?
+
+file1 e file2 compartilham o mesmo inode
+file1 e file2 devem estar obrigatoriamente na mesma partição.
+as mesmas permissões aplicadas ao arquivo file1 e aplicada ao file2
+
+
+37 - Qual comando pode ser utilizado para exibir os arquivos e diretorios contidos no arquivo backup.tgz?
+
+tar tf backup.tgz
+
+opção t exibe o conteudo do arquivo agrupado
+f sempre utilizado para indicar o arquivo .tar ou tgz
+
+35 - O usuario deseja que ao executar o comando myapp, o resultado seja exibido na tela e ao mesmo tempo escrito no arquivo log.out, sem sobrescrever o conteudo prévio do arquivo log.out. Qual comando deve ser utilizado?
+
+myapp | tee -a log.out
+
+-a faz um append no arquivo, sem apagar o conteudo.
+
+33 - Entrada do /etc/fstab incorreta?
+
+/home  /dev/sda  defaults,usrquota,grpquota 1 2
+
+32 - Qual do comando de redirecionamento ira escrever a saida padrão e a saida de erro no arquivo filename?
+
+>filename 2>&1
+
+2>&1 diz que saida de erro(stderr valor 2) deve ser associado ao mesmo local que esta associado a saida padrão.
+
+28 - Um arquivo texto foi compactado utilizando-se algoritmo gzip. Qual comando pode ser utilizado para ler o conteudo desse arquivo, sem remover a compactção do mesmo?
+zcat - Usado para ler arquivos compactados com gzip. Outra opção gunzip -c
+bzcat faz o mesmo para bzip2
+xzcat para xz
+
+27 - Expressẽs regulares
+
+
+
+
+24 - Quando iniciamos um processo usando nice mas sem informar valor algum, qual o nice é atribuido ao processo?
+
+10.
+Quando um processo é iniciado sem uso do nice, o valor do NICE assumido é 0.
+
+23 - Quais das seguintes opções mostra a palavra linux na tela?
+
+cat <<< linux
+echo linux | cat
+echo linux 2> file
+
+22 - Qual o diretorio que armazena o historico de comandos digitados?
+
+bash_history
+
+18 - Considerando a umask 022, qual será a permissão do arquivo novo criado?
+
+rwxr-xr-r - Calculo 777 - 022 = 755
+
+14 - Nas configurações do GRUB2, qual parametro indica o sistema iniciado por padrão
+GRUB_DEFAULT.
+
+13 - Analisando o arquivo /boot/grub/menu.lst, vc verificou a indicação de "hd0,3" no parametro root? Qual partição indica?
+/dev/hda4 - A contagem começa em 0.
+
+11 - Qual arquivo do sistema é atualizado apos rodar o comando ldconfig?
+/etc/ld.so.cache
+
+8 - Qual o resultado da execução do comando mount -a?
+
+Todas as partiçoes serão montadas automaticamente, exceto as que possuem noauto.
+
+4 - O admin do sistema redHat quer saber qual pacote instalou o arquivo /etc/virc. Qual comando deve ser usado?
+rpm -qf /etc/virc 
+f recebe o arquivo como parametro.
+
+2 - Qual comando ira exibir todas as dependencias do pacote ja instalado vim?
+apt-cache depends vim
+dpkg -s tambem retorna essa informação.
+
