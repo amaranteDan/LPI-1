@@ -33,10 +33,148 @@ grep -v "/bin/false" /etc/passwd
 
 No grep/egrep/fgrep a opção -v não exibe a string ou demais resultados da expressão utilizada.
 
+
+***Outros exemplos de uso do grep
+$ grep -c "/bin/bash" /etc/passwd
+1
+
+$ grep -n "/bin/bash" /etc/passwd
+38:postgres:x:119:123:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+
+$ grep -n "bash" /etc/passwd 
+38:postgres:x:119:123:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+
+$ grep "root" /etc/passwd                
+root:x:0:0:root:/root:/usr/bin/zsh
+nm-openvpn:x:124:129:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+
+$ grep -e "root" -e "/bin/bash" /etc/passwd
+root:x:0:0:root:/root:/usr/bin/zsh
+postgres:x:119:123:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+nm-openvpn:x:124:129:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+
+$ grep -E "root|home" /etc/passwd          
+root:x:0:0:root:/root:/usr/bin/zsh
+nm-openvpn:x:124:129:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+dublin:x:1000:1000:dublin,,,:/home/dublin:/usr/bin/zsh
+
+$egrep -E "root|home" /etc/passwd - tem o mesmo resultado
+
+
+***Exemplos com sed
+$ cat teste.txt                                                                          1 ⨯
+root1 root1 root1 root1
+root2 root2 root2 root2
+root3 root3 root3 root3
+root4 root4 root4 root4
+
+$ sed "s/root/ROOT/" teste.txt -Nesse caso na primeira coluna havera alteração.
+ROOT1 root1 root1 root1
+ROOT2 root2 root2 root2
+ROOT3 root3 root3 root3
+ROOT4 root4 root4 root4
+
+sed "s/root/ROOT/2" teste.txt -Nesse caso na segunda coluna havera as alterações.
+root1 ROOT1 root1 root1
+root2 ROOT2 root2 root2
+root3 ROOT3 root3 root3
+root4 ROOT4 root4 root4
+
+
+$ sed "s/root/ROOT/g" teste.txt -Nesse caso, a alteração ocorreu em todas. g
+ROOT1 ROOT1 ROOT1 ROOT1
+ROOT2 ROOT2 ROOT2 ROOT2
+ROOT3 ROOT3 ROOT3 ROOT3
+ROOT4 ROOT4 ROOT4 ROOT4
+
+$ sed "s/root/ROOT/3g" teste.txt -Nesse caso, as alterações foram feitas a partir da 3 col.
+root1 root1 ROOT1 ROOT1
+root2 root2 ROOT2 ROOT2
+root3 root3 ROOT3 ROOT3
+root4 root4 ROOT4 ROOT4
+
+$ sed "1,3 s/root/ROOT/g" teste.txt -Nesse caso, ocorreu alterações da linhas 1 a 3.
+ROOT1 ROOT1 ROOT1 ROOT1
+ROOT2 ROOT2 ROOT2 ROOT2
+ROOT3 ROOT3 ROOT3 ROOT3
+root4 root4 root4 root4
+
+$ sed -e "1 s/root/ROOT/g" -e "3 s/root/ROOT/g" teste.txt -Alterações na linha 1 e 3.
+ROOT1 ROOT1 ROOT1 ROOT1
+root2 root2 root2 root2
+ROOT3 ROOT3 ROOT3 ROOT3
+root4 root4 root4 root4
+
+$ sed "2,$ s/root/ROOT/g" teste.txt -Alterações a partir da segunda linha até o final.                      
+root1 root1 root1 root1
+ROOT2 ROOT2 ROOT2 ROOT2
+ROOT3 ROOT3 ROOT3 ROOT3
+ROOT4 ROOT4 ROOT4 ROOT4
+
+$ sed "s/root1/ROOT/gp" teste.txt  Substitui todas as linhas que foram feita a alteração.
+ROOT ROOT ROOT ROOT
+ROOT ROOT ROOT ROOT
+root2 root2 root2 root2
+root3 root3 root3 root3
+root4 root4 root4 root4
+
+
+$ cat teste.txt| sed "s/root/ROOT/" Substitui a primeira ocorrencia em cada linha.
+ROOT1 root1 root1 root1
+ROOT2 root2 root2 root2
+ROOT3 root3 root3 root3
+ROOT4 root4 root4 root4
+
+$ sed "s/root/ROOT/w teste2.txt" teste.txt -Gravando alterações no novo arquivo.
+ROOT1 root1 root1 root1
+ROOT2 root2 root2 root2
+ROOT3 root3 root3 root3
+ROOT4 root4 root4 root4
+
+***103.4 Utilizar streams, pipes e redirecionadores.
+
+stdin - Teclado - valor  0
+stdout - Monitor - valor 1
+stderr - valor 2
+
+> direciona sobrescrevendo
+>> direciona sem sobrescrever
+<<< redireciona o stdin para o comando
+2> mensagem_erro - redireciona a saída de erro para o arquivo mensagem.
+
+
+ls /ETC 2> mensagem_erro
+
+$ ls -l /etc/passwd /etc/PASSWD &>> message_erro -Rediciona saida(stdin,stdout) para arquivo
+
+Redicionando saida stdout para stdin e enseguida para arquivo
+
+2>&1
+
+ls /ROOT /root > listagem 2>&1
+
+diferenças. 
+tr a-z A-Z < /etc/passwd - Fara a leitura do arquivo todo em letras maiusculas
+
+tr a-z A-Z <<< /etc/passwd Fara com que a visualização do impresso na tela /ETC/PASSWD
+
+***xargs - Executa um comando
+
+$ xargs -p echo  
+Hello World, Iḿ still alive
+echo Hello World, Iḿ still alive?...yes
+Hello World, Iḿ still alive
+
+***Comando tee. Mostra na tela e ao mesmo tempo grava no arquivo
+
+Ex: # seq 1 10 | tee sequencia. -Mostra na tela e envia para arquivo simultaneamente.
+-a faz append no arquivo sem sobrescrever.
+
 40 - Qual símbolo deve ser usado após um comando para que o mesmo entre em execução background?
+
 &  no final do comando.
 
-39 - Qual o código numerico do sinal SGHUP?
+39 - Qual o código numerico do sinal SIGHUP?
 
 1 SIGHUP
 9 SIGKILL
@@ -56,6 +194,59 @@ tar tf backup.tgz
 
 opção t exibe o conteudo do arquivo agrupado
 f sempre utilizado para indicar o arquivo .tar ou tgz
+
+Empacotadores de arquivos - tar e cpio
+
+-c Cria um arquivo .tar
+-C Altera local de extração dos arquivos
+-f Define o nome do arquivo .tar
+-x Extrai o conteudo do arquivo
+-z Utiliza a compactação gzip
+-j Utiliza a compactação bzip2
+--xz/ -J Compacta arquivos no formato xz
+-p Extrai arquivos e mantem permissões.
+-t Lista o conteudo sem extrair lo
+-v Modo verboso
+
+
+Ex: #tar cvf boot.tar /boot - Cria o arquivo boot.var com o conteudo do /boot
+
+$ tar tvf boot.tar  -Listando o arquivo                                                                                        2 ⨯
+
+drwxr-xr-x root/root         0 2021-01-21 22:04 boot/
+-rw-r--r-- root/root   5734400 2020-10-29 07:03 boot/vmlinuz-5.9.0-kali1-amd64
+-rw-r--r-- root/root  64766360 2021-01-21 22:04 boot/initrd.img-5.9.0-kali1-amd64
+drwxr-xr-x root/root         0 2021-01-21 21:58 boot/grub/
+drwxr-xr-x root/root         0 2021-01-21 21:58 boot/grub/fonts/
+-rw-r--r-- root/root   2395475 2021-01-21 21:58 boot/grub/fonts/unicode.pf2
+
+$tar xvf boot.tar - Extrai o arquivo no diretorio local.
+
+$tar xvf boot.tar boot/grub/grub.cfg - Extrai arquivo no diretorio atual.
+
+Criar arquivo do /boot com gzip
+
+$tar czvf boot.tar.gz /boot
+
+Extrair o conteudo do boot.tar.gz
+tar xzvf boot.tar.gz ou
+tar xvf boot.tar.gz
+
+
+Criar arquivo boot.tar.bz2 do /boot
+$tar cjvf boot.tar.bz2 /boot
+
+Extrair
+tar xjvf boot.tar.bz2 ou
+tar xvf boot.tar.bz2
+
+Criar arquivo xz do /boot
+tar cJvf boot.tar.bz2 /boot
+
+Extrair
+tar xJvf boot.tar.xz
+
+
 
 35 - O usuario deseja que ao executar o comando myapp, o resultado seja exibido na tela e ao mesmo tempo escrito no arquivo log.out, sem sobrescrever o conteudo prévio do arquivo log.out. Qual comando deve ser utilizado?
 
@@ -78,7 +269,7 @@ zcat - Usado para ler arquivos compactados com gzip. Outra opção gunzip -c
 bzcat faz o mesmo para bzip2
 xzcat para xz
 
-27 - Expressẽs regulares
+27 - Expressões regulares
 
 
 
