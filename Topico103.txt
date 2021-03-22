@@ -523,6 +523,11 @@ cp -i origem destino -i Copia interativa
 -p copia atributos
 -r copia recursiva
 
+cp -dpr
+-r copia varios diretorios
+-d preserva links simbolicos
+-p preserva atributos.
+
 
 mv Comando usado para mover ou renomear
 
