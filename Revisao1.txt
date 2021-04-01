@@ -30,7 +30,7 @@ rmdir - Usado para remover diretorios vazios
 43 - Qual comando mostra todos os registros do arquivo /etc/passwd exceto os que tiverem a string "/bin/false"?
 
 grep -v "/bin/false" /etc/passwd
-
+grep -c aula.1 fara a contagem dos arquivos que iniciem com 1.
 No grep/egrep/fgrep a opção -v não exibe a string ou demais resultados da expressão utilizada.
 
 
@@ -130,6 +130,12 @@ ROOT1 root1 root1 root1
 ROOT2 root2 root2 root2
 ROOT3 root3 root3 root3
 ROOT4 root4 root4 root4
+
+sed -i '/www.\./d' arquivo Faz com que o arquivo de origem seja alterado. /d indica que toda linha que possui o termo será removida.
+
+
+
+
 
 ***103.4 Utilizar streams, pipes e redirecionadores.
 
@@ -313,4 +319,227 @@ f recebe o arquivo como parametro.
 2 - Qual comando ira exibir todas as dependencias do pacote ja instalado vim?
 apt-cache depends vim
 dpkg -s tambem retorna essa informação.
+
+#############################################################################
+****Revisão 3 Simulado do Ricardo Prudenciato.
+############################################################################
+
+Pergunta 1 Busca por orden inversa no vi.
+
+
+Ex ?LPI - Faz a busca do final para o começo do texto.
+   /LPI - Faz a busca a partir do posicionamento do cursor ate o final do arquivo.
+n - faz a busca subindo o texto
+N - faz a busca descendo o texto
+
+u -desfaz a alteração
+ctrl + r refaz a ultima alteração.
+
+:g/termo - faz a busca pelo termo.
+
+0$ vai para inicio da linha.
+
+ZZ salva e fecha = :x :wq ou :exit
+ZQ fecha arquivo sem salvar = q!
+
+Pergunta 2 - Qual a sequencia que melhor representa um processo de boot em sistemas que utilizam UEFI como firmware?
+
+UEFI > Bootloader > Kernel > init
+
+partição /boot/efi
+
+Pergunta 3 - Qual o processo responsavel por selecionar e executar o kernel e o intrd durante o processo de boot?
+
+Bootloader.
+Explicação o Bios localiza e executa a MBR que carrega o Bootloader, que seleciona o kernel e o initrd, o init inicia os serviços e programas de acordo com o runlevel.
+
+Pergunta 5 - QUal daemon é responsavel por tratar eventos gerados ao pressionar a tecla power do hardware, ou au se conectar o desconectar o cabo de energia de um notebook?
+acpid
+Explicação. Pcs modernos tem suporte a Advanced Configuration an Power, que permite o gerenciamento por meio do daemon acpid.
+
+Hoje vamos comer abacaxi no almoço e beber vinho de manaaaana.
+
+
+Pergunta 9 - Quais comandos podem ser usados para atualizar o arquivo de configuração do GRUB2?
+
+grub-mkconfig > /boot/grub/grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg
+update-grub > /boot/grub/grub.cfg
+
+Pergunta 10 - Qual comando do debian remove o pacote e todos seus arquivos de configuração?
+
+apt-get purge pacote.
+ou dpkg -P ou --purge
+
+Pergunta 12 -  Quais comandos podem ser utilizados para remover um pacote do rpm?
+-e ou -- erase
+rpm -e
+yum remove
+yum erase
+
+Pergunta 13 - Quais das partiçoes virtuais que são montadas dinamicamente pelo sistema durante o processo de inicialização?
+
+/proc
+/dev
+/sys
+
+Pergunta 14 - Quais dos comandos abaixo devem ser utilizados para atualizar todos os pacotes de um sistema que usa o rpm, sem levar em consideração os pacotes marcados 
+como obsoletos?
+
+dnf update
+dnf upgrade considera os pacotes obsoletos.
+
+15 - Qual variavel embutida  no shell que retorna o valor do PID do shell atual?
+
+$$
+$! PID do ultimo processo em background
+$? codigo de retorno
+$~ não exite o comando
+
+Pergunta 17 - A variavel NOME foi declarada. Qual comando exibira a frase: O Aluno Daniel foi aprovado!
+
+declarando a varaiavel
+$ NOME="Daniel" 
+
+echo O aluno $NOME foi aprovado!
+
+O aluno Daniel foi aprovado
+
+
+Pergunta 19 Qual comando irá deletar de um arquivo toda linha que comece com a string "www."?
+
+sed -i '/www.\./d' arquivo
+
+Pergunta 20 - Qual comando ira retornar apenas o nome e o iD dos 5 ultimos usuarios presentes no arquivo /etc/passwd?
+
+tail -5 /etc/passwd cut -d : -f 1,3
+
+Pergunta 21 - Quais parametros do ls mostraram todos os detalhes dos arquivos e diretorios, inclusive os arquivos modificados recentemente?
+
+#ls -altr
+
+a - mostra arquivos ocultos
+l - lista detalhes
+t - ordena
+r - orden inversa para aparecer os mais novos.
+
+Pergunta 29 - No arquivo /boot/grub/grub.cfg qual parametro indica o arquivo de kernel que deve ser utilizado durante o processo de boot?
+
+#linux -> vmlinuz-5-9.0-kali1-amd64 root
+initrd -> initrd.image-5-9.0-kali1-amd64
+
+Pergunta 30 - Qual opção do fsck fara com que umapartição seja analizada mas que nenhuma ação
+seja tomada?
+
+#fsck -n 
+
+-N         do not execute, just show what would be done
+-C [<fd>]  display progress bar; file descriptor is for GUIs
+ -A         check all filesystems
+ -V         explain what is being done
+
+Pergunta 32 - Qual sinal será enviado a um processo quando ele é interrompido atraves do uso do ctrl+C
+
+#2
+
+Sinais
+SIGHUP    1 -Sinal enviado para reler arquivo
+SIGINT    2 -Interrupção de processo. Ctrl+c
+SIGQUIT   3 -Finaliza processo
+SIGABRT   6 -Aborta processo
+SIGKILL   9 -Finaliza de forma abrupta processo.
+SIGTERM   15 Sinal padrão enviado para a correta finalização do processo.
+SIGSTOP   19 Para a execução do processo
+SIGSTP    20 Para a execução do processo. Crtl+z no teclado
+SIGCONT   18 Caso um processo seja parado, o SIGCONT volta a executar lo
+
+fg - Processo em primeiro plano
+bg - Processo em segundo plano
+$ ping 1.1.1.1 &> /dev/null &
+$ ping 3.3.3.3 &> /dev/null & 
+$ ping 2.2.2.2 &> /dev/null &
+
+$ jobs -l                                                                                    
+[1]   1770 Running                 ping 1.1.1.1 &> /dev/null &
+[2]-  1771 Running                 ping 2.2.2.2 &> /dev/null &
+[3]+  1778 Running                 ping 3.3.3.3 &> /dev/null &
+
+
+fg %2 - Coloca o processo 2 em primeiro plano
+bg %2 - Coloca o processo 2 em segundo plano
+
+nohup - Continua a execução mesmo que o usuario faça logout
+
+Pergunta 36 - Ao executar o comando nice -8 myapp - Qual atributo e valore é definido ao processo?
+
+8 E definido o nivel do nice igual a 8
+
+nice - quanto um processo é "legal" para a cpu. 
+Todo processo é iniciado com prioridade-padrão zero.
+para alterar nice e renice. (nice apenas pelo root) [renice pelo usuario 0 e 19 ]
+
+valores -20 a +19 = -20 a mais alta / +19 a mais baixa
+
+se um processo for iniciado com nice sem argumtos, o valor padrão é 10.
+Ex:
+$ nice ping 1.1.1.1 &> /dev/null &
+$ ps o ni,command -C ping
+ NI COMMAND
+  0 ping 1.1.1.1
+  0 ping 2.2.2.2
+ 10 ping 1.1.1.1 -> coluna NI(10)
+
+$jobs -l 
+[3]+  1851 Running                 "nice" ping 1.1.1.1 &> /dev/null &
+
+$ nice -10 firefox - Fara com que o firefox inicie com o nice +10
+
+$ nice --10 firefox - Fara com que o firefox inicie com o nice -10
+
+renice - troca o valor nice de um processo
+
++/- nice
+-u usuario
+-p PID
+
+
+$ renice +15 firefox - troca o valor do nice para +15
+
+$ renice -15 firefox - troca o valor do nice para -15
+
+Pergunta 38 - Qual dos comandos não aceita expressão regular no shell?
+
+#fgrep - ele apenas faz um filtro por strings de texto. O restante aceita.
+
+Pergunta 41 - Qual variavel pode ser editar para iniciar o editor padrão?
+EDITOR
+
+Pergunta 42 - Em um sistema que utiliza pacotes RPM, qual comando irá exibir todos os arquivos instalados pelo pacote vim-minimal?
+
+#rpm -ql vim-minimal [--query / l list]
+
+Pergunta 43 - Apos criar partição swap, qual o sequinte comando a ser realizado?
+
+#mkswap
+swapon
+
+Pergunta 44 - Em uma partição que utiliza o sistema xfs, qual comando é utilizado especificamente para que os dados dentro da partição sejam reogarnizados?
+
+xfs_fsr (file system reoganizer)
+
+xfs_db - ferramenta de debug
+xfs_repair tem a função de reparar
+
+
+Pergunta 54 - Sobre link simbolico
+
+1 Um link simbolico pode ter como destino um arquivo em uma partição diferente
+
+2 Apenas o link simbolico pode ter um diretorio como destino, o link fisico so pode ser utilizados para arquivos
+3 O acesso aos dados atraves de um link fisico será possivel mesmo que o nome do arquivo seja alterado posteriormente.
+
+Pergunta 57 - Em quais diretorios estão localizados os arquivos binarios que só podem ser executados pelo usuario root?
+
+/usr/sbin
+/sbin
 
