@@ -394,7 +394,7 @@ dnf upgrade considera os pacotes obsoletos.
 $$
 $! PID do ultimo processo em background
 $? codigo de retorno
-$~ não exite o comando
+$~ não existe o comando
 
 Pergunta 17 - A variavel NOME foi declarada. Qual comando exibira a frase: O Aluno Daniel foi aprovado!
 
@@ -428,7 +428,7 @@ Pergunta 29 - No arquivo /boot/grub/grub.cfg qual parametro indica o arquivo de 
 #linux -> vmlinuz-5-9.0-kali1-amd64 root
 initrd -> initrd.image-5-9.0-kali1-amd64
 
-Pergunta 30 - Qual opção do fsck fara com que umapartição seja analizada mas que nenhuma ação
+Pergunta 30 - Qual opção do fsck fara com que uma partição seja analizada mas que nenhuma ação
 seja tomada?
 
 #fsck -n 
@@ -538,8 +538,34 @@ Pergunta 54 - Sobre link simbolico
 2 Apenas o link simbolico pode ter um diretorio como destino, o link fisico so pode ser utilizados para arquivos
 3 O acesso aos dados atraves de um link fisico será possivel mesmo que o nome do arquivo seja alterado posteriormente.
 
+***Diferença entre hardlink e softlink.
+
+softlink(link simbolico)
+
+1 - aponta para qualquer arquivo ou diretorios.
+2 - pode apontar para arquivos ou diretorios em sistemas/dispositivos diferentes;
+3 - pode apontar para partiçoes diferentes.
+4 - é criado por meio do comando ln -s. Ex ln -s /mnt/backup /backup_dados
+5 - é identificado com a letra "l" "->" "@"
+6 - se alterado o link simbolico, o arquivo original é alterado
+7 - permissão rwxrwxrwx - Depende da permissão do arquivo original
+
+hardlink(link fisico)
+
+1 - não cria links para diretorios, apenas para arquivos;
+2 - se a localização for alterada, movida ou renomeada, o link não sera perdido, desde que estejam no mesmo sistema de arquivos.
+3 - para criar link usa o comando ln arquivo a ser linkado e o link fisico. Ex ln /documentos/backup backup_teste.
+4 - possui o mesmo inode do arquivo original
+
+
+
+
+
 Pergunta 57 - Em quais diretorios estão localizados os arquivos binarios que só podem ser executados pelo usuario root?
 
 /usr/sbin
 /sbin
+
+
+
 
