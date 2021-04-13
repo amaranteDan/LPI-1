@@ -558,13 +558,38 @@ hardlink(link fisico)
 4 - possui o mesmo inode do arquivo original
 
 
-
-
-
 Pergunta 57 - Em quais diretorios estão localizados os arquivos binarios que só podem ser executados pelo usuario root?
 
 /usr/sbin
 /sbin
+
+Encontrar arquivos e comandos no Linux
+
+locate - Busca por arquivos no sistema(apenas por nome), baseando sua consulta em um banco de dados. Comando updatedb atualiza dados do locate
+
+which - Localiza os binarios realizando a consulta da variavel $PATH.
+
+Ex: $ which ls
+/usr/bin/ls
+
+
+whereis - Localiza binario, codigo fonte e paginas de manual de determinado comando em diretorios padronizados.
+
+Ex: $ whereis ls
+ls: /usr/bin/ls /usr/share/man/man1/ls.1.gz
+
+-b binarios
+-s codigo fonte 
+-m somente manual
+
+type - Exibe informações sobre o tipo de comando.
+-a exibe todas as informações sobre o comando
+
+$ type cd
+cd is a shell builtin - Comando interno do shell
+
+$ type systemctl
+systemctl is /usr/bin/systemctl - Comando externo do shell.
 
 
 
