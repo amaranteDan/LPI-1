@@ -294,6 +294,35 @@ Listando Modulos carregados no kernel em execução
 lsmod
 cdrom                  73728  1 sr_mod
 
+
+─$ lsmod | grep -i --color snd
+snd_ens1371            32768  2
+snd_ac97_codec        180224  1 snd_ens1371
+ac97_bus               16384  1 snd_ac97_codec
+gameport               20480  1 snd_ens1371
+snd_rawmidi            45056  1 snd_ens1371
+snd_seq_device         16384  1 snd_rawmidi
+snd_pcm               135168  2 snd_ac97_codec,snd_ens1371
+snd_timer              49152  1 snd_pcm
+snd                   110592  10 snd_seq_device,snd_timer,snd_ac97_codec,snd_pcm,snd_rawmidi,snd_ens1371
+soundcore              16384  1 snd
+
+$ lsmod | fgrep -i snd -Listando os componentes que dependem do modulo
+
+snd_ens1371            32768  2
+snd_ac97_codec        180224  1 snd_ens1371
+ac97_bus               16384  1 snd_ac97_codec
+gameport               20480  1 snd_ens1371
+snd_rawmidi            45056  1 snd_ens1371
+snd_seq_device         16384  1 snd_rawmidi
+snd_pcm               135168  2 snd_ac97_codec,snd_ens1371
+snd_timer              49152  1 snd_pcm
+snd                   110592  10 snd_seq_device,snd_timer,snd_ac97_codec,snd_pcm,snd_rawmidi,snd_ens1371
+soundcore              16384  1 snd
+
+
+
+
 Obtendo informações com modinfo
 
 filename:       /lib/modules/5.9.0-kali1-amd64/kernel/drivers/cdrom/cdrom.ko (ko = Kernel object)
@@ -382,6 +411,18 @@ Listando dispositivos pci com detalhes
 	Subsystem: VMware PRO/1000 MT Single Port Adapter
 	Kernel driver in use: e1000
 	Kernel modules: e1000
+
+
+
+
+***Verificando qual modulo do kernel esta usando o dispositivo [-k]
+
+$ lspci -s 02:01.0 -k
+02:01.0 Ethernet controller: Intel Corporation 82545EM Gigabit Ethernet Controller (Copper) (rev 01)
+        DeviceName: Ethernet0
+        Subsystem: VMware PRO/1000 MT Single Port Adapter
+->      Kernel driver in use: e1000
+->      Kernel modules: e1000
 
 
 vv Super verboso
@@ -568,7 +609,145 @@ Device Qualifier (for other device speed):
 Device Status:     0x0000
   (Bus Powered)
 
+
+$ lsusb -v -d 1d6b:0002 -Pesquisando modulos usb por id (-d)
+
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Couldn't open device, some information will be missing
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9 Hub
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 Full speed (or root) hub
+  bMaxPacketSize0        64
+  idVendor           0x1d6b Linux Foundation
+  idProduct          0x0002 2.0 root hub
+  bcdDevice            5.09
+  iManufacturer           3 Linux 5.9.0-kali1-amd64 ehci_hcd
+  iProduct                2 EHCI Host Controller
+  iSerial                 1 0000:02:03.0
+
+
+***Modinfo - Buscando informações sobre o modulo
+-p parametros
+
+$ modinfo -p cdrom -Mostrando os parametros do modulo
+debug: (bool)
+autoclose: (bool)
+autoeject: (bool)
+lockdoor: (bool)
+check_media_type: (bool)
+mrw_format_restart: (bool)
+
+Obs: Para persistir os parametros, devem ser incluidos no arquivo /etc/modprobe.conf ou no /etc/podprobe.d/
+
+Caso algum modulo esteja causando conflito pod ser adiciionado na blacklist /etc/modprobe.d/blacklist.conf
+
+
+**** Arquivos de Informação e de dispositivo.
+
+lspci, lsusb e lsmod atuam como front-ends para os arquivos especiais /proc /sys
+
+Arquivos importantes
+
+/proc/cpuinfo - Informações da CPU
+
+/proc/interrupts -Lista de numeros de interrupçoes por dispositivo de entrada e saida em cada CPU
+
+/proc/ioports - Listas de posrtas de entrada e saida registradas autualmente
+
+/proc/dma - Canais registrados de DMA - acesso direto a memoria
+
+/proc e /sys tem objetivo especifico de armazenar informações dos dispositivos e dados do kernel, incluindo processos em execução.
+
+/dev Cada arquivo dentro do /dev é associado a um dispositovo no sistema, particularmente dispositivos de armazenamento
+Ex: /dev/hda, /dev/hda1, /dev/hda2
+
+Dispositivos removiveis são manipulados pelo subsistema "udev" que cria dispositivos correspodentes no /dev
+
+o udev é responsavel pela deteccção coldplug e hotplug. o UDEV usa o SysFS /sys.
+
+o UDEV consulta o /etc/udev/rules.d
+
+A partir do kernel 2.4 em diante, os dispositivos de armazenamento são identificados como SCSI 
+
+mestre sda = /dev/sda1, /dev/sda2 ...
+escravo sdb = /dev/sdb1, /dev/ sdb2 ...
+
+cartoes sd 
+
+/dev/mmcblk0p1
+/dev/mmcblk0p2
+
+Dispositivos NVMe recebem prefixo nvme = /dev/nvme0n1p1, /dev/nveme0n1p2
+
+
+*** Perguntas para a LPI - fonte https://learning.lpi.org/pt/learning-materials/101-500/101/101.1/101.1_01/
+
+
+
+Suponha que um sistema operacional não consegue inicializar após um segundo disco SATA ser adicionado ao sistema. Sabendo que as peças não são defeituosas, qual poderia ser a causa possível desse erro?
+
+R: Reconhecimennto de disco. Necessario verificar. 
+
+A ordem dos dispositivos de inicialização deve ser definida no utilitário de configuração da BIOS, caso contrário a BIOS pode não conseguir executar o carregador de inicialização.
+
+
+
+Você acaba de adquirir um novo computador de mesa e gostaria de conferir se a placa de vídeo externa conectada ao barramento PCI é realmente a anunciada pelo fabricante. Porém, se abrir o gabinete do computador, a garantia será anulada. Qual comando pode ser usado para listar as informações da placa de vídeo detectadas pelo sistema operacional?
+
+R: pode ser rodado o comando lspci a principio para identificar a placa de video.
+
+A linha a seguir faz parte da saída gerada pelo comando lspci:
+
+03:00.0 RAID bus controller: LSI Logic / Symbios Logic MegaRAID SAS 2208 [Thunderbolt] (rev 05)
+
+Qual comando deve ser executado para identificar o módulo do kernel em uso neste dispositivo específico?
+
+R: lspci -s 03:00.0 -k ou lspci -s 03:00.0 -v
+
+
+Um administrador deseja experimentar parâmetros diferentes para o módulo do kernel bluetooth sem reiniciar o sistema. No entanto, qualquer tentativa de descarregar o módulo com modprobe -r bluetooth resulta no seguinte erro:
+
+modprobe: FATAL: Module bluetooth is in use.
+Qual a possível causa desse erro?
+
+R: Outros modulos dependem dele, por isso nao pode ser interrompido. 
+Pode usar o comando lsmod | fgrep -i bluetooth para verificar os modulos que dele dependem.
+
+Exercícios Exploratórios
+
+É comum encontrar máquinas legadas em ambientes de produção, por exemplo quando certos equipamentos usam uma conexão desatualizada para se comunicar com o computador controlador, sendo assim necessário estar particularmente atento a algumas peculiaridades dessas máquinas mais antigas. Certos servidores x86 com firmware BIOS mais antigo, por exemplo, não inicializam se um teclado não for detectado. Como esse problema específico pode ser evitado?
+
+O utilitário de configuração da BIOS tem uma opção para desativar o bloqueio do computador quando um teclado não é encontrado.
+
+R: Verificar no /proc/interrupts como estão configuradas as IRQS
+
+
+Os sistemas operacionais criados em torno do kernel do Linux também estão disponíveis para uma ampla variedade de arquiteturas de computadores além do x86, como os computadores de placa única baseados na arquitetura ARM. Um usuário atento notará a ausência do comando lspci nessas máquinas, como o Raspberry Pi. Que diferença em relação às máquinas x86 justifica essa ausência?
+
+R: Ao contrário da maioria das máquinas x86, um computador baseado em ARM, como o Raspberry Pi, não possui um barramento PCI; portanto, o comando lspci é inútil.
+
+
+
+Muitos roteadores de rede incluem uma porta USB que permite a conexão de um dispositivo externo, como um disco rígido USB. Sabendo que a maioria deles usa um sistema operacional baseado em Linux, qual seria o nome de um disco rígido USB externo no diretório /dev/, supondo-se que não haja nenhum outro dispositivo de bloco convencional no roteador?
+
+R:Os kernels do Linux modernos identificam os discos rígidos USB como dispositivos SATA, de modo que o arquivo correspondente será /dev/sda, já que não existe nenhum outro dispositivo de bloco convencional no sistema.
+
+R: E provavel que seja reconhecido como /dev/sdb -Lembrar que não foi identificado outro dispositivo no roteador.
+
+
+Em 2018, a vulnerabilidade de hardware conhecida como Meltdown foi descoberta. Ela afeta quase todos os processadores de diferentes arquiteturas. As versões mais recentes do kernel Linux podem informar se o sistema atual está vulnerável. Como obter essas informações?
+
+R: Consultando o  /proc/cpuinfo
+
+O arquivo /proc/cpuinfo tem uma linha que mostra os bugs conhecidos para a CPU correspondente, como por exemplo bugs: cpu_meltdown.
+
+
 ****Verificando Dispositivos Scsi (Small Computer system interface)****
+
 
 4 Niveis 
 Host: Numero da controladora scsi
