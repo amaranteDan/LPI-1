@@ -899,6 +899,23 @@ Feb 27 18:58:53 dublin dbus-daemon[496]: [system] Successfully activated service
 101.2 Inicializando o sistema
 peso 3.
 
+O kernel deve ser carregado por programa chamdo bootloader(carregador de Inicialização) que por su vez é carregador pelo BIOS ou UEFI. O bootloader passar parametros para o kernel(cmdline) como a partição raiz ou qual sistema operacional deve ser carregado.
+
+Kernel da seguimento a inicialização identificando e configurando o hardware. então o kernel chama o utilitario responsavel por iniciar e gerenciar os serviços do sistema.
+
+A BIOS, abreviação de Basic Input/Output System, é um programa armazenado em um chip de memória não volátil conectado à placa-mãe, executado sempre que o computador é ligado. Esse tipo de programa é chamado firmware e seu local de armazenamento é separado dos outros dispositivos de armazenamento do sistema. A BIOS pressupõe que os primeiros 440 bytes no primeiro dispositivo de armazenamento — seguindo a ordem definida no utilitário de configuração da BIOS — são o primeiro estágio do bootloader (também chamado de bootstrap). Os primeiros 512 bytes de um dispositivo de armazenamento são o que se chama de MBR (Master Boot Record) dos dispositivos de armazenamento que usam o esquema de partição DOS padrão e, além do primeiro estágio do gerenciador de inicialização, eles contêm a tabela de partições. Se o MBR não contiver os dados corretos, o sistema não poderá inicializar, a menos que um método alternativo seja empregado.
+
+De um modo geral, as etapas pré-operacionais para inicializar um sistema equipado com BIOS são:
+
+O processo POST (power-on self-test) é executado para identificar falhas simples de hardware assim que a máquina é ligada.
+
+A BIOS ativa os componentes básicos para carregar o sistema, como a saída de vídeo, o teclado e as mídias de armazenamento.
+
+A BIOS carrega o primeiro estágio do bootloader a partir do MBR (os primeiros 440 bytes do primeiro dispositivo, conforme definido no utilitário de configuração da BIOS).
+
+O primeiro estágio do bootloader chama o segundo estágio, responsável por apresentar as opções de inicialização e carregar o kernel.
+
+
 Processo de Inicialização da arquitetura PC em 5 etapas
 
 1 - Ligou a maquina POST (Power on self test) e uma porção minima dos 512 bytes (MBR) são carregados
@@ -908,7 +925,8 @@ Processo de Inicialização da arquitetura PC em 5 etapas
 5 - O /sbin/init ou systemD le o arquivo de configuração /etc/inittab e se encarregar de inicializar o sistema
 
 OBS: *** /proc/cmdline -> Arquivo que contém parametros que são passados para o Gerenciador de Boot
- 
+
+  
 ***UEFI***
 Unified Extensible Firmware Interface diferente da BIOS
 o UEFI ignora arquivos presentes na MBR, usando aplicativos EFI e leva em conta arquivos na NVRAM
@@ -921,6 +939,69 @@ Arquivos compativos com UEFI: fat12, fat16, fat32, ISO 9660
 3 - O firmware do UEFI le os arquivos armazenadas na NVRAM para localizar o sistema de arquivos da partição ESP e executar o aplicativo EFI.
  1 Estagio bootloader
 4 - Aplicativo EFI predefinido no bootloader, kernel sera carregado e inicio do SO.
+
+
+De maneira geral, as etapas de inicialização do pré-sistema operacional em um sistema com UEFI são:
+
+O processo POST (power-on self-test) é executado para identificar falhas simples de hardware assim que a máquina é ligada.
+
+A UEFI ativa os componentes básicos para carregar o sistema, como a saída de vídeo, o teclado e as mídias de armazenamento.
+
+O firmware da UEFI lê as definições armazenadas na NVRAM para executar o aplicativo EFI predefinido armazenado no arquivo de sistemas da partição ESP. Normalmente, o aplicativo EFI predefinido é um bootloader.
+
+Se o aplicativo EFI predefinido for um bootloader, ele carrega o kernel para iniciar o sistema operacional.
+
+O padrão UEFI também suporta um recurso chamado Inicialização Segura, que permite apenas a execução de aplicativos EFI assinados, ou seja, aplicativos EFI autorizados pelo fabricante do hardware. Esse recurso aumenta a proteção contra software malicioso, mas pode dificultar a instalação de sistemas operacionais não cobertos pela garantia do fabricante.
+
+
+O bootloader
+O carregador de inicialização mais popular para Linux na arquitetura x86 é o GRUB (Grand Unified Bootloader). Assim que é chamado pela BIOS ou pela UEFI, o GRUB exibe uma lista de sistemas operacionais disponíveis para inicialização. Às vezes, a lista não aparece automaticamente, mas ela pode ser invocada pressionando "Shift" enquanto o GRUB está sendo chamado pela BIOS. Nos sistemas" UEFI", a tecla a ser usada é "Esc".
+
+No menu do GRUB, é possível escolher qual dos kernels instalados deve ser carregado e passar novos parâmetros para ele. A maioria dos parâmetros do kernel segue o padrão opção=valor. Alguns dos parâmetros mais úteis do kernel são:
+
+acpi
+Ativa/desativa o suporte a ACPI. acpi=off desabilita o suporte a ACPI. O daemon acpid é o principal gerenciador de energia do Linux e permite ajustes mais refinados das ações após eventos relacionados ao consumo de energia, como fechar a tampa do laptop, bateria fraca ou níveis de carga da bateria
+
+init
+Define um iniciador de sistema alternativo. Por exemplo, init=/bin/bash define o shell Bash como iniciador. Assim, uma sessão do shell será iniciada logo após o processo de inicialização do kernel.
+
+systemd.unit
+Define o destino do systemd a ser ativado. Por exemplo, systemd.unit=graphical.target. O systemd também aceita os níveis de execução numéricos definidos para SysV. Para ativar o nível de execução 1, por exemplo, é necessário apenas incluir o número 1 ou a letra S (abreviação de “single”) como parâmetro do kernel.
+
+mem
+Define a quantidade de RAM disponivel para o sistema. Este parâmetro é útil para limitar a RAM disponível para cada convidado em uma máquina virtual. Assim, mem=512M limita a 512 megabytes a quantidade de RAM disponível para um sistema convidado em particular.
+
+maxcpus
+Limita o número de processadores (ou núcleos de processador) visíveis ao sistema em máquinas multiprocessador simétricas. Também é útil para máquinas virtuais. Um valor de 0 desativa o suporte a máquinas multiprocessador e tem o mesmo efeito do parâmetro do kernel nosmp. O parâmetro maxcpus=2 limita a dois o número de processadores disponíveis para o sistema operacional.
+
+quiet
+Oculta a maioria das mensagens de inicialização.
+
+vga
+Seleciona um modo de vídeo. O parâmetro vga=ask mostra uma lista dos modos disponíveis a escolher.
+
+root
+Define a partição raiz, diferente da que está configurada no bootloader. Por exemplo, root=/dev/sda3.
+
+rootflags
+Opções de montagem para o arquivo de sistemas raiz.
+
+ro
+Torna somente para leitura a montagem inicial do arquivo de sistemas raiz.
+
+rw
+Permite escrever no arquivo de sistemas raiz durante a montagem inicial.
+
+Geralmente não é necessário alterar os parâmetros do kernel, mas isso pode ser útil para detectar e resolver problemas relacionados ao sistema operacional. Os parâmetros do kernel devem ser adicionados ao arquivo /etc/default/grub na linha GRUB_CMDLINE_LINUX para que persistam após a inicialização. É necessário gerar um novo arquivo de configuração para o carregador de inicialização a cada vez que /etc/default/grub é alterado, o que é feito com o comando grub-mkconfig -o /boot/grub/grub.cfg. Quando o sistema operacional estiver rodando, os parâmetros do kernel usados para carregar a sessão ficam disponíveis para leitura no arquivo /proc/cmdline.
+
+A inicialização do sistema operacional começa quando o carregador de inicialização carrega o kernel na RAM. Nesse momento, o kernel assume o controle da CPU e começa a detectar e configurar os aspectos fundamentais do sistema operacional, como a configuração básica de hardware e o endereçamento de memória.
+
+O kernel abre então o initramfs (initial RAM filesystem). "O initramfs é um arquivo que contém um sistema de arquivos raiz temporário usado durante o processo de inicialização. "O principal objetivo de um arquivo initramfs é fornecer os módulos necessários para que o kernel" possa acessar o sistema de arquivos raiz “de verdade” do sistema operacional.
+
+Logo que o sistema de arquivos raiz fica disponível, o kernel monta todos os sistemas de arquivos configurados em /etc/fstab e, em seguida, executa o primeiro programa, um utilitário chamado init. O programa init é responsável por executar todos os scripts de inicialização e daemons do sistema. Existem implementações distintas desses iniciadores de sistema além do tradicional init, como o systemd e o Upstart. Depois que o programa init é carregado, o initramfs é removido da RAM.
+
+
+
 
 ***MBR Master Boot Record - 512 bytes
 
@@ -954,11 +1035,87 @@ Apos iso o arquivo /proc/cmdline passa os novos parametros para o kernel
 
 As partiçoes são indicadas no /etc/fstab
 
+
 Verificando a Inicialização 
+
 #dmesg - Aqui o kernel Buffer Ring é consultado.
 #journalctl -b ou --boot
 #journalctl -k 
 
+#journalctl --list-boots -Mostra lista de numeros de inicialização.
+
+$ journalctl --list-boots
+-45 e694cecb812247a3830002cbe55d3fba Thu 2021-01-21 22:10:15 EST—Thu 2021-01-21 22:40:01 EST
+-44 476b99c618b34531bd18482862006428 Sat 2021-01-23 16:41:39 EST—Sat 2021-01-23 20:31:27 EST
+-43 ae19d8cb85aa4c559f6d5edf30efc1d3 Sat 2021-01-23 21:09:44 EST—Sun 2021-01-24 18:17:29 EST
+-42 5a4289b8baf14793bad9140eb872ddd2 Sun 2021-01-24 19:02:14 EST—Sun 2021-01-24 19:23:26 EST
+-41 9ee665b0e5b34e67ad309a4db57ed779 Mon 2021-01-25 11:16:19 EST—Mon 2021-01-25 22:34:49 EST
+-40 94adf6bdb0ea4e88b8833244ac5c813f Tue 2021-01-26 22:13:09 EST—Tue 2021-01-26 22:35:35 EST
+-39 25ef3078dfb141679bdbe86977a0afc9 Tue 2021-01-26 22:36:16 EST—Tue 2021-01-26 22:51:56 EST
+
+#journalctl -b 0 -Mostra as mensagens de sessão atual
+
+$ journalctl -b 0
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+-- Logs begin at Thu 2021-01-21 22:10:15 EST, end at Sun 2021-04-18 20:07:50 EDT. --
+Apr 18 18:50:04 dublin systemd[906]: gpgconf: error running '/usr/lib/gnupg/scdaemon': probably not installed
+Apr 18 18:50:05 dublin systemd[901]: Queued start job for default target Main User Target.
+Apr 18 18:50:05 dublin systemd[901]: Reached target Paths.
+Apr 18 18:50:05 dublin systemd[901]: Reached target Timers.
+Apr 18 18:50:05 dublin systemd[901]: Starting D-Bus User Message Bus Socket.
+Apr 18 18:50:05 dublin systemd[901]: Listening on GnuPG network certificate management daemon.
+Apr 18 18:50:05 dublin systemd[901]: Listening on GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Apr 18 18:50:05 dublin systemd[901]: Listening on GnuPG cryptographic agent and passphrase cache (restricted).
+Apr 18 18:50:05 dublin systemd[901]: Listening on GnuPG cryptographic agent (ssh-agent emulation).
+Apr 18 18:50:05 dublin systemd[901]: Listening on GnuPG cryptographic agent and passphrase cache.
+Apr 18 18:50:05 dublin systemd[901]: Listening on Sound System.
+Apr 18 18:50:05 dublin systemd[901]: Listening on D-Bus User Message Bus Socket.
+Apr 18 18:50:05 dublin systemd[901]: Reached target Sockets.
+Apr 18 18:50:05 dublin systemd[901]: Reached target Basic System.
+Apr 18 18:50:05 dublin systemd[901]: Starting Sound Service...
+Apr 18 18:50:05 dublin systemd[901]: Started D-Bus User Message Bus.
+Apr 18 18:50:05 dublin pulseaudio[921]: N: [pulseaudio] alsa-util.c: Disabling timer-based scheduling because running inside a VM.
+Apr 18 18:50:05 dublin pulseaudio[921]: N: [pulseaudio] alsa-util.c: Disabling timer-based scheduling because running inside a VM.
+Apr 18 18:50:05 dublin pulseaudio[921]: E: [pulseaudio] bluez5-util.c: GetManagedObjects() failed: org.freedesktop.systemd1.NoSuchUnit: Unit dbus-org.bluez.service>
+Apr 18 18:50:05 dublin systemd[901]: Started Sound Service.
+Apr 18 18:50:05 dublin systemd[901]: Reached target Main User Target.
+Apr 18 18:50:05 dublin systemd[901]: Startup finished in 958ms.
+Apr 18 18:50:07 dublin dbus-daemon[937]: [session uid=1000 pid=937] Activating via systemd: service name='org.a11y.Bus' unit='at-spi-dbus-bus.service' requested by>
+
+#journalctl -b -1 -Mostra as mensagens de inicialização anterior
+
+Apr 17 19:29:42 dublin systemd[846]: Reached target Main User Target.
+Apr 17 19:29:42 dublin systemd[846]: Startup finished in 759ms.
+Apr 17 19:29:42 dublin pulseaudio[866]: E: [pulseaudio] bluez5-util.c: GetManagedObjects() failed: org.freedesktop.systemd1.NoSuchUnit: Unit dbus-org.bluez.service>
+Apr 17 19:29:43 dublin dbus-daemon[882]: [session uid=1000 pid=882] Activating via systemd: service name='org.a11y.Bus' unit='at-spi-dbus-bus.service' requested by>
+Apr 17 19:29:43 dublin systemd[846]: Starting Accessibility services bus...
+Apr 17 19:29:43 dublin dbus-daemon[882]: [session uid=1000 pid=882] Successfully activated service 'org.a11y.Bus'
+Apr 17 19:29:43 dublin systemd[846]: Started Accessibility services bus.
+Apr 17 19:29:43 dublin dbus-daemon[882]: [session uid=1000 pid=882] Activating service name='org.xfce.Xfconf' requested by ':1.7' (uid=1000 pid=872 comm="xfce4-ses>
+Apr 17 19:29:43 dublin dbus-daemon[882]: [session uid=1000 pid=882] Successfully activated service 'org.xfce.Xfconf'
+
+
+#journalctl -b -2 -Mostras as mensagens de inicialização 2 anteriores. 
+
+Apr 17 12:12:45 dublin systemd[970]: Listening on GnuPG network certificate management daemon.
+Apr 17 12:12:45 dublin systemd[970]: Listening on GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Apr 17 12:12:45 dublin systemd[970]: Listening on GnuPG cryptographic agent and passphrase cache (restricted).
+Apr 17 12:12:45 dublin systemd[970]: Listening on GnuPG cryptographic agent (ssh-agent emulation).
+Apr 17 12:12:45 dublin systemd[970]: Listening on GnuPG cryptographic agent and passphrase cache.
+Apr 17 12:12:45 dublin systemd[970]: Listening on Sound System.
+Apr 17 12:12:45 dublin systemd[970]: Listening on D-Bus User Message Bus Socket.
+Apr 17 12:12:45 dublin systemd[970]: Reached target Sockets.
+Apr 17 12:12:45 dublin systemd[970]: Reached target Basic System.
+Apr 17 12:12:45 dublin systemd[970]: Starting Sound Service...
+Apr 17 12:12:45 dublin systemd[970]: Started D-Bus User Message Bus.
+Apr 17 12:12:45 dublin pulseaudio[991]: N: [pulseaudio] alsa-util.c: Disabling timer-based scheduling because running inside a VM.
+Apr 17 12:12:45 dublin pulseaudio[991]: N: [pulseaudio] alsa-util.c: Disabling timer-based scheduling because running inside a VM.
+
+
+*** Para desligar o buffer de anel do kernel
+#dmesg --clear
 
 ***Apagar o Kernel Buffer Ring
 dmesg --clear
@@ -967,18 +1124,105 @@ dmesg --clear
 Informações de Log
 /var/log
 
+-D ou --directory serve para ler arquivos de log em outros diretorios como o /var/log/journal
+
+journalctl sempre será exigido para que as mensagens sejam legíveis.
+
+
+Exercicios.
+
+Exercícios Guiados
+Em uma máquina equipada com firmware BIOS, onde está localizado o binário do bootstrap?
+R: MBR 
+
+
+O firmware UEFI suporta recursos estendidos fornecidos por programas externos, chamados aplicativos EFI. Esses aplicativos, no entanto, têm seu próprio local especial. Em que lugar do sistema localizam-se os aplicativos?
+
+R: /boot/efi
+
+Solução: Os aplicativos EFI são armazenados na EFI System Partition (ESP), localizada em qualquer bloco de armazenamento disponível com um sistema de arquivos compatível (geralmente um sistema de arquivos FAT32).
+
+Os gerenciadores de inicialização permitem a passagem de parâmetros personalizados do kernel antes de carregá-lo. Suponha que o sistema não possa inicializar devido a uma localização incorreta do sistema de arquivos raiz. Como o sistema de arquivos raiz correto, localizado em /dev/sda3, seria fornecido como parâmetro para o kernel?
+
+R: root=/dev/sda3
+
+O processo de inicialização de uma máquina Linux termina com a seguinte mensagem:
+
+ALERT! /dev/sda3 does not exist. Dropping to a shell!
+Qual a causa provável desse problema?
+
+R: a partição raiz não definida.
+
+Resposta: O kernel não encontrou o dispositivo /dev/sda3, informado como o sistema de arquivo raiz.
+
+Exercícios Exploratórios
+O carregador de inicialização apresenta uma lista de sistemas operacionais a escolher quando houver mais de um sistema operacional instalado na máquina. No entanto, um sistema operacional recém-instalado pode sobrescrever o MBR do disco rígido, apagando o primeiro estágio do gerenciador de inicialização e tornando o outro sistema operacional inacessível. Por que isso não aconteceria em uma máquina equipada com um firmware UEFI?
+
+R: Porque a partição MBR não esta presente em um sistema equipado com UEFI.
+
+
+Qual é uma consequência comum de se instalar um kernel personalizado sem fornecer uma imagem initramfs apropriada?
+
+R: A initramfs é responsavel de passar determinados parametros para o kernel, sem ela não será possivel fazer isso.
+
+Solução:O sistema de arquivos raiz pode ficar inacessível se seu tipo tiver sido compilado como um módulo externo do kernel.
+
+
+O log de inicialização tem centenas de linhas, portanto a saída do comando dmesg é frequentemente canalizada para um comando de paginação — como o comando less — para facilitar a leitura. Qual opção do dmesg faz automaticamente a paginação da saída, eliminando a necessidade de usar explicitamente um comando de paginação?
+
+R: dmesg -P
+Solução: dmesg -H ou dmesg --human
+
+Um disco rígido contendo todo o sistema de arquivos de uma máquina offline foi removido e conectado a uma máquina operacional como drive secundário. Supondo que seu ponto de montagem seja /mnt/hd, como o journalctl seria usado para inspecionar o conteúdo dos arquivos de diário localizados em /mnt/hd/var/log/journal/?
+
+R: Poderia ser usado o comando journalctl -D /mnt/hd/var/log/journal  ou journalctl --directory=/mnt/hd/var/log/journal
+
+
 *****101.3 Alternar runlevels /boot targets, desligar e reiniciar o sistema
 
+https://learning.lpi.org/pt/learning-materials/101-500/101/101.3/101.3_01/
+
+
 Modo Halt
+
 0 - Desligamento
 1 ou S Single mode - Monousuario
 2 a 4 Multiusuario
-5 - Modo grafico
+5 - Modo grafico = = 3 
 6 - Reinicio do sistema
+
+
+Nível de execução 0
+Encerramento do sistema.
+
+Nível de execução 1, s ou single
+Modo de usuário único, sem rede e outros recursos não-essenciais (modo de manutenção).
+
+Nível de execução 2, 3 ou 4
+Modo multiusuário. Os usuários podem se logar via console ou pela rede. Os níveis de execução 2 e 4 não são usados com frequência.
+
+Nível de execução 5
+Modo multiusuário. Equivale ao nível 3, mais o login em modo gráfico.
+
+Nível de execução 6
+Reinicialização do sistema.
+
+
 
 O /sbin/init - componente principal do linux. Guia a inicialização do sistema para o runlevel especificado. Faz a leitura do /etc/inittab
 
 /etc/init.d  - Contem scripts de inicialização.
+
+A sintaxe do arquivo /etc/inittab usa o seguinte formato:
+
+O comando telinit q deve ser executado a cada vez que o arquivo /etc/inittab é modificado. O argumento q (ou Q) pede que o init recarregue sua configuração. Essa etapa é importante para evitar uma parada do sistema devido a uma configuração incorreta em /etc/inittab.
+
+
+
+id:runlevels:action:process
+Ex:
+# Default runlevel
+id:3:initdefault:
 
 boot - Processo executado durante o carregamento do sistema
 bootwait - Processo executado durante carregamentodo sistema. Init aguarda o encerramento para prosseguir. Runlevels ignorados
@@ -1000,14 +1244,17 @@ processos por cgroups, suporte a snapshots, restauro dos estado do sistema, cont
 Systemd usa o conceito de units
 
 service - serviços iniciados
-socket - 
-device
-mount 
-automount - ponto de montagem automatica
-target
-snapshot - Apenas aponta para outras unidades.
 
-Administrando com systemctl
+socket - O tipo de unidade socket pode ser um socket de sistema de arquivos ou um socket de rede. Todas as unidades socket possuem uma unidade de serviço correspondente, carregada quando o socket recebe uma solicitação.device
+
+mount - Uma unidade de montagem é uma definição de ponto de montagem no sistema de arquivos, semelhante a uma entrada em /etc/fstab.
+automount - ponto de montagem automatica
+
+target -Uma unidade de destino é um agrupamento de outras unidades, gerenciadas como uma única unidade.
+
+snapshot - Apenas aponta para outras unidades. Uma unidade snapshot é um estado salvo do gerenciador do systemd (não disponível em todas as distribuições Linux).
+
+***Administrando com systemctl
 
 systemctl start
 systemctl stop
@@ -1015,7 +1262,13 @@ systemctl restart
 systemctl status
 systemctl enable - habilita no boot
 systemctl disable - desabilita no boot
+
 systemctl is-enabled - Verifica se unidade é ativada no carregamento
+Verifica se unit é iniciado com o sistema. A resposta é armazenada na variável $?. O valor 0 indica que unit inicia com o sistema e o valor 1 indica que não.
+
+systemctl enable unit.service -Habilita a unidade durante a inicialização.
+
+
 
 systemctl list-unit-files --type=service - Lista todos os serviços
 systemctl list-unit-files --type=target - Lista todos os targets
@@ -1025,11 +1278,25 @@ systemctl poweroff - Desligamento
 
 ***Controlando alvos
 
+O comando systemctl também pode controlar os destinos do sistema. A unidade multi-user.target, por exemplo, combina todas as unidades exigidas pelo ambiente do sistema multiusuário. É semelhante ao nível de execução número 3 em um sistema que utiliza o SysV.
+
 multi-user = runlevel 5
+
+O comando systemctl isolate alterna entre diferentes destinos. Assim, para alternar manualmente para o destino multi-user:
+
+# systemctl isolate multi-user.target
 
 Ex: systemctl isolate multi-user.target
 Arquivos de configuração
 /lib/systemd/system
+
+#systemctl get-default - Mostra o destino na inicialização.
+
+
+O comando systemctl list-unit-files lista todas as unidades disponíveis e mostra se elas estão habilitadas para iniciar quando o sistema é inicializado. A opção --type seleciona apenas as unidades para um tipo determinado, como em systemctl list-unit-files --type=service e systemctl list-unit-files --type=target.
+
+As unidades ativas ou as que estiveram ativas durante a sessão atual do sistema podem ser listadas com o comando systemctl list-units. Como no caso da opção list-unit-files, o comando systemctl list-units --type=service seleciona somente as unidades de tipo service e o comando systemctl list-units --type=target seleciona somente as unidades do tipo target.
+
 
 Gerenciamento de Energia
 
@@ -1053,17 +1320,73 @@ Não utiliza o /etc/inittab mas usa os comandos tradicionais: runlevel e telinit
 
 ***Desligamento do Sistema
 
+Desligar e reiniciar
+Um comando muito tradicional usado para desligar ou reiniciar o sistema é o shutdown. O comando shutdown adiciona funções extras ao processo de desligamento: ele notifica automaticamente todos os usuários conectados com uma mensagem em suas sessões do shell e impede novos logins. O comando shutdown atua como intermediário nos procedimentos do SysV ou do systemd, ou seja, executa a ação solicitada chamando a ação correspondente no gerenciador de serviços adotado pelo sistema.
+
+Após o shutdown ser executado, todos os processos recebem o sinal SIGTERM, seguido pelo sinal SIGKILL, e o sistema é encerrado ou muda seu nível de execução. Por padrão, quando as opções -h ou -r não são usadas, o sistema alterna para o nível de execução 1, ou seja, o modo de usuário único. Para alterar as opções padrão de shutdown, o comando deve ser executado com a seguinte sintaxe:
+
+$ shutdown [option] time [message]
+Somente o parâmetro time é obrigatório. Esse parâmetro define quando a ação solicitada será executada, aceitando os seguintes formatos:
+
+hh:mm
+Este formato especifica o tempo de execução em horas e minutos.
+
++m
+Este formato especifica quantos minutos esperar antes da execução.
+
+now ou +0
+Este formato determina a execução imediata.
+
+O parâmetro message é o texto de aviso enviado a todas as sessões de terminal dos usuários logados.
+
+A implementação do SysV permite limitar os usuários que poderão reiniciar a máquina pressionando Ctrl+Alt+Del. Para isso, incluímos a opção -a no comando shutdown presente na linha referente a ctrlaltdel no arquivo /etc/inittab. Ao fazer isso, somente usuários cujos nomes de usuário constem do arquivo /etc/shutdown.allow poderão reiniciar o sistema com o atalho de teclado Ctrl+Alt+Del.
+
+O comando systemctl também pode ser usado para desligar ou reiniciar a máquina em sistemas que empregam o systemd. Para reiniciar o sistema, usamos o comando systemctl reboot. Para desligar o sistema, o comando é systemctl poweroff. Ambos os comandos requerem privilégios de root para serem executados, pois usuários comuns não podem realizar esses procedimentos.
+
+
 shutdown 
 
 Ex: shutdown -q -r +120 "O sistema vai cair ..." - Sistema será reiniciado (-r) 120 minutos
 -h horario
 -m mensagem
 
+#shutdown -k simula um desligamento do sistema
+
+Usuarios comuns necessitam constar no /etc/shutdown.allow para reiniciar o sistema com Ctrl + alt + del.
+
+
 wall manda mensagem de broadcast a todos os usuarios conectados
 
 Ex wall "With the Great power comes with  great responsabilities - Be hurry"
 
+***Exercícios Guiados
+Como o comando telinit pode ser usado para reiniciar o sistema?
+R: telinit 6
 
+O que acontece com os serviços relacionados ao arquivo /etc/rc1.d/K90network quando o sistema entra no nível de execução 1?
+R: Entra em modo single user sem acesso a rede. Como mostra a letra /k90network os serviços selecionados serão interrompidos.
 
+Usando o comando systemctl, como um usuário pode verificar se a unidade sshd.service está em execução?
 
+R: systemctl status sshd.service ou systemctl is-active sshd.service
+
+Em um sistema baseado em systemd, qual comando deve ser executado para ativar a unidade sshd.service durante a inicialização do sistema?
+
+R: systemctl enable sshd.service executado pelo root.
+
+Exercícios Exploratórios
+Em um sistema baseado em SysV, suponha que o nível de execução padrão definido em /etc/inittab seja 3, mas o sistema sempre inicia no nível de execução 1. Qual é a causa provável disso?
+
+R: O user default foi definido como 1 ou S podem estar presentes na lista de parametros do kernel.
+
+Embora o arquivo /sbin/init possa ser encontrado nos sistemas baseados em systemd, ele é apenas um link simbólico para outro arquivo executável. Nesses sistemas, qual o arquivo apontado por /sbin/init?
+R: o binario principal do systemd : /lib/systemd/systemd
+
+Como se verifica o destino padrão do sistema em um sistema baseado em systemd?
+
+R: Verificando o link simbolico /etc/systemd/systemd/default.target aponta paraa o arquivo da unidade definida, ou com o comando systemctl get-default.
+
+Como poderíamos cancelar uma reinicialização do sistema programada com o comando shutdown?
+
+R: como o comando shutdown -c
 
