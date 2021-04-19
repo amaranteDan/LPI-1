@@ -1,5 +1,204 @@
 Objetivo 102.1 Particionamento de Disco
 
+Pense em um disco (ou dispositivo de armazenamento, já que os dispositivos modernos não contêm nenhum “disco”) como um “receptáculo físico” para seus dados.
+
+Antes de um disco poder ser usado por um computador, ele precisa ser particionado. Uma partição é um subconjunto lógico do disco físico, uma espécie de “cerca” lógica. O particionamento é uma maneira de “compartimentar” as informações armazenadas no disco, separando, por exemplo, os dados do sistema operacional dos dados do usuário.
+
+Todo disco precisa de pelo menos uma partição, mas é possível definir várias partições se necessário, e as informações a respeito delas são armazenadas em uma tabela de partições. Essa tabela inclui informações sobre o primeiro e o último setores da partição e seu tipo, além de detalhes adicionais sobre cada partição.
+
+
+Pontos de montagem
+Antes que um sistema de arquivos possa ser acessado no Linux, ele precisa ser montado. Isso significa vincular o sistema de arquivos a um ponto específico na árvore de diretórios do sistema, chamado ponto de montagem.
+
+Quando montado, o conteúdo do sistema de arquivos estará disponível no ponto de montagem. Por exemplo, imagine que você tenha uma partição com os dados pessoais de seus usuários (o diretório pessoal deles), contendo os diretórios /john, /jack e /carol. Quando montados em /home, o conteúdo desses diretórios estará disponível em /home/john, /home/jack e /home/carol.
+
+O ponto de montagem deve existir antes de o sistema de arquivos ser montado. Não é possível montar uma partição em /mnt/userdata se esse diretório não existir. No entanto, se o diretório existir e contiver arquivos, esses arquivos ficarão indisponíveis até você desmontar o sistema de arquivos. Ao listar o conteúdo do diretório, veremos os arquivos armazenados no sistema de arquivos montado, não o conteúdo original do diretório.
+
+Os sistemas de arquivos podem ser montados em qualquer lugar que você desejar. No entanto, certas práticas são recomendadas para facilitar a administração do sistema.
+
+Tradicionalmente, todos os dispositivos externos eram montados no diretório /mnt. Ali existia uma série de pontos de ancoragem pré-configurados para os dispositivos mais comuns, como drives de CD-ROM (/mnt/cdrom) e de disquete (/mnt/floppy).
+
+Ele foi substituído por /media, que agora é o ponto de montagem padrão para qualquer mídia removível (como discos externos, drives flash USB, leitores de cartão de memória, discos óticos etc.) conectada ao sistema.
+
+Na maioria das distribuições Linux e ambientes de desktop modernos, os dispositivos removíveis são montados automaticamente em /media/USER/LABEL quando conectados ao sistema, sendo USER o nome de usuário e LABEL o nome do dispositivo. Por exemplo, um drive flash USB com o nome FlashDrive conectado pelo usuário john seria montado em /media/john/FlashDrive/. A maneira como isso é feito varia de acordo com o ambiente de desktop.
+
+Dito isto, sempre que for preciso montar manualmente um sistema de arquivos, é recomendável montá-lo em /mnt. Os comandos específicos para controlar a montagem e desmontagem de sistemas de arquivos no Linux serão discutidos em outra lição.
+
+A partição de inicialização (/boot)
+A partição de inicialização contém arquivos usados pelo gerenciador de inicialização para carregar o sistema operacional. Nos sistemas Linux, o gerenciador de inicialização costuma ser o GRUB2 ou, em sistemas mais antigos, o GRUB Legacy. A partição geralmente é montada em /boot e seus arquivos são armazenados em /boot/grub.
+
+Tecnicamente, uma partição de inicialização não é necessária, pois na maioria dos casos o GRUB pode montar a partição raiz (/) e carregar os arquivos a partir de um diretório /boot separado.
+
+No entanto, uma partição de inicialização separada pode ser interessante, seja por segurança (garantindo que o sistema seja inicializado mesmo em caso de falha no sistema de arquivos raiz), ou se você desejar usar um sistema de arquivos que o carregador de inicialização não pode entender na partição raiz, ou se usar um método não suportado de criptografia ou compactação.
+
+A partição de inicialização geralmente é a primeira partição no disco. Isso ocorre porque a IBM PC BIOS original endereçava os discos usando cilindros, cabeças e setores (CHS), com um máximo de 1024 cilindros, 256 cabeças e 63 setores, resultando em um tamanho máximo de disco de 528 MB (504 MB no MS-DOS). Isso significa que qualquer coisa além dessa marca não estaria acessível em sistemas legados, a menos que um esquema de endereçamento de disco diferente (como o Endereçamento de bloco lógico, LBA) fosse usado.
+
+Portanto, para obter compatibilidade máxima, a partição de inicialização geralmente está localizada no início do disco e termina antes do cilindro 1024 (528 MB), garantindo que, aconteça o que acontecer, a máquina sempre poderá carregar o kernel.
+
+Como a partição de inicialização armazena apenas os arquivos necessários para o carregador de inicialização, o disco RAM inicial e as imagens do kernel, ela pode ser bem pequena para os padrões atuais. Um bom tamanho é de cerca de 300 MB.
+
+A partição do sistema EFI (ESP)
+A partição do sistema EFI (ESP) é usada por máquinas baseadas na UEFI (Unified Extensible Firmware Interface) para armazenar gerenciadores de inicialização e imagens do kernel para os sistemas operacionais instalados.
+
+Essa partição é formatada em um sistema de arquivos baseado em FAT. Em um disco particionado com uma tabela de partição GUID, ela possui o identificador global único C12A7328-F81F-11D2-BA4B-00A0C93EC93B. Se o disco tiver sido formatado no esquema de particionamento do MBR, o ID da partição será 0xEF.
+
+Em máquinas com Microsoft Windows, essa partição geralmente é a primeira no disco, embora isso não seja obrigatório. O ESP é criado (ou preenchido) pelo sistema operacional após a instalação e, em um sistema Linux, é montado em /boot/efi.
+
+A partição /home
+Cada usuário do sistema possui um diretório inicial para armazenar arquivos pessoais e preferências. Aa maioria deles está localizada em /home. O diretório inicial costuma ter o mesmo nome que o usuário; assim, o usuário John teria seu diretório em /home/john.
+
+Porém, há exceções. Por exemplo, o diretório inicial do usuário raiz é /root e alguns serviços do sistema podem ter usuários associados com diretórios pessoais em outros lugares.
+
+Não existe uma regra para determinar o tamanho de uma partição para o diretório /home (a partição inicial). É preciso levar em consideração o número de usuários no sistema e como ele será usado. Um usuário que apenas navega na web e processa textos requer menos espaço do que um que trabalha com edição de vídeo, por exemplo.
+
+Dados variáveis (/var)
+Este diretório contém “dados variáveis”, ou arquivos e diretórios nos quais o sistema deve poder escrever durante a operação. Dentre eles estão os logs do sistema (em /var/log), os arquivos temporários (/var/tmp) e os dados de aplicativos em cache (em /var/cache).
+
+/var/www/html também é o diretório padrão para os arquivos de dados do Apache Web Server e /var/lib/mysql é o local padrão para os arquivos de banco de dados do servidor MySQL. Porém, ambos podem ser alterados.
+
+Uma boa razão para colocar /var em uma partição separada é a estabilidade. Muitos aplicativos e processos escrevem em /var e seus subdiretórios, como /var/log ou /var/tmp. Um processo defeituoso poderia escrever dados até que não restasse nenhum espaço livre no sistema de arquivos.
+
+Se /var estiver em /, isso poderia disparar um pânico do kernel e corromper o sistema de arquivos, causando uma situação muito difícil de reverter. Mas se /var for mantido em uma partição separada, o sistema de arquivos raiz não será afetado.
+
+Como no caso de /home, não existe uma regra universal para determinar o tamanho da partição de /var, já que isso vai variar conforme o uso que for feito do sistema. Em um sistema doméstico, uns poucos gigabytes devem bastar. Mas em um banco de dados ou servidor web, será necessário bem mais espaço. Nesse caso, seria melhor colocar /var em uma partição de um disco diferente da partição raiz, adicionando uma camada extra de proteção contra falhas físicas do disco.
+
+Swap
+A partição de troca (ou swap) é usada para passar as páginas de memória da RAM para o disco conforme necessário. Esta partição precisa ser de um tipo específico e configurada com um utilitário apropriado chamado mkswap antes de poder ser usada.
+
+A partição de troca não pode ser montada como as outras, o que significa que não é possível acessá-la como um diretório normal e visualizar seu conteúdo.
+
+Um sistema pode ter diversas partições de troca (embora isso seja incomum), e o Linux também suporta o uso de arquivos de troca em vez de partições, o que pode ser útil para aumentar rapidamente o espaço de troca quando necessário.
+
+O tamanho da partição de troca é um tema controverso. A regra antiga dos primeiros dias do Linux (“duas vezes a quantidade de RAM”) nem sempre se aplica, dependendo de como o sistema está sendo usado e da quantidade de RAM física instalada.
+
+Na documentação do Red Hat Enterprise Linux 7, a Red Hat recomenda o seguinte:
+
+Quantidade de RAM	Tamanho de troca recomendado	Tamanho de troca recomendado com hibernação
+< 2 GB de RAM
+
+2x a quantidade de RAM
+
+3x a quantidade de RAM
+
+2-8 GB de RAM
+
+Igual à quantidade de RAM
+
+2x a quantidade de RAM
+
+8-64 GB de RAM
+
+No mínimo 4 GB
+
+1.5x a quantidade de RAM
+
+> 64 GB de RAM
+
+No mínimo 4 GB
+
+Não recomendado
+
+Obviamente, a quantidade de troca pode depender da carga de trabalho. Se a máquina estiver executando um serviço crítico, como um banco de dados, servidor Web ou SAP, é aconselhável verificar o valor recomendado na documentação desses serviços (ou consultar o fornecedor do software).
+
+
+LVM
+Já discutimos como os discos são organizados em uma ou mais partições, com cada partição contendo um sistema de arquivos que descreve como os arquivos e os metadados associados são armazenados. Uma das desvantagens do particionamento é que o administrador do sistema deve decidir antecipadamente como o espaço em disco disponível em um dispositivo será distribuído. Isso pode ser problemático mais tarde, se uma partição exigir mais espaço do que o originalmente planejado. Claro que as partições podem ser redimensionadas, mas isso nem sempre é possível (se, por exemplo, não houver mais espaço livre no disco).
+
+O Gerenciamento de Volumes Lógicos (LVM) é uma forma de virtualização do armazenamento que oferece aos administradores de sistema um método mais flexível do que o particionamento tradicional para gerenciar o espaço em disco. O objetivo do LVM é facilitar a gestão das necessidades de armazenamento de seus usuários finais. A unidade básica é o Volume Físico (PV), que é um dispositivo de bloco no sistema, como uma partição de disco ou uma matriz RAID.
+
+Os PVs são agrupados em Grupos de Volumes (VG), que abstraem os dispositivos subjacentes e são vistos como um único dispositivo lógico, com a capacidade de armazenamento combinada dos PVs do componente.
+
+Cada volume em um Grupo de Volumes é subdividido em partes de tamanho fixo chamadas extensões. As extensões em um PV são chamadas Extensões Físicas (PE), enquanto as do volume lógico são Extensões Lógicas (LE). De maneira geral, cada extensão lógica é mapeada para uma extensão física, mas isso pode mudar se forem usados recursos como o espelhamento de disco.
+
+Os Grupos de Volumes podem ser subdivididos em Volumes Lógicos (LVs), com funcionalidade semelhante à das partições, mas com mais flexibilidade.
+
+O tamanho de um Volume Lógico, conforme especificado durante a sua criação, é na verdade definido pelo tamanho das extensões físicas (por padrão, 4 MB) multiplicado pelo número de extensões no volume. Com isso, é fácil entender que para aumentar um Volume Lógico, por exemplo, basta adicionar mais extensões do pool disponível no Grupo de Volumes. Da mesma forma, as extensões podem ser removidas para reduzir o LV.
+
+Após sua criação, um Volume Lógico é visto pelo sistema operacional como um dispositivo de bloco normal. Um dispositivo será criado em /dev, com o nome /dev/VGNAME/LVNAME, em que VGNAME é o nome do Grupo de Volumes e LVNAME o nome do Volume Lógico.
+
+Esses dispositivos podem ser formatados com o sistema de arquivos desejado usando utilitários padrão (como o mkfs.ext4, por exemplo) e montados com os métodos usuais, seja manualmente, com o comando mount, ou automaticamente, adicionando-os ao arquivo /etc/fstab.
+
+Exercícios Guiados
+Nos sistemas Linux, onde são armazenados os arquivos do gerenciador de inicialização GRUB?
+
+Onde deve estar a partição de inicialização para garantir que um PC seja capaz de carregar o kernel?
+
+Onde a partição EFI costuma ser montada?
+
+Normalmente, em qual diretório se monta manualmente um sistema de arquivos?
+
+Exercícios Exploratórios
+Qual a menor unidade dentro de um Grupo de Volumes?
+
+Como se define o tamanho de um Volume Lógico?
+
+Em um disco formatado com o esquema de particionamento MBR, qual a ID da Partição do Sistema EFI?
+
+Além das partições de troca, como é possível aumentar rapidamente o espaço de troca em um sistema Linux?
+
+Resumo
+Nesta lição, falamos sobre particionamento e explicamos quais diretórios geralmente são mantidos em partições separadas e por quê. Além disso, demos uma visão geral do LVM (Gerenciamento Lógico de Volumes) e como ele pode oferecer uma maneira mais flexível de alocar os dados e o espaço em disco em comparação com o particionamento tradicional.
+
+Os seguintes arquivos, termos e utilitários foram discutidos:
+
+/
+O sistema de arquivos raiz do Linux.
+
+/var
+O local padrão dos “dados variáveis”, ou seja, dados que podem encolher ou aumentar com o tempo.
+
+/home
+O diretório pai padrão para as pastas iniciais dos usuários regulares de um sistema.
+
+/boot
+O local padrão dos arquivos do gerenciador de inicialização, kernel do Linux e disco de RAM inicial.
+
+Partição do Sistema EFI (ESP)
+Usada pelos sistemas que têm UEFI implementada para o armazenamento dos arquivos de inicialização do sistema.
+
+Espaço de troca
+Usado para trocar páginas de memória do kernel quando a RAM está sendo muito solicitada.
+
+Pontos de montagem
+Locais em um diretório nos quais um dispositivo (como um disco rígido) será montado.
+
+Partições
+Divisões em um disco rígido.
+
+Respostas aos Exercícios Guiados
+Nos sistemas Linux, onde são armazenados os arquivos do gerenciador de inicialização GRUB?
+
+Em /boot/grub.
+
+Onde deve estar a partição de inicialização para garantir que um PC seja capaz de carregar o kernel?
+
+Antes do cilindro 1024.
+
+Onde a partição EFI costuma ser montada?
+
+Em /boot/efi.
+
+Normalmente, em qual diretório se monta manualmente um sistema de arquivos?
+
+Em /mnt. Porém, isso não é obrigatório. Podemos montar uma partição no diretório que quisermos.
+
+Respostas aos Exercícios Exploratórios
+Qual a menor unidade dentro de um Grupo de Volumes?
+
+Os Grupos de Volumes são subdivididos em extensões.
+
+Como se define o tamanho de um Volume Lógico?
+
+Pelo tamanho das extensões físicas multiplicado pelo número de extensões no volume.
+
+Em um disco formatado com o esquema de particionamento MBR, qual a ID da Partição do Sistema EFI?
+
+A ID é 0xEF.
+
+Além das partições de troca, como é possível aumentar rapidamente o espaço de troca em um sistema Linux?
+
+Podem ser usados arquivos de troca.
+
 MSDOS
 
 OBS: Discos SCSI maximo 15 partiçoes lógicas
@@ -142,7 +341,7 @@ Pontos de Montagem
 /opt - Area de armazenamento generico para programas que não sao 100% compativeis com a estrutura de diretorios do linux.
 /proc - Sistemas de arquivo virtual onde coleta informações do hardware e kernel. Aqui é possivel ver informações da memoria, cpu, parametros do kernel.
 /run - Arquivos utilizados pelo processo runtime, pricipalmente para o boot.
-/sbi - Arquivos do super binario, como o fsck, dump2fs, debugfs. Utilizado no modo de recuperação do sistema.
+/sbin - Arquivos do super binario, como o fsck, dump2fs, debugfs. Utilizado no modo de recuperação do sistema.
 /srv - Serviços com FTP, APACHE, SAMBA
 /sys - Informações do kernel, dispositivos e drivers.
 /usr - A maior estrutura do linux. Contem binarios, documentação, imagens utilizadas pelo sistema. Somente-leitura. Evitar gravações. Partição separada. Local base para 
@@ -213,6 +412,29 @@ DBX Banco de assinaturas proibidas, onde drivers que contem nesse banco tem sua 
 
 
 ****Objetivo 102.2 Instalar um gerenciador de Boot
+GRUB Legacy e GRUB 2
+A versão original do GRUB (Grand Unified Bootloader), agora conhecida como GRUB Legacy, foi desenvolvida em 1995 como parte do projeto GNU Hurd e, mais tarde, adotada como o gerenciador de inicialização padrão de muitas distribuições Linux, substituindo alternativas anteriores, como o LILO.
+
+O GRUB 2 é uma remodelagem completa do GRUB com o objetivo de deixá-lo mais limpo, seguro, robusto e poderoso. Dentre as muitas vantagens em relação ao GRUB Legacy estão um arquivo de configuração muito mais flexível (com mais comandos e instruções condicionais, semelhantes a uma linguagem de script), um design mais modular e melhor localização/internacionalização.
+
+Também há suporte para temas e menus gráficos de inicialização com telas de abertura, a possibilidade de inicializar ISOs LiveCD diretamente a partir do disco rígido, melhor suporte para arquiteturas não-x86, suporte universal para UUIDs (facilitando a identificação de discos e partições) e muito mais.
+
+O GRUB Legacy não está mais em desenvolvimento ativo (a última versão foi a 0.97, em 2005), e hoje a maioria das principais distribuições Linux vem com o GRUB 2 como gerenciador de inicialização padrão. No entanto, ainda podemos encontrar sistemas usando o GRUB Legacy; portanto, é importante saber como usá-lo e em que ele difere do GRUB 2.
+
+Onde fica o gerenciador de inicialização?
+Historicamente, os discos rígidos nos sistemas compatíveis com IBM PC eram particionados usando o esquema de particionamento MBR, criado em 1982 para o IBM PC-DOS (MS-DOS) 2.0.
+
+Nesse esquema, o primeiro setor de 512 bytes do disco é chamado de Master Boot Record (Registro Mestre de Inicialização, em português) e contém uma tabela que descreve as partições no disco (a tabela de partições) e também um código de inicialização (bootstrap), chamado gerenciador de inicialização.
+
+Quando o computador é ligado, esse código mínimo (devido às restrições de tamanho) do gerenciador de inicialização é carregado, executado e transfere o controle para um carregador de inicialização secundário no disco, geralmente localizado em um espaço de 32 KB entre o MBR e a primeira partição, que por sua vez carregará o(s) sistema(s) operacional(is).
+
+Em um disco particionado em MBR, o código de inicialização do GRUB é instalado no MBR. Ele carrega e transfere o controle para uma imagem “núcleo” instalada entre o MBR e a primeira partição. A partir desse ponto, o GRUB é capaz de carregar o restante dos recursos necessários (definições de menu, arquivos de configuração e módulos extras) do disco.
+
+No entanto, o MBR tem limitações no número de partições (originalmente, no máximo 4 partições primárias; mais tarde, no máximo 3 partições primárias com 1 partição estendida, subdividida em uma série de partições lógicas) e no tamanho máximo de disco (2 TB). Para suplantar essas limitações, foi criado um novo esquema de particionamento chamado GPT (GUID Partition Table), parte do padrão UEFI (Unified Extensible Firmware Interface).
+
+Os discos particionados em GPT podem ser usados em computadores com a BIOS tradicional do PC ou com o firmware UEFI. Em máquinas com BIOS, a segunda parte do GRUB é armazenada em uma partição especial de inicialização da BIOS.
+
+Em sistemas com firmware UEFI, o GRUB é carregado pelo firmware a partir dos arquivos grubia32.efi (para sistemas de 32 bits) ou grubx64.efi (para sistemas de 64 bits) em uma partição chamada ESP (EFI System Partition)
 
 GRUB2 - GRand Unified Bootloader
 
@@ -253,6 +475,27 @@ Retornando backup
 
 Em seguida, gravando o grub
 
+***Conteúdo da partição de inicialização
+
+O conteúdo da partição /boot pode variar de acordo com a arquitetura do sistema ou o gerenciador de inicialização usado, mas em um sistema baseado em x86 geralmente encontramos os arquivos abaixo. A maioria deles recebe o sufixo -VERSION, onde -VERSION é a versão correspondente do kernel do Linux. Assim, por exemplo, o arquivo de configuração para a versão do kernel do Linux 4.15.0-65-generic seria chamado de config-4.15.0-65-generic.
+
+Arquivo de configuração
+Este arquivo, geralmente chamado config-VERSION (veja o exemplo acima), armazena parâmetros de configuração para o kernel do Linux. Este arquivo é gerado automaticamente quando um novo kernel é compilado ou instalado e não deve ser diretamente modificado pelo usuário.
+
+Mapa do sistema
+Este arquivo é uma tabela de consulta que articula nomes de símbolos (como variáveis ou funções) com sua posição correspondente na memória. Isso é útil ao se corrigir um tipo de falha do sistema conhecida como kernel panic (pânico do kernel), pois permite ao usuário saber qual variável ou função estava sendo chamada quando ocorreu a falha. Como no caso do arquivo de configuração, o nome geralmente é System.map-VERSION (por exemplo, System.map-4.15.0-65-generic).
+
+Kernel do Linux
+Este é o kernel do sistema operacional propriamente dito. Seu nome é geralmente vmlinux-VERSION (por exemplo, vmlinux-4.15.0-65-generic). Também se pode encontrar o nome vmlinuz em vez de vmlinux — o z no final indica que o arquivo foi compactado.
+
+Disco RAM inicial
+Geralmente se chama initrd.img-VERSION e contém um sistema de arquivos raiz mínimo carregado em um disco RAM, contendo os utilitários e módulos de kernel necessários para que o kernel possa montar o sistema de arquivos raiz real.
+
+Arquivos relacionados ao gerenciador de inicialização
+Em sistemas com o GRUB instalado, eles costumam estar localizados em /boot/grub e incluem o arquivo de configuração (/boot/grub/grub.cfg para o GRUB 2 ou /boot/grub/menu.lst no caso do GRUB Legacy), módulos (em /boot/grub/i386-pc), arquivos de tradução (em /boot/grub/locale) e fontes (em /boot/grub/fonts) do GRUB.
+
+
+
 #grub-install /dev/sda
 
 ou
@@ -266,6 +509,108 @@ Verificando /grub/device.map
 >root (hd0,2)
 > kernel (hd0,2) /boot/vmlinuz-4.0.19 vga=769 quiet
 >boot
+
+GRUB 2
+Instalando o GRUB 2
+O GRUB 2 pode ser instalado usando o utilitário grub-install. Se seu sistema se recusa a inicializar, você precisará inicializá-lo usando um Live CD ou um disco de recuperação, descobrir qual é a partição de inicialização do seu sistema, montá-la e executar o utilitário.
+
+Note
+Para usar os comandos abaixo, é preciso estar logado como root. Se não for o caso, execute primeiro sudo su - para “virar” root. No final, digite exit para se deslogar e voltar a ser um usuário comum.
+
+O primeiro disco de um sistema é geralmente o dispositivo de inicialização . Pode ser necessário saber se existe uma partição de inicialização no disco. Para isso existe o utilitário fdisk. Para listar todas as partições no primeiro disco da sua máquina, use:
+
+# fdisk -l /dev/sda
+Disk /dev/sda: 111,8 GiB, 120034123776 bytes, 234441648 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x97f8fef5
+
+Device     Boot    Start       End   Sectors   Size Id Type
+/dev/sda1  *        2048   2000895   1998848   976M 83 Linux
+/dev/sda2        2002942 234440703 232437762 110,9G  5 Extended
+/dev/sda5        2002944  18008063  16005120   7,6G 82 Linux swap / Solaris
+/dev/sda6       18010112 234440703 216430592 103,2G 83 Linux
+A partição de inicialização é identificada com o * na coluna boot. No exemplo acima, ela é /dev/sda1.
+
+A seguir, crie um diretório temporário em /mnt e monte a partição nele:
+
+# mkdir /mnt/tmp
+# mount /dev/sda1 /mnt/tmp
+Depois execute grub-install, apontando-o para o dispositivo de inicialização (não a partição) e o diretório em que a partição de inicialização está montada. Se o sistema possuir uma partição de inicialização dedicada, o comando será:
+
+# grub-install --boot-directory=/mnt/tmp /dev/sda1
+Caso esteja instalando em um sistema que não possui uma partição de inicialização, mas apenas um diretório /boot no sistema de arquivos raiz, aponte-o em grub-install. Nesse caso, o comando é:
+
+# grub-install --boot-directory=/boot /dev/sda1
+Configurando o GRUB 2
+O arquivo de configuração padrão do GRUB 2 é /boot/grub/grub.cfg. Esse arquivo é gerado automaticamente e não se recomenda editá-lo à mão. Para fazer alterações na configuração do GRUB, é preciso editar o arquivo /etc/default/grub e depois executar o utilitário update-grub para gerar um arquivo compatível.
+
+Note
+update-grub normalmente é um atalho para grub-mkconfig -o /boot/grub/grub.cfg, de modo que eles produzem os mesmos resultados.
+
+Existem algumas opções no arquivo /etc/default/grub para controlar o comportamento do GRUB 2, como o kernel padrão de inicialização, tempo limite, parâmetros extras da linha de comando, etc. Os mais importantes são:
+
+GRUB_DEFAULT=
+A entrada de menu padrão para a inicialização. Pode ser um valor numérico (como 0, 1, etc.), o nome de um item de menu (como debian) ou saved, que é usado em conjunto com GRUB_SAVEDEFAULT=, explicado abaixo. Lembre-se de que as entradas de menu começam com zero, de forma que a primeira é 0, a segunda é 1 e assim por diante.
+
+GRUB_SAVEDEFAULT=
+Se esta opção estiver definida como true e GRUB_DEFAULT= como saved, a opção padrão de inicialização sempre será a última selecionada no menu de inicialização.
+
+GRUB_TIMEOUT=
+O tempo limite, em segundos, para que a entrada do menu padrão seja selecionada. Se definido como 0, o sistema inicializará a entrada padrão sem exibir um menu. Se definido como -1, o sistema aguardará até que o usuário selecione uma opção, não importa quanto tempo leve.
+
+GRUB_CMDLINE_LINUX=
+Lista as opções de linha de comando que serão adicionadas às entradas do kernel do Linux.
+
+GRUB_CMDLINE_LINUX_DEFAULT=
+Por padrão, duas entradas de menu são geradas para cada kernel do Linux, uma com as opções padrão e uma entrada para recuperação. Com esta opção, você pode incluir parâmetros extras que serão adicionados apenas à entrada padrão.
+
+GRUB_ENABLE_CRYPTODISK=
+Se definido como y, comandos como grub-mkconfig, update-grub e grub-install procuram por discos criptografados e adicionam os comandos necessários para acessá-los durante a inicialização. Assim, a inicialização automática é desabilitada (GRUB_TIMEOUT= com valor diferente de -1) porque uma senha será exigida para descriptografar os discos antes que possam ser acessados.
+
+Administrando as entradas de menu
+Quando rodamos o update-grub, o GRUB 2 busca por kernels e sistemas operacionais na máquina e gera as entradas de menu correspondentes no arquivo /boot/grub/grub.cfg. É possível adicionar novas entradas manualmente aos arquivos de script dentro do diretório /etc/grub.d.
+
+Esses arquivos devem ser executáveis e são processados em ordem numérica pelo update-grub. Portanto, 05_debian_theme é processado antes de 10_linux e assim por diante. As entradas de menu personalizadas são geralmente adicionadas ao arquivo 40_custom.
+
+A sintaxe básica de uma entrada de menu é mostrada abaixo:
+
+menuentry "Default OS" {
+    set root=(hd0,1)
+    linux /vmlinuz root=/dev/sda1 ro quiet splash
+    initrd /initrd.img
+}
+A primeira linha sempre começa com menuentry e termina com {. O texto entre aspas será mostrado como o rótulo da entrada no menu de inicialização do GRUB 2.
+
+O parâmetro set root define o disco e a partição em que o sistema de arquivos raiz do sistema operacional está localizado. Note que no GRUB 2 os discos são numerados a partir de zero, então hd0 é o primeiro disco (sda no Linux), hd1 o segundo e assim por diante. As partições, por sua vez, são numeradas a partir de um. No exemplo acima, o sistema de arquivos raiz está localizado no primeiro disco (hd0), primeira partição (,1) ou sda1.
+
+Em vez de especificar diretamente o dispositivo e a partição, também podemos pedir que o GRUB 2 busque por um sistema de arquivos com um rótulo ou UUID (Universally Unique Identifier) específico. Para isso, use o parâmetro search --set=root seguido por --label e o rótulo do sistema de arquivos a buscar, ou --fs-uuid seguido pelo UUID do sistema de arquivos.
+
+Use o comando abaixo para encontrar o UUID de um sistema de arquivos:
+
+$ ls -l /dev/disk/by-uuid/
+total 0
+lrwxrwxrwx 1 root root 10 nov  4 08:40 3e0b34e2-949c-43f2-90b0-25454ac1595d -> ../../sda5
+lrwxrwxrwx 1 root root 10 nov  4 08:40 428e35ee-5ad5-4dcb-adca-539aba6c2d84 -> ../../sda6
+lrwxrwxrwx 1 root root 10 nov  5 19:10 56C11DCC5D2E1334 -> ../../sdb1
+lrwxrwxrwx 1 root root 10 nov  4 08:40 ae71b214-0aec-48e8-80b2-090b6986b625 -> ../../sda1
+No exemplo acima, o UUID de /dev/sda1 é ae71b214-0aec-48e8-80b2-090b6986b625. Se quisermos defini-lo como dispositivo raiz do GRUB 2, o comando seria:
+ search --set=root --fs-uuid ae71b214-0aec-48e8-80b2-090b6986b625.
+
+Ao usar o comando search, é comum adicionar o parâmetro --no-floppy para que o GRUB não perca tempo buscando em disquetes.
+
+A linha linux indica onde está localizado o kernel do sistema operacional (neste caso, o arquivo vmlinuz na raiz do sistema de arquivos). Depois disso, podemos passar parâmetros na linha de comando para o kernel.
+
+No exemplo acima, especificamos a partição root (root=/dev/sda1) e passamos três parâmetros do kernel: a partição root deve ser montada com acesso apenas de leitura (ro), a maioria das mensagens de log deve ser desabilitada (quiet) e uma tela de boas-vindas deve ser exibida (splash).
+
+A linha initrd indica onde está localizado o disco de RAM inicial. No exemplo acima, o arquivo é initrd.img, localizado na raiz do sistema de arquivos.
+
+Note
+A maioria das distribuições Linux não coloca de fato o kernel e o initrd no diretório raiz do sistema de arquivos raiz. Em vez disso, esses são links para os arquivos reais dentro do diretório ou partição /boot.
+
+A última linha de uma entrada do menu deve conter apenas o caractere }.
 
 
 Arquivo de consulta do GRUB2
@@ -340,6 +685,141 @@ GRUB_DISBLE_OS_PROBER - Descarta a busca automatica por outros sistemas operacio
 update-grub se não disponivel
 grub-mkconfig -o /boot/grub/grub.cfg ou
 grub2-mkconfig -o /boot/grub/grub.cfg
+
+Inicialização a partir do shell do GRUB 2
+Podemos usar o shell do GRUB 2 para inicializar o sistema caso uma configuração incorreta em uma entrada de menu cause uma falha de inicialização.
+
+A primeira coisa que você deve fazer é descobrir onde está a partição de inicialização. Use para isso o comando ls, que mostra uma lista das partições e discos encontrados pelo GRUB 2.
+
+grub> ls
+(proc) (hd0) (hd0,msdos1)
+No exemplo acima, tudo é simples. Existe apenas um disco (hd0), com apenas uma partição: (hd0,msdos1).
+
+Os discos e partições listados serão diferentes no seu sistema. Em nosso exemplo, a primeira partição do hd0 é chamada msdos1 porque o disco foi particionado usando o esquema de particionamento MBR. Se ele fosse particionado usando GPT, o nome seria gpt1.
+
+Para inicializar o Linux, precisamos de um kernel e de um disco RAM inicial (initrd). Vamos verificar o conteúdo de (hd0,msdos1):
+
+grub> ls (hd0,msdos1)/
+lost+found/ swapfile etc/ media/ bin/ boot/ dev/ home/ lib/ lib64/ mnt/ opt/ proc/ root/ run/ sbin/ srv/ sys/ tmp/ usr/ var/ initrd.img initrd.img.old vmlinuz cdrom/
+Podemos adicionar o parâmetro -l a ls para obter uma lista longa, como faríamos em um terminal Linux. Use Tab para completar automaticamente os nomes de discos, partições e arquivos.
+
+Note que temos as imagens do kernel (vmlinuz) e initrd (initrd.img) bem no diretório raiz. Se não, poderíamos conferir o conteúdo de /boot com list (hd0,msdos1)/boot/.
+
+Agora, defina a partição de inicialização:
+
+grub> set root=(hd0,msdos1)
+Carregue o kernel do Linux com o comando linux, seguido pelo caminho para o kernel e pela opção root= para informar ao kernel onde está localizado o sistema de arquivos raiz do sistema operacional.
+
+grub> linux /vmlinuz root=/dev/sda1
+Carregue o disco RAM inicial com initrd, seguido pelo caminho completo para o arquivo initrd.img:
+
+grub> initrd /initrd.img
+Agora, inicialize o sistema com boot.
+
+Inicializando com o shell de resgate
+No caso de uma falha na inicialização, o GRUB 2 pode carregar um shell de resgate, uma versão simplificada do shell que mencionamos anteriormente. Você o reconhecerá pelo prompt de comando, que é exibido como grub rescue>.
+
+O processo para inicializar um sistema a partir deste shell é quase idêntico ao mostrado anteriormente. No entanto, será preciso carregar alguns módulos do GRUB 2 para fazer as coisas funcionarem.
+
+Depois de descobrir qual é a partição de inicialização (com ls, como mostrado anteriormente), use o comando set prefix=, seguido pelo caminho completo para o diretório que contém os arquivos do GRUB 2 — geralmente /boot/grub. No nosso exemplo:
+
+grub rescue> set prefix=(hd0,msdos1)/boot/grub
+Em seguida, carregue os módulos normal e linux com o comando insmod:
+
+grub rescue> insmod normal
+grub rescue> insmod linux
+A seguir, defina a partição de inicialização com set root= como ensinado anteriormente, carregue o kernel do linux (com linux), o disco RAM inicial (initrd) e tente inicializar com boot.
+
+GRUB Legacy
+Instalando o GRUB Legacy a partir de um sistema em execução
+Para instalar o GRUB Legacy em um disco a partir de um sistema em execução, empregaremos o utilitário grub-install. O comando básico é grub-install DEVICE, onde DEVICE é o disco no qual você deseja instalar o GRUB Legacy. Um exemplo seria /dev/sda.
+
+# grub-install /dev/sda
+Note que é preciso especificar o dispositivo no qual o GRUB Legacy será instalado, como /dev/sda/, não a partição como em /dev/sda1.
+
+Por padrão, o GRUB copia os arquivos necessários para o diretório /boot no dispositivo especificado. Se você deseja copiá-los para outro diretório, use o parâmetro --boot-directory= seguido pelo caminho completo para o local onde os arquivos devem ser copiados.
+
+Instalando o GRUB Legacy a partir de um shell do GRUB
+Se você não conseguir inicializar o sistema por algum motivo e precisar reinstalar o GRUB Legacy, poderá fazê-lo no shell do GRUB em um disco de inicialização do GRUB Legacy.
+
+No shell do GRUB (digite c no menu de inicialização para acessar o prompt grub>), o primeiro passo é configurar o dispositivo de inicialização, que contém o diretório /boot. Por exemplo, se esse diretório estiver na primeira partição do primeiro disco, o comando seria:
+
+grub> root (hd0,0)
+Se você não souber qual dispositivo contém o diretório /boot, peça ao GRUB para procurá-lo com o comando find, como abaixo:
+
+grub> find /boot/grub/stage1
+ (hd0,0)
+Em seguida, defina a partição de inicialização conforme as instruções acima e use o comando setup para instalar o GRUB Legacy no MBR e copiar os arquivos necessários no disco:
+
+grub> setup (hd0)
+Ao final, reinicie o sistema e ele deverá inicializar normalmente.
+
+Definindo entradas e configurações do menu do GRUB Legacy
+As entradas de menu e configurações do GRUB Legacy são armazenadas no arquivo /boot/grub/menu.lst. Trata-se de uma lista de comandos e parâmetros em um arquivo de texto simples, que pode ser editado diretamente em seu editor de texto predileto.
+
+As linhas que começam com # são consideradas comentários e as linhas em branco são ignoradas.
+
+Uma entrada de menu possui ao menos três comandos. O primeiro, title, define o título do sistema operacional na tela do menu. O segundo, root, informa ao GRUB Legacy qual o dispositivo ou partição de inicialização.
+
+A terceira entrada, kernel, especifica o caminho completo para a imagem do kernel que deve ser carregada quando a entrada correspondente for selecionada. Observe que esse caminho é relativo ao dispositivo especificado no parâmetro root.
+
+Veja um exemplo simples a seguir:
+
+# This line is a comment
+title My Linux Distribution
+root (hd0,0)
+kernel /vmlinuz root=/dev/hda1
+Ao contrário do GRUB 2, no GRUB Legacy tanto as partições quanto os discos são numerados a partir de zero. Portanto, o comando root (hd0,0) define a partição de inicialização como a primeira partição (0) do primeiro disco (hd0).
+
+Podemos omitir a instrução root se especificarmos o dispositivo de inicialização antes do caminho no comando kernel. A sintaxe é a mesma, portanto:
+
+kernel (hd0,0)/vmlinuz root=dev/hda1
+equivale a:
+
+root (hd0,0)
+kernel /vmlinuz root=/dev/hda1
+Ambos carregam o arquivo vmlinuz a partir do diretório root (/) da primeira partição do primeiro disco (hd0,0).
+
+O parâmetro root=/dev/hda1 após o comando kernel informa ao kernel do Linux qual partição deve ser usada como sistema de arquivos raiz. Este é um parâmetro do kernel do Linux, não um comando do GRUB Legacy.
+
+Note
+Para saber mais sobre os parâmetros do kernel, visite https://www.kernel.org/doc/html/v4.14/admin-guide/kernel-parameters.html.
+
+Pode ser necessário especificar o local da imagem inicial do disco RAM para o sistema operacional com o parâmetro initrd. O caminho completo para o arquivo pode ser especificado como no parâmetro kernel, mas também é possível especificar um dispositivo ou partição antes do caminho, como por exemplo:
+
+# This line is a comment
+title My Linux Distribution
+root (hd0,0)
+kernel /vmlinuz root=/dev/hda1
+initrd /initrd.img
+O GRUB Legacy tem um design modular, no qual módulos (geralmente armazenados como arquivos .mod em /boot/grub/i386-pc) podem ser carregados para adicionar recursos extras, como suporte a hardware incomum, sistemas de arquivos ou novos algoritmos de compactação.
+
+Os módulos são carregados usando o comando module, seguido pelo caminho completo para o arquivo .mod correspondente. Lembre-se de que, como no caso dos kernels e imagens initrd, esse caminho é relativo ao dispositivo especificado no comando root.
+
+O exemplo abaixo carrega o módulo 915resolution, necessário para definir corretamente a resolução da memória de imagens (frame buffer) em sistemas com chipsets de vídeo das séries Intel 800 ou 900.
+
+module /boot/grub/i386-pc/915resolution.mod
+Carregamento em cadeia de outros sistemas operacionais
+O GRUB Legacy pode ser usado para carregar sistemas operacionais não suportados, como o Windows, usando um processo chamado de carregamento em cadeia (chainloading). O GRUB Legacy é carregado primeiro e, quando a opção correspondente é selecionada, o gerenciador de inicialização do sistema desejado é carregado.
+
+Uma entrada típica para o carregamento em cadeia do Windows seria semelhante a esta:
+
+# Load Windows
+title Windows XP
+root (hd0,1)
+makeactive
+chainload +1
+boot
+Vamos esclarecer cada parâmetro. Como anteriormente, root (hd0,1) especifica o dispositivo e a partição em que o gerenciador de inicialização do sistema operacional que queremos carregar está localizado. Neste exemplo, a segunda partição do primeiro disco.
+
+makeactive
+define um sinalizador indicando que esta é uma partição ativa. Funciona apenas em partições primárias do DOS.
+
+chainload +1
+diz ao GRUB para carregar o primeiro setor da partição de inicialização. É nela que costumam ficar os gerenciadores de inicialização.
+
+boot
+executa o gerenciador de inicialização e carrega o sistema operacional correspondente.
 
 ***Recuperando o Grub
 
