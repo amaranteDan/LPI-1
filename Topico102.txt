@@ -854,24 +854,103 @@ UUID=0a29a596-3668-415a-982a-b7df2ef40284 none            swap    sw            
 
 /dev/sr0        /media/cdrom0   udf,iso9660 user,noauto     0       0
 
+Respostas aos Exercícios Guiados
+Qual é o local padrão do arquivo de configuração do GRUB 2?
 
+/boot/grub/grub.cfg
 
+Quais são as etapas necessárias para alterar as configurações do GRUB 2?
 
-102.3 Controle das bibliotecas compartilhadas
+Efetuar as alterações no arquivo /etc/default/grub, depois atualizar a configuração com update-grub.
+
+Em qual arquivo devem ser adicionadas as entradas de menu personalizadas do GRUB 2?
+
+/etc/grub.d/40_custom
+
+Onde são armazenadas as entradas de menu do GRUB Legacy?
+
+/boot/grub/menu.lst
+
+Como podemos entrar no shell do GRUB a partir de um menu do GRUB 2 ou GRUB Legacy?
+
+Pressionando c na tela de menu.
+
+Respostas aos Exercícios Exploratórios
+Imagine um usuário configurando o GRUB Legacy para inicializar a partir da segunda partição do primeiro disco. Ele escreve a seguinte entrada de menu personalizada:
+
+title My Linux Distro
+root (hd0,2)
+kernel /vmlinuz root=/dev/hda1
+initrd /initrd.img
+No entanto, o sistema não inicializa. O que está errado?
+
+A partição de inicialização está incorreta. Lembre-se de que, ao contrário do GRUB 2, o GRUB Legacy conta as partições a partir de zero. Portanto, o comando correto para a segunda partição do primeiro disco seria root (hd0,1).
+
+Imagine que você tenha um disco identificado como /dev/sda com diversas partições. Que comando pode ser usado para descobrir qual a partição de inicialização em um sistema?
+
+Use fdisk -l /dev/sda. A partição de inicialização estará marcada na lista com um asterisco (*).
+
+Qual o comando para descobrir o UUID de uma partição?
+
+Use ls -la /dev/disk/by-uuid/ e procure pelo UUID que aponta para a partição.
+
+Considere a seguinte entrada para o GRUB 2
+
+menuentry "Default OS" {
+    set root=(hd0,1)
+    linux /vmlinuz root=/dev/sda1 ro quiet splash
+    initrd /initrd.img
+}
+Altere-a para que o sistema inicialize a partir de um disco com o UUID 5dda0af3-c995-481a-a6f3-46dcd3b6998d
+
+Será preciso alterar a declaração set root. Em vez de especificar um disco e uma partição, diga ao GRUB para buscar pela partição com o UUID desejado.
+
+menuentry "Default OS" {
+    search --set=root --fs-uuid 5dda0af3-c995-481a-a6f3-46dcd3b6998d
+    linux /vmlinuz root=/dev/sda1 ro quiet splash
+    initrd /initrd.img
+}
+Como configurar o GRUB 2 para aguardar 10 segundos antes de inicializar a entrada de menu padrão?
+
+Adicionando o parâmetro GRUB_TIMEOUT=10 a /etc/default/grub.
+
+Em um shell do GRUB Legacy, quais são os comandos para instalar o GRUB na primeira partição do segundo disco?
+
+grub> root (hd1,0)
+grub> setup (hd1)
+
+***102.3 Controle das bibliotecas compartilhadas
 
 Bibliotecas de ligação estática - Sã bibliotecas ligas ao programa em tempo de execução.
 Bibliotecas ligação dinamica - Bibliotecas cuja ligação ocorre sob demanda.
 
 As libs tem uma S.O (Shared Object)
 
+
+O caminho da biblioteca é configurado no diretório /etc, especificamente no arquivo /etc/ld.so.conf e, o que atualmente é mais comum, nos arquivos do diretório /etc/ld.so.conf.d. Normalmente, o primeiro inclui uma única linha include para os arquivos *.conf do segundo:
+
+$ cat /etc/ld.so.conf
+include /etc/ld.so.conf.d/*.conf
+O diretório /etc/ld.so.conf.d contém arquivos *.conf:
+
+$ ls /etc/ld.so.conf.d/
+libc.conf  x86_64-linux-gnu.conf
+
 Diretorio das libs
 
 /lib     Bibliotecas usadas por programas e na inicialização
+/lib32
 /usr/lib Bibliotecas usada por programas do sistema geral
 /usr/local/lib - Bibliotecas usadas por programas que não são parte do sistema.
 
+
 ***Usando o ldconfig. 
 Usado para configurar as ligações em tempo de execução do link dinâmico. Cria sonames como link simbolicos. Atualiza o cache /etc/ld.so.conf
+
+O comando ldconfig trata de ler esses arquivos de configuração, criando o conjunto de links simbólicos anteriormente mencionados que ajudam a localizar as bibliotecas individuais, e, por fim, de atualizar o arquivo de cache /etc/ld.so.cache. Assim, o ldconfig deve ser executado sempre que atualizarmos ou adicionarmos arquivos de configuração.
+
+
+
 
 #ldconfig -v - Verboso
 #ldconfig -p Print cache
@@ -951,9 +1030,103 @@ Bibliotecas adicionais
 
 o ldconfig altera /etc/ld.so.conf e atualiza o /etc/ld.so.cache
 
+
+
 Exportando um biblioteca para ser carregada pela ld.so
 
 ex: export LD_LIBRARY_PATH=caminho_da_biblioteca - acesso temporário
+
+Em seguida podemos verificar o valor:
+
+$ echo $LD_LIBRARY_PATH
+/usr/local/mylib
+Para adicionar /usr/local/mylib ao caminho da biblioteca na sessão atual do shell e exportá-lo para todos os processos secundários originados desse shell, escreveríamos:
+
+$ export LD_LIBRARY_PATH=/usr/local/mylib
+Para remover a variável de ambiente LD_LIBRARY_PATH, basta digitar:
+
+$ unset LD_LIBRARY_PATH
+Se quiser tornar as alterações permanentes, escrevemos a linha
+
+export LD_LIBRARY_PATH=/usr/local/mylib
+Em um dos scripts de inicialização do Bash, como /etc/bash.bashrc ou ~/.bashrc.
+
+
+Buscando pelas dependências de um executável específico
+Para buscar as bibliotecas compartilhadas requeridas por um programa específico, use o comando ldd seguido do caminho absoluto para o programa. A saída mostra o caminho do arquivo da biblioteca compartilhada, bem como o endereço de memória hexadecimal no qual ele é carregado:
+
+# ldd /usr/bin/git
+        linux-vdso.so.1 (0x00007ffd4c857000)
+        libpcre2-8.so.0 => /lib/x86_64-linux-gnu/libpcre2-8.so.0 (0x00007fc157e70000)
+        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007fc157e53000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fc157e31000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fc157c6c000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fc158286000)
+
+Da mesma forma, usamos ldd para procurar as dependências de um objeto compartilhado:
+
+$ ldd /lib/x86_64-linux-gnu/libc.so.6
+	/lib64/ld-linux-x86-64.so.2 (0x00007fbfed578000)
+	linux-vdso.so.1 (0x00007fffb7bf5000)
+
+
+Com a opção -u (ou --unused), o ldd imprime as dependências diretas não utilizadas (se existirem):
+
+$ ldd -u /usr/bin/git
+Unused direct dependencies:
+	/lib/x86_64-linux-gnu/libz.so.1
+	/lib/x86_64-linux-gnu/libpthread.so.0
+	/lib/x86_64-linux-gnu/librt.so.1
+A razão para haver dependências não utilizadas está relacionada às opções usadas pelo vinculador ao criar o binário. Embora o programa não precise de uma biblioteca não utilizada, ela ainda estava vinculada e rotulada como NEEDED (necessária) nas informações sobre o arquivo-objeto. Para investigar isso, podemos usar comandos como readelf ou objdump, que serão necessários mais adiante, nos exercícios exploratórios.
+
+Você desenvolveu um programa e deseja adicionar um novo diretório de biblioteca compartilhada em seu sistema (/opt/lib/mylib). Você escreve o caminho absoluto em um arquivo chamado mylib.conf.
+
+Em que diretório deve ser armazenado esse arquivo?
+
+/etc/ld.so.conf.d
+
+Qual comando deve ser executado para que as alterações sejam totalmente efetivas?
+
+ldconfig
+
+Qual comando você usaria para listar as bibliotecas compartilhadas exigidas por kill?
+
+ldd /bin/kill
+
+Respostas aos Exercícios Exploratórios
+objdump é um utilitário de linha de comando que exibe informações sobre arquivos objeto. Confira se ele está instalado em seu sistema com which objdump. Se não estiver, instale-o agora.
+
+Use objdump com -p (ou --private-headers) e grep para exibir as dependências de glibc:
+
+objdump -p /lib/x86_64-linux-gnu/libc.so.6 | grep NEEDED
+
+# which objdump
+/usr/bin/objdump
+
+# objdump -p /lib/x86_64-linux-gnu/libc.so.6
+
+/lib/x86_64-linux-gnu/libc.so.6:     file format elf64-x86-64
+
+Program Header:
+    PHDR off    0x0000000000000040 vaddr 0x0000000000000040 paddr 0x0000000000000040 align 2**3
+         filesz 0x00000000000002a0 memsz 0x00000000000002a0 flags r--
+  INTERP off    0x0000000000193f00 vaddr 0x0000000000193f00 paddr 0x0000000000193f00 align 2**4
+         filesz 0x000000000000001c memsz 0x000000000000001c flags r--
+    LOAD off    0x0000000000000000 vaddr 0x0000000000000000 paddr 0x0000000000000000 align 2**12
+         filesz 0x0000000000024980 memsz 0x0000000000024980 flags r--
+    LOAD off    0x0000000000025000 vaddr 0x0000000000025000 paddr 0x0000000000025000 align 2**12
+         filesz 0x000000000014a43c memsz 0x000000000014a43c flags r-x
+    LOAD off    0x0000000000170000 vaddr 0x0000000000170000 paddr 0x0000000000170000 align 2**12
+         filesz 0x0000000000049fab memsz 0x0000000000049fab flags r--
+
+Use objdump com -p (ou --private-headers) e grep para exibir o soname de glibc:
+
+objdump -p /lib/x86_64-linux-gnu/libc.so.6 | grep SONAME
+
+Use objdump com -p (ou --private-headers) e grep para exibir as dependências do Bash:
+
+objdump -p /bin/bash | grep NEEDED
+
 
 ***102.4 Gerenciamento de Pacotes Debian
 
@@ -993,7 +1166,8 @@ apt-get install pacote -> instala pacotes
 apt install pacote
 
 *Instalar pacotes individuais.
-dpkg -i pacote.deb (.deb para pacotes binarios)
+dpkg -i pacote.deb (.deb para pacotes binarios) ou caso o pacote esteja instalado, ele atualiza.
+dpkg -I google-chrome-stable_current_amd64.deb -Traz informações sobre o pacote
 dpkg install pacote.deb
 
 apt-get install -f (força a instalaçao de dependencia)
@@ -1033,19 +1207,68 @@ apt-get dist-upgrade atualizando todos os pacotes e substitui todos os obsoletos
 
 dpkg -l pacote -> mostra estado dos pacotes
 
+# dpkg -l apache2
+Desired=Unknown/Install/Remove/Purge/Hold
+| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
+|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
+||/ Name           Version      Architecture Description
++++-==============-============-============-=================================
+ii  apache2        2.4.46-1     amd64        Apache HTTP Server
+
+
 dpkg -S procura qual pacote instalou o arquivo
+
+# dpkg -S xzcat                                                                                                                                                   
+xz-utils: /usr/share/man/man1/xzcat.1.gz
+xz-utils: /usr/bin/xzcat
+
+
+
+Descobrindo qual pacote possui um arquivo específico
+Às vezes, podemos precisar descobrir qual pacote possui um arquivo específico no sistema. Para isso, usamos o utilitário dpkg-query, seguido pelo parâmetro` -S` e o caminho para o arquivo em questão:
+
+# dpkg-query -S /usr/bin/unrar-nonfree
+unrar: /usr/bin/unrar-nonfree
+
 
 dpkg -L lista arquivos instalados pelo pacote
 
 dpkg --contents pacote.deb lista o conteudo do pacote
 
-apt-cache show pacote
- apt show pacote
+apt-cache search - A saida será uma lista de todos os pacotes que contem o padrão, seja no nome do pacote, descrição ou nos arquivos conhecidos.
+apt search
+
+apt-cache show pacote - Mostra informações completas do pacote, incluido descriçao
+apt show
+
+Ex:
+# apt-cache show git
+Package: git
+Version: 1:2.30.2-1
+Installed-Size: 35058
+Maintainer: Jonathan Nieder <jrnieder@gmail.com>
+Architecture: amd64
+Replaces: git-core (<< 1:1.7.0.4-1.), gitweb (<< 1:1.7.4~rc1)
+Provides: git-completion, git-core
+Depends: libc6 (>= 2.28), libcurl3-gnutls (>= 7.56.1), libexpat1 (>= 2.0.1), libpcre2-8-0 (>= 10.22), zlib1g (>= 1:1.2.0), perl, liberror-perl, git-man (>> 1:2.30.2), git-man (<< 1:2.30.2-.)
+Recommends: ca-certificates, patch, less, ssh-client
+Suggests: gettext-base, git-daemon-run | git-daemon-sysvinit, git-doc, git-el, git-email, git-gui, gitk, gitweb, git-cvs, git-mediawiki, git-svn
+Breaks: bash-completion (<< 1:1.90-1), cogito (<= 0.18.2+), dgit (<< 5.1~), git-buildpackage (<< 0.6.5), git-core (<< 1:1.7.0.4-1.), gitosis (<< 0.2+20090917-7), gitpkg (<< 0.15), gitweb (<< 1:1.7.4~rc1), guilt (<< 0.33), openssh-client (<< 1:6.8), stgit (<< 0.15), stgit-contrib (<< 0.15)
+Size: 5527496
+SHA256: 1efbc55de3ca1211fe4c0afc559f2edbded30ed3095d94dd602311bf604b3fd7
+SHA1: a3b1de53d57ea9cabb3cf3753f1df2847934faeb
+MD5sum: 927610ac33981f208f76cc71046ca2e1
+
 
 dpkg -p pacote
 
 *Limpando repositorios
  -> /var/cache/apt/archives (diretorio de cache dos repositorios)
+
+A cache local
+Quando instalamos ou atualizamos um pacote, o arquivo .deb correspondente é baixado em um diretório de cache local antes do pacote ser instalado. Por padrão, esse diretório é /var/cache/apt/archives. Os arquivos parcialmente baixados são copiados para /var/cache/apt/archives/partial/.
+
+Conforme instalamos e atualizamos diferentes pacotes, o diretório da cache pode ficar bastante volumoso. Para recuperar espaço, podemos esvaziar a cache usando o comando apt-get clean. Ele remove o conteúdo dos diretórios /var/cache/apt/archives e /var/cache/apt/archives/partial/.
 
 apt-get clean
 apt-get autoclean
@@ -1057,22 +1280,138 @@ apt-cache stats
 
 * Conhecimento Geral
 
-apt install -d pacote faz download do pactoe sem instalar (caso de verificação)
+apt install -d pacote faz download do pacote sem instalar (caso de verificação)
 
 *Resolvendo dependencias
+
+Corrigindo dependências quebradas
+É possível ter “dependências quebradas” em um sistema. O termo significa que um ou mais dos pacotes instalados dependem de outros pacotes que não foram instalados ou não estão mais presentes. Isso pode ocorrer devido a um erro do APT ou a um pacote instalado manualmente.
+
+Para resolver o problema, use o comando apt-get install -f. Ele procura “consertar” os pacotes quebrados instalando as dependências ausentes, garantindo que todos os pacotes voltem a ficar consistentes.
+
+Tip
+Você também pode usar apt install -f.
 
 apt install --fix-missing
 apt update --fix-missing  ou apt update -f missing
 
-102.5 Gerenciamento de Pacotes YUM/RPM
+
+Os seguintes comandos foram abordados:
+
+dpkg -i
+Instala um único pacote ou uma lista de pacotes separados por espaço.
+
+dpkg -r
+Remove um pacote ou uma lista de pacotes separados por espaço.
+
+dpkg -I
+Inspeciona um pacote, fornecendo detalhes sobre o software instalado e todas as dependências necessárias.
+
+dpkg --get-selections
+Lista todos os pacotes que o dpkg instalou no sistema.
+
+dpkg -L
+Imprime uma lista de todos os arquivos instalados por um pacote específico.
+
+dpkg-query
+Com um nome de arquivo especificado, este comando imprimirá o pacote que instalou o arquivo.
+
+dpkg-reconfigure
+Este comando re-executa um script pós-instalação de pacotes para que um administrador possa fazer ajustes de configuração da instalação do pacote.
+
+apt-get update
+Este comando atualiza o índice do pacote local de acordo com o que está disponível nos repositórios configurados no diretório /etc/apt/.
+
+apt-get install
+Este comando baixa um pacote de um repositório remoto e o instala junto com suas dependências. Também pode ser usado para instalar um pacote Debian que já foi baixado.
+
+apt-get remove
+Este comando desinstala o(s) pacote(s) especificado(s) do sistema.
+
+apt-cache show
+Assim como o comando dpkg -I, pode ser usado para exibir os detalhes de um pacote específico.
+
+apt-cache search
+Este comando procura um pacote específico no banco de dados em cache local do APT.
+
+apt-file update
+Este comando atualiza o cache do pacote para que o apt-file possa consultar seu conteúdo.
+
+apt-file search
+Este comando procura em qual pacote um arquivo está incluído. Uma lista de todos os pacotes que contêm o padrão é retornada.
+
+apt-file list
+Este comando é usado para listar o conteúdo de um pacote, assim como o comando dpkg -L.
+
+****Respostas aos Exercícios Guiados
+Qual seria o comando para instalar um pacote chamado package.deb usando dpkg?
+
+Passe o parâmetro -i para o dpkg:
+
+# dpkg -i package.deb
+Usando dpkg-query, descubra qual pacote contém um arquivo chamado 7zr.1.gz.
+
+Adicione o parâmetro -S a dpkg-query:
+
+# dpkg-query -S 7zr.1.gz
+É possível remover um pacote chamado unzip do sistema usando dpkg -r unzip se o pacote file-roller depender dele? Se não, qual seria o jeito correto de fazer isso?
+
+Não. O dpkg não resolve dependências e não permite remover um pacote se outro pacote instalado depender dele. Neste exemplo, podemos primeiro remover file-roller (pressupondo que nada depende dele) e em seguida remover unzip, ou remover os dois ao mesmo tempo com
+
+# dpkg -r unzip file-roller
+Usando o utilitário apt-file, como podemos descobrir qual pacote contém o arquivo /usr/bin/unrar?
+
+Use o parâmetro search seguido pelo caminho (ou nome de arquivo):
+
+# apt-file search /usr/bin/unrar
+Usando o apt-cache, qual seria o comando para exibir informações para o pacote gimp?
+
+Use o parâmetro show seguido pelo nome do pacote:
+
+# apt-cache show gimp
+
+
+Respostas aos Exercícios Exploratórios
+Considere um repositório com pacotes de fontes Debian para a distribuição xenial, hospedado em http://us.archive.ubuntu.com/ubuntu/ e com pacotes para o componente universe. Qual seria a linha correspondente a adicionar a /etc/apt/sources.list?
+
+Os pacotes fonte são do tipo deb-src, então a linha deve ser:
+
+deb-src http://us.archive.ubuntu.com/ubuntu/ xenial universe
+Essa linha também poderia ser adicionada a um arquivo .list fem /etc/apt/sources.list.d/. Ela pode ter qualquer nome, mas é melhor que seja descritivo, algo como xenial_sources.list.
+
+Ao compilar um programa, aparece uma mensagem de erro reclamando que o arquivo de cabeçalho zzip-io.h não está presente no seu sistema. Como você pode descobrir qual pacote fornece esse arquivo?
+
+Use apt-file search para descobrir qual pacote contém um arquivo que não está presente no sistema:
+
+# apt-file search zzip-io.h
+Como podemos ignorar um aviso de dependência e remover um pacote usando dpkg, mesmo que haja pacotes que dependam dele no sistema?
+
+O parâmetro --force poderia ser usado, mas isso jamais deve ser feito a menos que se saiba exatamente o que se está fazendo, já que existe um risco enorme de que o sistema seja deixado em um estado inconsistente ou “quebrado”.
+
+Como é possível pode obter mais informações sobre um pacote chamado midori usando apt?
+
+Use apt-cache show seguido pelo nome do pacote:
+
+# apt-cache show midori
+Antes de instalar ou atualizar pacotes com o apt, qual comando deve ser usado para garantir que o índice do pacote esteja atualizado?
+
+apt-get update deve ser usado. Ele baixa os índices mais recentes do pacote dos repositórios descritos no arquivo /etc/apt/sources.list ou no diretório /etc/apt/sources.list.d/.
+
+Fonte de pesquisa: https://learning.lpi.org/pt/learning-materials/101-500/102/102.5/102.5_01/
+
+
+****102.5 Gerenciamento de Pacotes YUM/RPM
 
 ***Instalando pacotes
+
+Obs: o rpm não gerencia dependencias. Nestes casos o yum, dnf e zypper fazem essa função.
+
 
 rpm -ivh nome_do_pacote.rpm
 
 -i --install - instalar
 
--U --update - Atualiza e instala
+-U --update - Atualiza e instala caso ja exista um pacote instalado
 
 Ex: rpm -Uvh pacote.rpm
 ou rpm -ivh --replacepkgs pacote.rpm -Vai instalar em cima do que esta, mesmo sendo a mesma versão.
@@ -1096,23 +1435,29 @@ rpm -e pacote
 
 ***Comando rpm com sub-opções
 
-rpm -qa ou rpm --quer --all - Consulta  pacotes instalados
+rpm -qa ou rpm --query --all  Consulta todos os  pacotes instalados
 
 rpm -qc pacote ou rpm --query --configfiles - Lista arquivos de configuração do pacote
 
 rpm -qd pacote ou rpm --query --docfiles - Lista a documentação do pacote
 
 rpm -qf caminho_do_arquivo ou rpm --query --file caminho_do_arquivo - Informações sobre qual pacote instalou o arquivo
+# rpm -qf /usr/bin/unzip
+unzip-6.0-19.el7.x86_64
 
-rpm -qi nome_do_pacote ou rpm --query --info nomedopacote - Informção sobre o pacote, versão etc
+rpm -qi nome_do_pacote ou rpm --query --info nomedopacote - Informação sobre o pacote, versão etc
 
-rpm -ql nomedopacote ou rpm --query --list nomedopacote -Lista os arquivos contidos no pacote
+rpm -qip pacote Traz uma lista dos arquivos de um pacote que ainda não foi instalado 
+
+rpm -ql nomedopacote ou rpm --query --list nomedopacote -Lista os arquivos dentro do pacote
+
+rpm -qlp pacote.rpm
 
 rpm -qp pacote.rpm ou rpm --query --package pacote.rpm - Faz a inspeção de um pacote não instalado.
 
 rpm -qR nomedopacote ou rpm --query -requires nomedopacote - Mostra pacotes necessarios(dependencias) para o pacote indicado
 
-rpm --quer --whatrequires nomedopacote - Lista quais programas dependem do pacote
+rpm --query --whatrequires nomedopacote - Lista quais programas dependem do pacote
 
 ***Subopções
 
@@ -1122,7 +1467,7 @@ as opçoes --nodeps e --force devem ser usadas com cautela. Pode causar efeitos 
 
 --test pode ser usado para saber qual será o resultado de uma instalação.
 
-***Verificar todo os pacotes instalados
+***Verificar todos os pacotes instalados
 
 rpm -Va
 
@@ -1204,7 +1549,11 @@ Usando coringa
 
 yum provides "*bin/named"
 
+
 Para saber quais pacotes proveem determinados arquivos.
+
+yum whatprovides /etc/hosts
+
 
 yum provides ou
 yum whatprovides
@@ -1236,14 +1585,56 @@ yum remove @kde-desktop
 Ex yumdownloader --dstdir /tmp/pacote --resolve foo
 
 
+
+
 Configurando o YUM
 
 /etc/yum.conf centro de configuração do YUM
 /etc/yum.repos.d - repositorio
 
+Administrando os repositórios de software
+Para o yum, os “repos” estão listados no diretório /etc/yum.repos.d/. Cada repositório é representado por um arquivo .repo, como CentOS-Base.repo.
+
+Repositórios adicionais podem ser incluídos pelo usuário acrescentando um arquivo .repo no diretório mencionado acima, ou no final de /etc/yum.conf. No entanto, a maneira recomendada de adicionar ou gerenciar repositórios é usar a ferramenta yum-config-manager.
+
+Para adicionar um repositório, use o parâmetro --add-repo, seguido da URL para um arquivo .repo.
+
+# yum-config-manager --add-repo https://rpms.remirepo.net/enterprise/remi.repo
+Loaded plugins: fastestmirror, langpacks
+adding repo from: https://rpms.remirepo.net/enterprise/remi.repo
+grabbing file https://rpms.remirepo.net/enterprise/remi.repo to /etc/yum.repos.d/remi.repo
+repo saved to /etc/yum.repos.d/remi.repo
+Para obter uma lista de todos os repositórios disponíveis, use yum repolist all. A saída obtida será semelhante a esta:
+
+# yum repolist all
+Loaded plugins: fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+ * base: mirror.ufscar.br
+ * epel: mirror.globo.com
+ * extras: mirror.ufscar.br
+ * updates: mirror.ufscar.br
+repo id                       repo name                    status
+updates/7/x86_64              CentOS-7 - Updates           enabled:  2,500
+updates-source/7              CentOS-7 - Updates Sources   disabled
+Os repositórios disabled (desabilitados) serão ignorados ao instalar ou atualizar o software. Para habilitar ou desabilitar um repositório, use o utilitário yum-config-manager, seguido pelo ID do repositório.
+
+Na saída acima, a identidade do repositório é mostrada na primeira coluna (repo id) de cada linha. Usamos apenas a parte anterior ao primeiro /, de forma que o id do repositório CentOS-7 - Updates é updates, e não updates/7/x86_64.
+
+# yum-config-manager --disable updates
+O comando acima desabilita o repositório updates. Para reativá-lo, use:
+
+# yum-config-manager --enable updates
 ***Plugins do yum
 
 yum info yum - Consultando os plugins
+
+*** Limpando o cache que armazena os pacotes baixados
+
+local /var/cache/yum
+
+yum clean packages -Para excluir pacotes baixados e metadatas
+yum clean metadata
+
 
 ***Desabilitando o plugn em tempo de execução
 
@@ -1252,14 +1643,664 @@ yum update --disableplugin=presto
 
 ***DNF - Gerenciador de pacotes que instala, atualiza e remove pacotes rpm.
 
-Veio para suprir o yum
+O dnf, a ferramenta de gerenciamento de pacotes usada no Fedora, é um fork do yum. Como tal, muitos dos comandos e parâmetros são semelhantes. Esta seção oferece apenas uma visão geral rápida do dnf.
+
+Busca de pacotes
+dnf search PATTERN, onde PATTERN é aquilo que você está buscando. Por exemplo, dnf search unzip mostra todos os pacotes que contêm a palavra unzip no nome ou descrição.
+
+Obter informações sobre um pacote
+dnf info PACKAGENAME
+
+Instalar pacotes
+dnf install PACKAGENAME, onde PACKAGENAME é o nome do pacote que se deseja instalar. Para encontrar o nome, faça uma busca.
+
+Remover pacotes
+dnf remove PACKAGENAME
+
+Atualizar pacotes
+dnf upgrade PACKAGENAME para atualizar um só pacote. Omita o nome do pacote para atualizar todos os pacotes do sistema.
+
+Descobrir qual pacote fornece um arquivo específico
+dnf provides FILENAME
+
+Obter uma lista de todos os pacotes instalados no sistema
+dnf list --installed
+
+Listar o conteúdo de um pacote
+dnf repoquery -l PACKAGENAME
+
+Note
+O dnf tem um sistema de ajuda embutido que mostra mais informações (como parâmetros extras) para cada comando. Para usá-lo, digite dnf help seguido pelo comando, como dnf help install.
+
+dnf repolist Para lista repositorios
+
+dnf repolist enabled ou disabled Exibe a lista de repositorios ativados ou desativados
 
 
+Para adicionar um repositório, use dnf config-manager --add_repo URL, onde URL é a URL completa do repositório. Para habilitar um repositório, use dnf config-manager --set-enabled REPO_ID.
+
+Da mesma forma, para desativar um repositório, use dnf config-manager --set-disabled REPO_ID. Nos dois casos, REPO_ID é o ID exclusivo do repositório, que pode ser obtido com dnf repolist. Os repositórios adicionados são ativados por padrão. Os repositórios são armazenados em arquivos .repo no diretório /etc/yum.repos.d/, com exatamente a mesma sintaxe usada para o yum.
+
+Zypper
+O zypper é a ferramenta de gerenciamento de pacotes usada no SUSE Linux e OpenSUSE. Em termos de recursos, é semelhante ao apt e ao yum, sendo capaz de instalar, atualizar e remover pacotes de um sistema, com resolução automática de dependências.
+
+Atualizando o índice do pacote
+A exemplo de outras ferramentas de gerenciamento de pacotes, o zypper trabalha com repositórios que contêm pacotes e metadados. Esses metadados precisam ser atualizados periodicamente para que o utilitário fique a par dos pacotes mais recentes disponíveis. Para fazer uma atualização, basta digitar:
+
+# zypper refresh
+Repository 'Non-OSS Repository' is up to date.
+Repository 'Main Repository' is up to date.
+Repository 'Main Update Repository' is up to date.
+Repository 'Update Repository (Non-Oss)' is up to date.
+All repositories have been refreshed.
+O zypper possui um recurso de atualização automática que pode ser ativado caso a caso, ou seja, alguns repositórios poderão ser atualizados automaticamente antes de uma consulta ou da instalação de um pacote, e outros poderão precisar ser atualizados manualmente. Vamos ensinar a controlar esse recurso em breve.
+
+Buscando pacotes
+Para procurar um pacote, use o operador search (ou se), seguido pelo nome do pacote:
+
+# zypper se gnumeric
+Loading repository data...
+Reading installed packages...
+
+S | Name           | Summary                           | Type
+--+----------------+-----------------------------------+--------
+  | gnumeric       | Spreadsheet Application           | package
+  | gnumeric-devel | Spreadsheet Application           | package
+  | gnumeric-doc   | Documentation files for Gnumeric  | package
+  | gnumeric-lang  | Translations for package gnumeric | package
+O operador de pesquisa também serve para obter uma lista de todos os pacotes instalados no sistema. Para isso, use o parâmetro -i sem o nome do pacote, como em zypper se -i.
+
+Para ver se um pacote específico está instalado, adicione o nome do pacote ao comando acima. Por exemplo, o seguinte comando buscará dentre os pacotes instalados por um que contenha “firefox” no nome:
+
+# zypper se -i firefox
+Loading repository data...
+Reading installed packages...
+
+S | Name                               | Summary                 | Type
+--+------------------------------------+-------------------------+--------
+i | MozillaFirefox                     | Mozilla Firefox Web B-> | package
+i | MozillaFirefox-branding-openSUSE   | openSUSE branding of -> | package
+i | MozillaFirefox-translations-common | Common translations f-> | package
+
+Para pesquisar apenas nos pacotes não-instalados, adicione o parâmetro -u ao operador se.
+
+Instalando, atualizando e removendo pacotes
+Para instalar um pacote de software, use o operador install (ou in), seguido pelo nome do pacote. Desta maneira:
+
+# zypper in unrar
+zypper in unrar
+Loading repository data...
+Reading installed packages...
+Resolving package dependencies...
+
+The following NEW package is going to be installed:
+  unrar
+
+1 new package to install.
+Overall download size: 141.2 KiB. Already cached: 0 B. After the operation, additional 301.6 KiB will be used.
+Continue? [y/n/v/...? shows all options] (y): y
+Retrieving package unrar-5.7.5-lp151.1.1.x86_64
+                                     (1/1), 141.2 KiB (301.6 KiB unpacked)
+Retrieving: unrar-5.7.5-lp151.1.1.x86_64.rpm .......................[done]
+Checking for file conflicts: .......................................[done]
+(1/1) Installing: unrar-5.7.5-lp151.1.1.x86_64 .....................[done]
+
+O zypper também pode ser usado para instalar um pacote RPM no disco enquanto tenta atender às dependências usando pacotes dos repositórios. Para isso, basta fornecer o caminho completo para o pacote em vez de apenas um nome de pacote, como em zypper in /home/john/newpackage.rpm.
+
+Para atualizar os pacotes instalados no sistema, use zypper update. Como no caso do processo de instalação, aparece uma lista de pacotes a serem instalados/atualizados e o gerenciador pergunta se você deseja continuar.
+
+Se quiser listar apenas as atualizações disponíveis, sem instalar nada, use zypper list-updates.
+
+Para remover um pacote, use o operador remove (ou rm), seguido pelo nome do pacote:
+
+# zypper rm unrar
+Loading repository data...
+Reading installed packages...
+Resolving package dependencies...
+
+The following package is going to be REMOVED:
+  unrar
+
+1 package to remove.
+After the operation, 301.6 KiB will be freed.
+Continue? [y/n/v/...? shows all options] (y): y
+(1/1) Removing unrar-5.7.5-lp151.1.1.x86_64 ........................[done]
+Lembre-se de que a remoção de um pacote também remove outros pacotes que dependem dele. Por exemplo:
+
+# zypper rm libgimp-2_0-0
+Loading repository data...
+Warning: No repositories defined. Operating only with the installed resolvables. Nothing can be installed.
+Reading installed packages...
+Resolving package dependencies...
+
+The following 6 packages are going to be REMOVED:
+  gimp gimp-help gimp-lang gimp-plugins-python libgimp-2_0-0
+  libgimpui-2_0-0
+
+6 packages to remove.
+After the operation, 98.0 MiB will be freed.
+Continue? [y/n/v/...? shows all options] (y):
+Descobrindo quais pacotes possuem um arquivo específico
+Para ver quais pacotes contêm um arquivo específico, use o operador de pesquisa seguido pelo parâmetro --provides e o nome do arquivo (ou o caminho completo para ele). Por exemplo, para saber quais pacotes contêm o arquivo libgimpmodule-2.0.so.0 em `/usr/lib64/, usaríamos:
+
+# zypper se --provides /usr/lib64/libgimpmodule-2.0.so.0
+Loading repository data...
+Reading installed packages...
+
+S | Name          | Summary                                      | Type
+--+---------------+----------------------------------------------+--------
+i | libgimp-2_0-0 | The GNU Image Manipulation Program - Libra-> | package
+Obtendo informações sobre um pacote
+Para ver os metadados associados a um pacote, use o operador info seguido pelo nome do pacote. Serão exibidos o repositório de origem, nome do pacote, versão, arquitetura, fornecedor, tamanho instalado, se está instalado ou não, status (se está atualizado), o pacote de origem e uma descrição.
+
+# zypper info gimp
+Loading repository data...
+Reading installed packages...
+
+Information for package gimp:
+ -----------------------------
+Repository     : Main Repository
+Name           : gimp
+Version        : 2.8.22-lp151.4.6
+Arch           : x86_64
+Vendor         : openSUSE
+Installed Size : 29.1 MiB
+Installed      : Yes (automatically)
+Status         : up-to-date
+Source package : gimp-2.8.22-lp151.4.6.src
+Summary        : The GNU Image Manipulation Program
+Description    :
+    The GIMP is an image composition and editing program, which can be
+    used for creating logos and other graphics for Web pages. The GIMP
+    offers many tools and filters, and provides a large image
+    manipulation toolbox, including channel operations and layers,
+    effects, subpixel imaging and antialiasing, and conversions, together
+    with multilevel undo. The GIMP offers a scripting facility, but many
+    of the included scripts rely on fonts that we cannot distribute.
+Administrando os repositórios de software
+
+O zypper também pode ser usado para gerenciar repositórios de software. Para ver uma lista de todos os repositórios atualmente registrados no seu sistema, use zypper repos:
+
+# zypper repos
+Repository priorities are without effect. All enabled repositories share the same priority.
+
+#  | Alias                     | Name                               | Enabled | GPG Check | Refresh
+---+---------------------------+------------------------------------+---------+-----------+--------
+ 1 | openSUSE-Leap-15.1-1      | openSUSE-Leap-15.1-1               | No      | ----      | ----
+ 2 | repo-debug                | Debug Repository                   | No      | ----      | ----
+ 3 | repo-debug-non-oss        | Debug Repository (Non-OSS)         | No      | ----      | ----
+ 4 | repo-debug-update         | Update Repository (Debug)          | No      | ----      | ----
+ 5 | repo-debug-update-non-oss | Update Repository (Debug, Non-OSS) | No      | ----      | ----
+ 6 | repo-non-oss              | Non-OSS Repository                 | Yes     | (r ) Yes  | Yes
+ 7 | repo-oss                  | Main Repository                    | Yes     | (r ) Yes  | Yes
+ 8 | repo-source               | Source Repository                  | No      | ----      | ----
+ 9 | repo-source-non-oss       | Source Repository (Non-OSS)        | No      | ----      | ----
+10 | repo-update               | Main Update Repository             | Yes     | (r ) Yes  | Yes
+11 | repo-update-non-oss       | Update Repository (Non-Oss)        | Yes     | (r ) Yes  | Yes
+Na coluna Enabled vemos que alguns repositórios estão ativados e outros não. Para mudar isso, use o operador modifyrepo, seguido pelo parâmetro -e (enable) ou -d (disable) e pelo alias do repositório (a segunda coluna na saída acima).
+
+# zypper modifyrepo -d repo-non-oss
+Repository 'repo-non-oss' has been successfully disabled.
+
+# zypper modifyrepo -e repo-non-oss
+Repository 'repo-non-oss' has been successfully enabled.
+Mencionamos anteriormente que o zypper possui um recurso de atualização automática que pode ser ativado caso a caso nos repositórios. Quando ativado, esse sinalizador faz com que o zypper execute uma operação de atualização (como se executássemos zypper refresh) antes de trabalhar com o repositório especificado. O processo pode ser controlado com os parâmetros -f e -F do operador modifyrepo:
+
+# zypper modifyrepo -F repo-non-oss
+Autorefresh has been disabled for repository 'repo-non-oss'.
+
+# zypper modifyrepo -f repo-non-oss
+Autorefresh has been enabled for repository 'repo-non-oss'.
+Adicionando e removendo repositórios
+
+Para adicionar um novo repositório de software para o zypper, use o operador addrepo seguido da URL e do nome do repositório, como abaixo:
+
+# zypper addrepo http://packman.inode.at/suse/openSUSE_Leap_15.1/ packman
+Adding repository 'packman' ........................................[done]
+Repository 'packman' successfully added
+
+URI         : http://packman.inode.at/suse/openSUSE_Leap_15.1/
+Enabled     : Yes
+GPG Check   : Yes
+Autorefresh : No
+Priority    : 99 (default priority)
+
+Repository priorities are without effect. All enabled repositories share the same priority.
+Ao adicionar um repositório, podemos ativar as atualizações automáticas com o parâmetro -f. Os repositórios adicionados são ativados por padrão, mas também é possível adicionar e desativar um repositório ao mesmo tempo usando o parâmetro -d. Para remover um repositório, use o operador removerepo seguido pelo nome do repositório (Alias). Para remover o repositório adicionado no exemplo acima, o comando seria:
+
+# zypper removerepo packman
+Removing repository 'packman' ......................................[done]
+Repository 'packman' has been removed.
 
 
+Respostas aos Exercícios Guiados
+Usando o rpm em um sistema Red Hat Enterprise Linux, como você instalaria o pacote file-roller-3.28.1-2.el7.x86_64.rpm de maneira a exibir uma barra de progresso durante a instalação?
+
+Use o parâmetro -i para instalar um pacote e a opção -h para habilitar os “sinais de hash” mostrando o progresso da instalação. Assim, a resposta é: rpm -ih file-roller-3.28.1-2.el7.x86_64.rpm.
+
+Usando o rpm, descubra qual pacote contém o arquivo /etc/redhat-release.
+
+Estamos solicitando informações sobre um arquivo, por isso usamos o parâmetro -qf: rpm -qf /etc/redhat-release.
+
+Como você usaria o yum para procurar atualizações para todos os pacotes do sistema?
+
+Use a operação check-update sem um nome de pacote: yum check-update.
+
+Usando o zypper, como desabilitaríamos um repositório chamado repo-extras?
+
+Use a operação modifyrepo para alterar os parâmetros de um repositório, e o parâmetro -d para desabilitá-lo: zypper modifyrepo -d repo-extras.
+
+Se tivermos um arquivo .repo descrevendo um novo repositório, onde esse arquivo deve ser colocado para poder ser reconhecido pelo DNF?
+
+Os arquivos .repo para o DNF devem ser postos no mesmo local usado pelo YUM, dentro de /etc/yum.repos.d/.
+
+Respostas aos Exercícios Exploratórios
+Como usar o zypper para descobrir qual pacote possui o arquivo /usr/sbin/swapon?
+
+Use o operador se (search) e o parâmetro --provides: zypper se --provides /usr/sbin/swapon.
+
+Como obter uma lista de todos os pacotes instalados no sistema usando o dnf?
+
+Use o operador list, seguido pelo parâmetro --installed: dnf list --installed.
+
+Usando o dnf, qual o comando para adicionar um repositório localizado em https://www.example.url/home:reponame.repo ao sistema?
+
+O trabalho com repositórios é uma “mudança de configurações”, por isso use o config-manager e o parâmetro --add_repo: dnf config-manager --add_repo https://www.example.url/home:reponame.repo.
+
+Como podemos usar o zypper para conferir se o pacote unzip está instalado?
+
+Precisamos fazer uma busca (se) nos pacotes instalados (-i): zypper se -i unzip.
+
+Usando o yum, descubra qual pacote fornece o arquivo /bin/wget.
+
+Para descobrir quem fornece um arquivo, use whatprovides e o nome do arquivo: yum whatprovides /bin/wget.
 
 
+Introdução
+Um dos maiores pontos fortes do Linux é sua versatilidade. Um aspecto dessa versatilidade é a possibilidade de usar o Linux como meio de hospedar outros sistemas operacionais, ou aplicativos individuais, em um ambiente completamente isolado e seguro. Esta lição será dedicada aos conceitos de virtualização e tecnologias de contêiner, juntamente com alguns detalhes técnicos que devem ser levados em conta ao se implementar uma máquina virtual em uma plataforma de nuvem.
+
+O que é virtualização?
+A virtualização é uma tecnologia que permite que uma plataforma de software, chamada de hipervisor, execute processos que contêm um sistema inteiramente emulado (virtual). O hipervisor é responsável por gerenciar os recursos do hardware físico que podem ser usados por máquinas virtuais individuais. Essas máquinas virtuais são chamadas de guests (convidados) do hypervisor. Muitos dos aspectos de um computador físico são emulados por software na máquina virtual, como a BIOS do sistema e os controladores de disco rígido. Uma máquina virtual geralmente usa imagens de disco rígido que são armazenadas como arquivos individuais e tem acesso à RAM e à CPU da máquina hospedeira por meio do software hipervisor. O hipervisor divide o acesso aos recursos de hardware do sistema hospedeiro entre os convidados, permitindo assim que vários sistemas operacionais sejam executados em um único sistema hospedeiro.
+
+Dentre os hipervisores mais comumente usados no Linux, podemos citar:
+
+Xen
+O Xen é um hipervisor de código aberto de Tipo 1, o que significa que ele não depende de um sistema operacional subjacente para funcionar. Um hipervisor desse tipo é conhecido como hipervisor bare-metal, pois o computador pode inicializar diretamente no hipervisor.
+
+KVM
+O Kernel Virtual Machine é um módulo de virtualização do kernel do Linux. O KVM é um hipervisor de Tipo 1 e também de Tipo 2 porque, embora precise de um sistema operacional Linux genérico para funcionar, é capaz de agir perfeitamente bem como hipervisor integrando-se a uma instalação Linux em execução. As máquinas virtuais implementadas com o KVM usam o daemon libvirt e utilitários de software associados para serem criadas e gerenciadas.
+
+VirtualBox
+Um aplicativo desktop popular que facilita a criação e o gerenciamento de máquinas virtuais. O Oracle VM VirtualBox é multiplataforma e funciona em Linux, macOS e Microsoft Windows. Como o VirtualBox requer um sistema operacional subjacente para ser executado, ele é um hipervisor de Tipo 2.
+
+Alguns hipervisores permitem a realocação dinâmica de uma máquina virtual. O processo de mover uma máquina virtual de uma instalação do hipervisor para outra é chamado de migração e as técnicas envolvidas são diferentes conforme as implementações do hipervisor. Algumas migrações só podem ser realizadas quando o sistema convidado está completamente desligado e outras podem ser feitas com o convidado em execução (é o que chamamos migração ao vivo). Essas técnicas podem ser úteis durante a manutenção dos hipervisores, ou ainda para garantir a resiliência do sistema quando um hipervisor para de funcionar, sendo possível mover o convidado para outro.
+
+Tipos de máquina virtual
+Existem três tipos principais de máquinas virtuais, o convidado totalmente virtualizado, o convidado paravirtualizado e o convidado híbrido.
+
+Totalmente virtualizado
+Todas as instruções que um sistema operacional convidado precisa executar devem poder rodar em uma instalação de sistema operacional totalmente virtualizada. A razão para isso é que nenhum driver de software adicional é instalado na máquina virtual para traduzir as instruções para o hardware simulado ou real. O convidado totalmente virtualizado (ou HardwareVM) não sabe que é uma instância de máquina virtual em execução. Para que esse tipo de virtualização seja possível com hardware baseado em x86, as extensões de CPU Intel VT-x ou AMD-V devem ser habilitadas no sistema no qual o hipervisor está instalado. Isso pode ser feito a partir de um menu de configuração de firmware na BIOS ou UEFI.
+
+Paravirtualizado
+Um convidado paravirtualizado (ou PVM) é aquele que está ciente de ser uma instância de máquina virtual em execução. Esses tipos de convidados fazem uso de um kernel modificado e drivers especiais (conhecidos como drivers convidados) que ajudam o sistema operacional convidado a utilizar os recursos de software e hardware do hipervisor. O desempenho de um convidado paravirtualizado costuma ser melhor do que o de um convidado totalmente virtualizado devido à vantagem oferecida por esses drivers de software.
+
+Híbrido
+A paravirtualização e a virtualização total podem ser combinadas para permitir que sistemas operacionais não modificados tenham um desempenho de E/S quase nativo usando drivers paravirtualizados em sistemas operacionais totalmente virtualizados. Os drivers paravirtualizados contêm drivers de dispositivos de armazenamento e de rede com desempenho aprimorado de E/S de disco e de rede.
+
+As plataformas de virtualização geralmente fornecem drivers convidados para os sistemas operacionais virtualizados. O KVM utiliza drivers do projeto Virtio, enquanto o Oracle VM VirtualBox usa Extensões de Convidado disponíveis em um arquivo de imagem ISO de CD-ROM para download.
+
+Exemplo de máquina virtual libvirt
+Veremos um exemplo de máquina virtual que é gerenciada por libvirt e usa o hipervisor KVM. Uma máquina virtual geralmente consiste em um grupo de arquivos, principalmente um arquivo XML que define a máquina virtual (sua configuração de hardware, conectividade de rede, recursos de exibição etc.) e um arquivo de imagem de disco rígido associado contendo a instalação do sistema operacional e seu software.
+
+Primeiro, vamos examinar um exemplo de arquivo de configuração XML para uma máquina virtual e seu ambiente de rede:
+
+$ ls /etc/libvirt/qemu
+total 24
+drwxr-xr-x 3 root root 4096 Oct 29 17:48 networks
+-rw------- 1 root root 5667 Jun 29 17:17 rhel8.0.xml
+Note
+A parte qemu do caminho do diretório se refere ao software subjacente do qual dependem as máquinas virtuais baseadas em KVM. O projeto QEMU fornece software para o hipervisor para emular os dispositivos de hardware que serão usados pela máquina virtual, como controladores de disco, acesso à CPU do host, emulação de placa de rede e muito mais.
+
+Observe que existe um diretório chamado networks. Esse diretório contém arquivos de definição (que também usam XML) que criam configurações de rede utilizáveis pelas máquinas virtuais. Este hipervisor está usando apenas uma rede e, portanto, há apenas um arquivo de definição contendo uma configuração para um segmento de rede virtual que será usado por esses sistemas.
+
+$ ls -l /etc/libvirt/qemu/networks/
+total 8
+drwxr-xr-x 2 root root 4096 Jun 29 17:15 autostart
+-rw------- 1 root root  576 Jun 28 16:39 default.xml
+$ sudo cat /etc/libvirt/qemu/networks/default.xml
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh net-edit default
+or other application using the libvirt API.
+-->
+
+<network>
+  <name>default</name>
+  <uuid>55ab064f-62f8-49d3-8d25-8ef36a524344</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='52:54:00:b8:e0:15'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254'/>
+    </dhcp>
+  </ip>
+</network>
+Esta definição inclui uma rede privada Classe C e um dispositivo de hardware emulado que age como um roteador para esta rede. Também vemos um intervalo de endereços IP que o hipervisor, junto com com uma implementação de servidor DHCP, pode atribuir às máquinas virtuais que usam esta rede. Essa configuração de rede também utiliza a tradução de endereços de rede (NAT) para encaminhar pacotes para outras redes, como a LAN do hipervisor.
+
+Veremos a seguir um arquivo de definição de máquina virtual Red Hat Enterprise Linux 8 (as seções mais importantes estão em negrito):
+
+$ sudo cat /etc/libvirt/qemu/rhel8.0.xml
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh edit rhel8.0
+or other application using the libvirt API.
+-->
+
+<domain type='kvm'>
+  <name>rhel8.0</name>
+  <uuid>fadd8c5d-c5e1-410e-b425-30da7598d0f6</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://redhat.com/rhel/8.0"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <memory unit='KiB'>4194304</memory>
+  <currentMemory unit='KiB'>4194304</currentMemory>
+  <vcpu placement='static'>2</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-q35-3.1'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <vmport state='off'/>
+  </features>
+  <cpu mode='host-model' check='partial'>
+    <model fallback='allow'/>
+  </cpu>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <pm>
+    <suspend-to-mem enabled='no'/>
+    <suspend-to-disk enabled='no'/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/lib/libvirt/images/rhel8'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>
+    </disk>
+    <controller type='usb' index='0' model='qemu-xhci' ports='15'>
+      <address type='pci' domain='0x0000' bus='0x02' slot='0x00' function='0x0'/>
+    </controller>
+    <controller type='sata' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x1f' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pcie-root'/>
+    <controller type='pci' index='1' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='1' port='0x10'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='pci' index='2' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='2' port='0x11'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x1'/>
+    </controller>
+    <controller type='pci' index='3' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='3' port='0x12'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x2'/>
+    </controller>
+    <controller type='pci' index='4' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='4' port='0x13'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x3'/>
+    </controller>
+    <controller type='pci' index='5' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='5' port='0x14'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x4'/>
+    </controller>
+    <controller type='pci' index='6' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='6' port='0x15'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x5'/>
+    </controller>
+    <controller type='pci' index='7' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='7' port='0x16'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x6'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x03' slot='0x00' function='0x0'/>
+    </controller>
+    <interface type='network'>
+      <mac address='52:54:00:50:a7:18'/>
+      <source network='default'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x01' slot='0x00' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target type='isa-serial' port='0'>
+        <model name='isa-serial'/>
+      </target>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='unix'>
+      <target type='virtio' name='org.qemu.guest_agent.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='2'/>
+    </channel>
+    <input type='tablet' bus='usb'>
+      <address type='usb' bus='0' port='1'/>
+    </input>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='spice' autoport='yes'>
+      <listen type='address'/>
+      <image compression='off'/>
+    </graphics>
+    <sound model='ich9'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x1b' function='0x0'/>
+    </sound>
+    <video>
+      <model type='virtio' heads='1' primary='yes'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x0'/>
+    </video>
+    <redirdev bus='usb' type='spicevmc'>
+      <address type='usb' bus='0' port='2'/>
+    </redirdev>
+    <redirdev bus='usb' type='spicevmc'>
+      <address type='usb' bus='0' port='3'/>
+    </redirdev>
+    <memballoon model='virtio'>
+      <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
+    </memballoon>
+    <rng model='virtio'>
+      <backend model='random'>/dev/urandom</backend>
+      <address type='pci' domain='0x0000' bus='0x06' slot='0x00' function='0x0'/>
+    </rng>
+  </devices>
+</domain>
+Este arquivo define uma série de configurações de hardware que são usadas por este convidado, como a quantidade de RAM que lhe será atribuída, o número de núcleos da CPU do hipervisor a que o convidado terá acesso, o arquivo de imagem de disco rígido associado a este convidado (na estrofe disk), seus recursos de exibição (por meio do protocolo SPICE) e o acesso do convidado a dispositivos USB, bem como o teclado emulado e a entrada de mouse.
+
+Exemplo de armazenamento em disco de uma máquina virtual
+A imagem de disco rígido desta máquina virtual reside em /var/lib/libvirt/images/rhel8. Eis a imagem de disco em si neste hipervisor:
+
+$ sudo ls -lh /var/lib/libvirt/images/rhel8
+-rw------- 1 root root 5.5G Oct 25 15:57 /var/lib/libvirt/images/rhel8
+O tamanho atual desta imagem de disco consome apenas 5,5 GB de espaço no hipervisor. No entanto, o sistema operacional deste convidado vê um disco de 23,3 GB, conforme evidenciado pela saída do seguinte comando lançado dentro da máquina virtual em execução:
+
+$ lsblk
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+vda           252:0    0 23.3G  0 disk
+├─vda1        252:1    0    1G  0 part /boot
+└─vda2        252:2    0 22.3G  0 part
+  ├─rhel-root 253:0    0   20G  0 lvm  /
+  └─rhel-swap 253:1    0  2.3G  0 lvm  [SWAP]
+Isso se deve ao tipo de provisionamento de disco usado para este convidado. Existem vários tipos de imagens de disco que uma máquina virtual pode usar, mas os dois principais são:
+
+COW
+Copy-on-write ou cópia na gravação (também conhecida como thin-provisioning ou sparse images) é um método em que um arquivo de disco é criado com um limite máximo de tamanho predefinido. O tamanho da imagem do disco só aumenta quando novos dados são gravados no disco. Como no exemplo anterior, o sistema operacional convidado vê o limite de disco predefinido de 23,3 GB, mas gravou apenas 5,5 GB de dados no arquivo de disco. O formato de imagem de disco usado para a máquina virtual de exemplo é qcow2, um formato de arquivo QEMU COW.
+
+RAW
+Um tipo de disco raw ou full é um arquivo que tem todo o seu espaço pré-alocado. Por exemplo, um arquivo de imagem de disco raw de 10 GB consome 10 GB de espaço em disco real no hipervisor. Esse estilo de disco permite um ganho de desempenho, pois todo o espaço em disco necessário já existe, de modo que o hipervisor subjacente pode simplesmente gravar dados no disco sem o impacto no desempenho que seria causado pela necessidade de monitorar a imagem do disco para garantir que ele não atingiu seu limite e de estender o tamanho do arquivo à medida que novos dados são gravados nele.
+
+Existem outras plataformas de gerenciamento de virtualização, como o Red Hat Enterprise Virtualization e o oVirt, que podem lançar mão de discos físicos como locais de armazenamento secundários para o sistema operacional de uma máquina virtual. Esses sistemas utilizam dispositivos de rede de área de armazenamento (SAN) ou de armazenamento conectado à rede (NAS) para gravar seus dados, e o hipervisor controla quais locais de armazenamento pertencem a quais máquinas virtuais. Esses sistemas de armazenamento podem usar tecnologias como o gerenciamento de volume lógico (LVM) para aumentar ou diminuir o tamanho do armazenamento em disco de uma máquina virtual conforme necessário e para auxiliar na criação e gerenciamento de instantâneos de armazenamento.
+
+Trabalhando com modelos de máquina virtual
+Como as máquinas virtuais são, tipicamente, apenas arquivos em execução em um hipervisor, é fácil criar modelos que podem ser personalizados para cenários específicos de implantação. Freqüentemente, uma máquina virtual contém uma instalação básica de sistema operacional e algumas configurações de autenticação predefinidas para facilitar futuras inicializações do sistema. Isso diminui o tempo necessário para construir um novo sistema, reduzindo a quantidade de trabalho repetitivo, como a instalação de pacotes básicos e as configurações de localidade.
+
+Esse modelo de máquina virtual pode ser copiado posteriormente para um novo sistema convidado. Nesse caso, o novo convidado receberia um novo nome e um novo endereço MAC para sua interface de rede, além de outras modificações dependendo do uso pretendido.
+
+O D-Bus Machine ID
+Muitas instalações do Linux utilizam um número de identificação de máquina gerado no momento da instalação, chamado de D-Bus machine ID. No entanto, se uma máquina virtual for clonada para ser usada como modelo para outras instalações de máquina virtual, um novo D-Bus machine ID precisará ser criado para garantir que os recursos do sistema do hipervisor sejam direcionados ao sistema convidado correto.
+
+O comando a seguir serve para validar se existe um D-Bus machine ID para o sistema em execução:
+
+$ dbus-uuidgen --ensure
+Se nenhuma mensagem de erro for exibida, é porque já existe um ID para o sistema. Para visualizar o D-Bus machine ID atual, execute o seguinte:
+
+$ dbus-uuidgen --get
+17f2e0698e844e31b12ccd3f9aa4d94a
+A sequência de caracteres exibida é o número de ID atual. Dois sistemas Linux em execução em um hipervisor não devem ter o mesmo D-Bus machine ID.
+
+O D-Bus machine ID localiza-se em /var/lib/dbus/machine-id e está simbolicamente ligado a /etc/machine-id. Não é recomendável alterar esse número de ID em um sistema em execução, pois isso pode acarretar instabilidades e travamentos do sistema. Se duas máquinas virtuais tiverem o mesmo D-Bus machine ID, siga o procedimento abaixo para gerar um novo:
+
+$ sudo rm -f /etc/machine-id
+$ sudo dbus-uuidgen --ensure=/etc/machine-id
+Se por acaso /var/lib/dbus/machine-id não for um link simbólico que remete a /etc/machine-id, /var/lib/dbus/machine-id terá de ser removido.
+
+Implementação de máquinas virtuais na nuvem
+Muitos provedores de IaaS (infraestrutura como serviço) executam sistemas de hipervisor e podem implantar imagens de máquinas virtuais para uma empresa. Praticamente todos esses provedores oferecem ferramentas que permitem a um administrador construir, implementar e configurar máquinas virtuais personalizadas com base em uma variedade de distribuições Linux. Muitos deles também possuem sistemas que permitem a implementação e migração de máquinas virtuais construídas de dentro da empresa de um cliente.
+
+Ao avaliar a implementação de um sistema Linux em um ambiente IaaS, existem alguns elementos-chave que um administrador deve conhecer:
+
+Instâncias de computação
+Muitos provedores de nuvem cobram taxas de uso com base em “instâncias de computação”, ou o tempo de CPU que será usado por uma infraestrutura baseada em nuvem. O planejamento cuidadoso do tempo de processamento real exigido por cada aplicativo ajuda a manter gerenciáveis os custos de uma solução em nuvem.
+
+As instâncias de computação também se referem ao número de máquinas virtuais provisionadas em um ambiente de nuvem. Também neste caso o maior número de instâncias de sistemas em execução ao mesmo tempo influencia no tempo geral de CPU que uma empresa terá de pagar.
+
+Armazenamento em bloco
+Os provedores de nuvem também oferecem diversos níveis de armazenamento em bloco para uso empresarial. Algumas ofertas consistem simplesmente em armazenamento de rede baseado na web para arquivos; outras oferecem armazenamento externo para uma máquina virtual provisionada em nuvem e usada para hospedar arquivos.
+
+O custo dessas ofertas varia de acordo com a quantidade de armazenamento usada e a velocidade do armazenamento nos data centers do provedor. Um acesso mais rápido ao armazenamento normalmente custa mais e, inversamente, os dados "em repouso" (como no caso do arquivamento de dados) costumam ser bem baratos.
+
+Rede
+Um dos principais componentes do trabalho com um provedor de soluções em nuvem é a maneira como a rede virtual será configurada. Muitos provedores de IaaS oferecem alguma forma de utilitários baseados na web que podem ser utilizados para o projeto e implementação de diferentes rotas de rede, sub-redes e configurações de firewall. Alguns fornecem até mesmo soluções de DNS para ser possível atribuir FQDN (nomes de domínio absolutos) publicamente acessíveis aos sistemas de Internet do cliente. Existem também soluções “híbridas” capazes de conectar uma infraestrutura de rede local existente a uma infraestrutura baseada em nuvem por meio de uma VPN (rede privada virtual), unindo assim as duas infraestruturas
+
+Acessando convidados na nuvem com segurança
+O método mais comum para acessar uma máquina virtual remota em uma plataforma de nuvem é por meio do software OpenSSH. Um sistema Linux residente na nuvem teria o servidor OpenSSH em execução, enquanto um administrador usaria um cliente OpenSSH com chaves pré-compartilhadas para acesso remoto.
+
+Um administrador executaria o seguinte comando:
+
+$ ssh-keygen
+seguindo as instruções para criar um par de chaves SSH públicas e privadas. A chave privada permanece no sistema local do administrador (armazenada em ~/.ssh/) e a chave pública é copiada para o sistema de nuvem remoto, exatamente o mesmo método que se usaria ao trabalhar com máquinas em rede em uma LAN corporativa.
+
+O administrador então executaria o seguinte comando:
+
+$ ssh-copy-id -i <public_key> user@cloud_server
+Ele copia a chave SSH pública do par que acaba de ser gerado para o servidor de nuvem remoto. A chave pública é gravada no arquivo ~/.ssh/authorized_keys do servidor na nuvem e define as permissões apropriadas no arquivo.
+
+Note
+Se houver apenas um arquivo de chave pública no diretório ~/.ssh/, então a opção -i pode ser omitida, pois o comando ssh-copy-id será o padrão para o arquivo de chave pública no diretório (normalmente o arquivo que termina com a extensão .pub).
+
+Alguns provedores de nuvem geram automaticamente um par de chaves quando um novo sistema Linux é provisionado. O administrador precisa então baixar a chave pública para o novo sistema do provedor de nuvem e armazená-la em seu sistema local. Observe que as permissões para chaves SSH devem ser 0600 para uma chave privada e 0644 para uma chave pública.
+
+Pré-configurando sistemas em nuvem
+Uma ferramenta útil que simplifica as implementações de máquina virtual baseada em nuvem é o utilitário cloud-init. Esse comando, junto com os arquivos de configuração associados e a imagem de máquina virtual predefinida, é um método neutro (independente de fornecedor) para implementar um convidado Linux em uma infinidade de provedores de IaaS. Utilizando arquivos de texto simples YAML (YAML Ain’t Markup Language), o administrador pode pré-configurar as definições de rede, a seleção de pacotes de software, a configuração de chave SSH, a criação de contas de usuário e as configurações de localidade, além de uma série de outras opções para criar novos sistemas rapidamente.
+
+Durante a inicialização de um novo sistema, o cloud-init lê as definições dos arquivos de configuração YAML e as aplica. Basta efetuar esse processo na configuração inicial de um sistema e a implantação de uma frota de novos sistemas em uma plataforma de provedor de nuvem ficará muito mais fácil.
+
+A sintaxe do arquivo YAML usado com cloud-init se chama cloud-config. Eis um exemplo de arquivo cloud-config:
+
+#cloud-config
+timezone: Africa/Dar_es_Salaam
+hostname: test-system
+
+# Update the system when it first boots up
+apt_update: true
+apt_upgrade: true
+
+# Install the Nginx web server
+packages:
+ - nginx
+Observe que na linha superior não há espaço entre o símbolo hash (#) e o termo cloud-config.
+
+Note
+cloud-init não é apenas para máquinas virtuais. O conjunto de ferramentas cloud-init também pode ser usado para pré-configurar contêineres (como contêineres LXD Linux) antes da implementação.
+
+Contêiners
+A tecnologia de contêiner lembra uma máquina virtual em certos aspectos: eles proporcionam um ambiente isolado para implementar facilmente um aplicativo. Ao passo que, com uma máquina virtual, um computador inteiro é emulado, um contêiner usa apenas o software suficiente para executar um aplicativo. Dessa forma, há muito menos sobrecarga.
+
+Os contêineres permitem uma maior flexibilidade em relação a uma máquina virtual. Um contêiner de aplicativo pode ser migrado de um hospedeiro para outro, assim como uma máquina virtual pode ser migrada de um hipervisor para outro. No entanto, às vezes, uma máquina virtual precisa ser desligada antes de poder ser migrada, enquanto no contêiner o aplicativo permanece em execução enquanto está sendo migrado. Os contêineres também facilitam a implementação de novas versões de aplicativos em conjunto com uma versão existente. Conforme os usuários fecham suas sessões com contêineres em execução, esses contêineres podem ser removidos automaticamente do sistema pelo software de orquestração de contêineres e substituídos pela nova versão, reduzindo assim o tempo de inatividade.
+
+Note
+Existem várias tecnologias de contêiner disponíveis para Linux, como Docker, Kubernetes, LXD / LXC, systemd-nspawn, OpenShift e outros. A implementação exata de um pacote de software contêiner está além do escopo do exame LPIC-1.
+
+Os contêineres usam o mecanismo de grupos de controle (mais conhecido como cgroups) no kernel do Linux. O cgroup é uma forma de particionar os recursos do sistema, como memória, tempo do processador, bem como disco e largura de banda da rede, para um aplicativo individual. Um administrador pode usar cgroups diretamente para definir os limites de recursos do sistema em um aplicativo ou um grupo de aplicativos existentes em um único cgroup. Em essência, é isso o que o software de contêiner faz para o administrador, além de fornecer ferramentas que facilitam o gerenciamento e a implementação de cgroups.
+
+Note
+Atualmente, o conhecimento de cgroups não é necessário para prestar o exame LPIC-1. O conceito de cgroup é mencionado aqui para que o candidato tenha pelo menos algum conhecimento prévio de como um aplicativo é segregado para fins de utilização dos recursos do sistema.
 
 
+Respostas aos Exercícios Guiados
+Quais extensões de CPU são necessárias em uma plataforma de hardware baseada em x86 para rodar convidados totalmente virtualizados?
 
+VT-x para as CPUs Intel ou AMD-V para CPUs AMD
 
+Uma instalação de servidor de missão crítica, que exige um desempenho mais rápido, provavelmente usará que tipo de virtualização?
+
+Um sistema operacional que faz uso de paravirtualização, como o Xen, pois o sistema operacional convidado poderá fazer melhor uso dos recursos de hardware disponíveis com drivers de software projetados para funcionar com o hipervisor.
+
+Duas máquinas virtuais que foram clonadas a partir do mesmo modelo e que utilizam o D-Bus apresentam desempenho irregular. Ambas têm nomes de host e definições de configuração de rede separadas. Qual comando seria usado para determinar se cada uma das máquinas virtuais tem diferentes D-Bus Machine IDs?
+
+dbus-uuidgen --get
+
+Respostas aos Exercícios Exploratórios
+
+Execute o seguinte comando para ver se seu sistema já tem extensões de CPU habilitadas para rodar uma máquina virtual (os resultados podem variar dependendo de sua CPU): 
+grep --color -E "vmx|svm" /proc/cpuinfo. Dependendo da saída, vmx pode estar realçado (para CPUs habilitadas com Intel VT-x) ou, ainda, svm (para CPUs habilitadas com AMD SVM). Se não obtiver resultados, consulte as instruções da BIOS ou da UEFI sobre como habilitar a virtualização para o seu processador.
+
+Os resultados variam dependendo da sua CPU. Eis um exemplo de saída de um computador com uma CPU Intel com extensões de virtualização habilitadas no firmware UEFI:
+
+$ grep --color -E "vmx|svm" /proc/cpuinfo
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+Se o seu processador suporta virtualizações, procure a documentação da sua distribuição para executar um hipervisor KVM.
+
+Instale os pacotes necessários para executar um hipervisor KVM.
+
+O método vai variar de acordo com a distribuição, mas aqui estão alguns pontos de partida:
+
+Ubuntu — https://help.ubuntu.com/lts/serverguide/libvirt.html
+
+Fedora — https://docs.fedoraproject.org/en-US/quick-docs/getting-started-with-virtualization/
+
+Arch Linux — https://wiki.archlinux.org/index.php/KVM
+
+Se estiver usando um ambiente de desktop gráfico, é recomendado instalar também o aplicativo virt-manager, um front-end gráfico que pode ser usado em uma instalação KVM. Isso ajudará na instalação e gerenciamento da máquina virtual.
+
+Mais uma vez, o método vai depender da distribuição. Eis um exemplo usando o Ubuntu:
+
+$ sudo apt install virt-manager
+Baixe a imagem ISO de uma distribuição Linux à sua escolha e, seguindo a documentação da distribuição, crie uma nova máquina virtual usando essa ISO.
+
+O pacote virt-manager facilita muito essa tarefa. No entanto, uma máquina virtual pode ser criada a partir da linha de comando usando o comando virt-install. Experimente os dois métodos para entender como as máquinas virtuais são implementadas.
