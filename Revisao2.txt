@@ -1,0 +1,937 @@
+####################################################
+Revisão da 103
+
+https://learning.lpi.org/pt/learning-materials/101-500/103/103.1/103.1_01/
+
+pwd -Onde estou
+
+touch cria arquivo
+
+uname -a ou --all
+
+apropos <comando> Localiza onde é possivel verificar informações do comando (Paginas do manual)
+
+# type uname cp kill which
+uname is hashed (/usr/bin/uname)
+cp is /usr/bin/cp
+kill is a shell builtin
+which is hashed (/usr/bin/which)
+
+history
+bash_history / .bash_history Banco de dados dinamico do history
+
+ls -la Mostra arquivos ocultos
+
+env Verifica as variaveis de ambiente e seus valores
+
+echo Exibe na tela
+echo "How are you"
+
+echo $PATH
+
+***Criando minha variavel
+
+myvar=hello
+$myvar
+
+
+bash - abre novo terminal 
+
+***exportar variavel
+
+export myvar
+
+echo $myvar
+
+***Removendo
+
+unset myvar
+
+*** set Exibe todas as variaveis e funções
+
+# set | grep PATH
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    local PATH=$PATH:/sbin;
+    if [[ -z ${CDPATH:-} || $cur == ?(.)?(.)/* ]]; then
+    for i in ${CDPATH//:/'
+    PATH=$PATH:/usr/sbin:/sbin:/usr/local/sbin type $1 &> /dev/null
+    COMPREPLY=($(compgen -W "$(PATH="$PATH:/sbin" lsmod |
+    local PATH=$PATH:/sbin;
+    local PATH="$PATH:/sbin:/usr/sbin";
+    COMPREPLY+=($(compgen -W         "$(PATH="$PATH:/sbin" lspci -n | awk '{print $3}')" -- "$cur"))
+    local PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin;
+    COMPREPLY+=($(compgen -W         "$(PATH="$PATH:/sbin" lsusb | awk '{print $6}')" -- "$cur"))
+    [ -z "$AWKLIBPATH" ] && AWKLIBPATH=`gawk 'BEGIN {print ENVIRON["AWKLIBPATH"]}'`;
+    export AWKLIBPATH="$AWKLIBPATH:$*"
+    unset AWKLIBPATH;
+    export AWKLIBPATH=`gawk 'BEGIN {print ENVIRON["AWKLIBPATH"]}'`
+    [ -z "$AWKLIBPATH" ] && AWKLIBPATH=`gawk 'BEGIN {print ENVIRON["AWKLIBPATH"]}'`;
+    export AWKLIBPATH="$*:$AWKLIBPATH"
+    [ -z "$AWKPATH" ] && AWKPATH=`gawk 'BEGIN {print ENVIRON["AWKPATH"]}'`;
+    export AWKPATH="$AWKPATH:$*"
+    unset AWKPATH;
+    export AWKPATH=`gawk 'BEGIN {print ENVIRON["AWKPATH"]}'`
+    [ -z "$AWKPATH" ] && AWKPATH=`gawk 'BEGIN {print ENVIRON["AWKPATH"]}'`;
+    export AWKPATH="$*:$AWKPATH"
+
+diff - Verificando a diferença entre os arquivos
+
+cat verifica o conteudo de u arquivo
+
+
+zcat visualiza o conteudo de um gzip
+
+bzcat le o conteudo do bzpi2
+
+xzcat le o conteu do xz
+
+gunzip para descompactar o gzip
+
+
+
+
+less paginador 
+
+
+less /var/log/messages
+
+head le as primeiras 10 linhas de um arquivo
+
+head /var/log/messages
+
+tail - usado para ler as ultimas linhas de um arquivo
+
+tail /var/log/messages
+
+
+nl contador de linhas
+
+
+head /var/log/messages |  nl
+
+# head /var/log/messages | nl
+     1  Apr 18 18:49:32 dublin rsyslogd: [origin software="rsyslogd" swVersion="8.2010.0" x-pid="497" x-info="https://www.rsyslog.com"] rsyslogd was HUPed
+     2  Apr 18 18:49:35 dublin lightdm[811]: Error getting user list from org.freedesktop.Accounts: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Accounts was not provided by any .service files
+     3  Apr 18 18:50:04 dublin lightdm[884]: Error getting user list from org.freedesktop.Accounts: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Accounts was not provided by any .service files
+     4  Apr 18 18:50:13 dublin colord[1109]: failed to get edid data: EDID length is too small
+     5  Apr 18 18:50:14 dublin org.freedesktop.thumbnails.Thumbnailer1[1088]: Registered thumbnailer /usr/bin/gdk-pixbuf-thumbnailer -s %s %u %o
+     6  Apr 18 18:50:14 dublin org.freedesktop.thumbnails.Thumbnailer1[1088]: Registered thumbnailer /usr/bin/gdk-pixbuf-thumbnailer -s %s %u %o
+     7  Apr 18 18:50:14 dublin org.freedesktop.thumbnails.Thumbnailer1[1088]: Registered thumbnailer atril-thumbnailer -s %s %u %o
+     8  Apr 18 18:50:15 dublin udisksd[1166]: udisks daemon version 2.9.1 starting
+     9  Apr 18 18:50:15 dublin udisksd[1166]: failed to load module mdraid: libbd_mdraid.so.2: cannot open shared object file: No such file or directory
+    10  Apr 18 18:50:15 dublin udisksd[1166]: Failed to load the 'mdraid' libblockdev plugin
+
+wc -Contador de caracteres 
+	-l conta as linhas tambem
+
+
+# tail /var/log/messages | wc -l
+10
+
+# tail -n 5 /var/log/messages
+Apr 20 00:10:03 dublin rsyslogd: [origin software="rsyslogd" swVersion="8.2010.0" x-pid="497" x-info="https://www.rsyslog.com"] rsyslogd was HUPed
+Apr 20 00:36:00 dublin lightdm[10932]: Error getting user list from org.freedesktop.Accounts: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Accounts was not provided by any .service files
+Apr 20 09:37:14 dublin lightdm[13774]: Error getting user list from org.freedesktop.Accounts: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Accounts was not provided by any .service files
+Apr 20 11:36:31 dublin lightdm[14413]: Error getting user list from org.freedesktop.Accounts: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Accounts was not provided by any .service files
+Apr 20 11:40:31 dublin lightdm[14546]: Error getting user list from org.freedesktop.Accounts: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Accounts was not provided by any .service files
+
+grep -v "root" faz a busca omitindo a palavra root
+
+Sed - editor de fluxo
+
+$ sed -n /cat/p < ftu.txt  sed -n para imprimi tudo na tela, a não ser a saidas do comando p
+bzcat
+cat
+xzcat
+zcat  
+
+
+# sed /cat/d < ftu.txt -Nesse caso o sed imprime na tela tudo exceto "cat" ou palavras que tenham cat. Ordenado pelo comando d 
+cut
+head
+less
+nl
+od
+paste
+join
+sed
+sha256sum
+sha512sum
+sort
+split
+tail
+tr
+uniq
+wc
+
+
+# sed s/cat/dog/ < ftu.txt  -Nesse caso, o comando s vai substituir nas ocorrencias /cat por /dog e imprimir na tela. "Lembrete"- Isso não altera o arquivo.
+dog
+bzdog
+xzdog
+zdog
+dog
+cut
+head
+less
+nl
+od
+paste
+join
+sed
+sha256sum
+sha512sum
+sort
+split
+tail
+tr
+uniq
+wc
+
+$ sed -i.backup s/cat/dog/ ftu.txt
+$ ls ftu*
+ftu.txt  ftu.txt.backup
+A opção -i executa uma operação sed local no arquivo original. Se você não usar .backup após o parâmetro -i, vai reescrever o arquivo original. Qualquer texto inserido após o parâmetro -i será o nome com o qual o arquivo original será salvo antes das modificações que você pediu ao sed para realizar.
+
+
+Garantindo a integridade dos dados
+Como vimos, é fácil manipular arquivos no Linux. Há momentos em que queremos compartilhar um arquivo com outra pessoa e ter certeza de que o destinatário receberá uma cópia fiel do arquivo original. Um uso muito comum dessa técnica é quando os servidores das distribuições Linux hospedam imagens de CD ou DVD de seu software para download, juntamente com arquivos que contêm os valores calculados da soma de verificação (checksum) dessas imagens de disco.
+
+Ex# sha256sum ftu.txt 
+332a4bb3e6e415749c6553ec402d3926a59f42038beab8a759c8420ad1b45c0a  ftu.txt
+
+
+# sha256sum ftu.txt > sha256.txt
+┌──(root💀dublin)-[/etc]
+└─# sha256sum -c sha256.txt 
+ftu.txt: OK
+
+# sha256sum -c sha256.txt 
+ftu.txt: FAILED
+sha256sum: WARNING: 1 computed checksum did NOT match  -Nesse caso houve a falha devido a adição de mais informações no arquivo ftu.txt
+
+od - Comando Octal dump -Para depurar aplicativos e diversos tipos de arquivos
+
+Listando o conteudo de um arquivo de forma octal
+# od ftu.txt 
+0000000 060543 005164 075142 060543 005164 075170 060543 005164
+0000020 061572 072141 062012 063557 061412 072165 064012 060545
+0000040 005144 062554 071563 067012 005154 062157 070012 071541
+0000060 062564 065012 064557 005156 062563 005144 064163 031141
+0000100 033065 072563 005155 064163 032541 031061 072563 005155
+0000120 067563 072162 071412 066160 072151 072012 064541 005154
+0000140 071164 072412 064556 005161 061567 005012 067556 060566
+0000160 066040 067151 060550 000012
+0000167
+
+Listando o conteudo em formato hexadecimal
+# od -x ftu.txt 
+0000000 6163 0a74 7a62 6163 0a74 7a78 6163 0a74
+0000020 637a 7461 640a 676f 630a 7475 680a 6165
+0000040 0a64 656c 7373 6e0a 0a6c 646f 700a 7361
+0000060 6574 6a0a 696f 0a6e 6573 0a64 6873 3261
+0000100 3635 7573 0a6d 6873 3561 3231 7573 0a6d
+0000120 6f73 7472 730a 6c70 7469 740a 6961 0a6c
+0000140 7274 750a 696e 0a71 6377 0a0a 6f6e 6176
+0000160 6c20 6e69 6168 000a
+0000167
+
+Depurando o arquivo por caracteres. A ocorrencias da linha que foi adicionada esta como \n
+
+# od -c ftu.txt 
+0000000   c   a   t  \n   b   z   c   a   t  \n   x   z   c   a   t  \n
+0000020   z   c   a   t  \n   d   o   g  \n   c   u   t  \n   h   e   a
+0000040   d  \n   l   e   s   s  \n   n   l  \n   o   d  \n   p   a   s
+0000060   t   e  \n   j   o   i   n  \n   s   e   d  \n   s   h   a   2
+0000100   5   6   s   u   m  \n   s   h   a   5   1   2   s   u   m  \n
+0000120   s   o   r   t  \n   s   p   l   i   t  \n   t   a   i   l  \n
+0000140   t   r  \n   u   n   i   q  \n   w   c  \n  \n   n   o   v   a
+0000160       l   i   n   h   a  \n
+0000167
+
+*Verificando um arquivo sem o deslocamento do byte
+
+od -An -c ftu.txt
+
+# od -An -c ftu.txt 
+   c   a   t  \n   b   z   c   a   t  \n   x   z   c   a   t  \n
+   z   c   a   t  \n   d   o   g  \n   c   u   t  \n   h   e   a
+   d  \n   l   e   s   s  \n   n   l  \n   o   d  \n   p   a   s
+   t   e  \n   j   o   i   n  \n   s   e   d  \n   s   h   a   2
+   5   6   s   u   m  \n   s   h   a   5   1   2   s   u   m  \n
+   s   o   r   t  \n   s   p   l   i   t  \n   t   a   i   l  \n
+   t   r  \n   u   n   i   q  \n   w   c  \n  \n   n   o   v   a
+       l   i   n   h   a  \n
+
+
+Alguém acaba de doar um laptop para sua escola e você deseja instalar Linux nele. Ele veio sem manual e você é obrigado a inicializá-lo a partir de um pen drive USB sem nenhuma interface gráfica. Aparece um terminal shell e você sabe que, para cada processador presente, haverá uma linha dedicada no arquivo /proc/cpuinfo:
+
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+
+(lines skipped)
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+
+(more lines skipped)
+Usando os comandos grep e wc, exiba o número de processadores presentes.
+
+Eis duas opções:
+
+$ cat /proc/cpuinfo | grep processor | wc -l
+$ grep processor /proc/cpuinfo | wc -l
+Agora que você sabe que existem várias maneiras de fazer a mesma coisa, quando deve usar uma ou outra? Isso depende de vários fatores, sendo os dois mais importantes o desempenho e a legibilidade. Na maioria das vezes, usamos comandos de shell dentro de scripts de shell para automatizar tarefas; quanto maiores e mais complexos seus scripts se tornam, mais precisamos nos preocupar em mantê-los rápidos.
+
+Faça o mesmo com sed em vez de grep.
+
+Agora, em vez de grep vamos tentar isso com sed:
+
+$ sed -n /processor/p /proc/cpuinfo | wc -l
+Aqui, usamos sed com o parâmetro -n para que sed não imprima nada, exceto o que corresponde à expressão processor, conforme instruído pelo comando p . Como fizemos nas soluções de grep, wc -l conta o número de linhas e, portanto, o número de processadores presentes.
+
+Estude o exemplo a seguir:
+
+$ sed -n /processor/p /proc/cpuinfo | sed -n '$='
+Esta sequência de comando fornece resultados idênticos aos do exemplo anterior, no qual a saída de sed foi canalizada para um comando wc. A diferença, aqui, é que em vez de usar wc -l para contar o número de linhas, sed é novamente invocado para fornecer uma funcionalidade equivalente. Mais uma vez, estamos suprimindo a saída de sed com a opção -n, exceto para a expressão que estamos chamando explicitamente, que é '$='. Essa expressão diz ao sed para encontrar uma correspondência para a última linha ($) e então imprimir o número dessa linha (=).
+
+Explore seu arquivo local /etc/passwd com os comandos grep, sed, head e tail de acordo com as tarefas descritas abaixo:
+
+Quais usuários têm acesso a um shell Bash?
+
+$ grep ":/bin/bash$" /etc/passwd
+Vamos refinar esta resposta exibindo apenas o nome do usuário que utiliza o shell Bash.
+
+$ grep ":/bin/bash$" /etc/passwd | cut -d: -f1
+O nome do usuário é o primeiro campo (parâmetro -f1 do comando cut) e o arquivo /etc/passwd usa : como separadores (-d: parâmetro do comando cut). Nós apenas canalizamos a saída do comando grep para o comando cut apropriado.
+
+Muitos dos usuários de seu sistema existem para lidar com programas específicos ou para fins administrativos. Eles não têm acesso a um shell. Quantos deles estão presentes no sistema?
+
+A maneira mais fácil de descobrir isso é exibir as linhas correspondentes às contas que não usam o shell Bash:
+
+$ grep -v ":/bin/bash$" /etc/passwd | wc -l
+Quantos usuários e grupos existem em seu sistema (lembre-se: use apenas o arquivo /etc/passwd)?
+
+O primeiro campo de qualquer linha do arquivo /etc/passwd é o nome do usuário, o segundo é tipicamente um x indicando que a senha do usuário não está armazenada aqui (ela é criptografada no arquivo /etc/shadow). O terceiro é o id do usuário (UID) e o quarto é o id do grupo (GID). Portanto, isso deve nos fornecer o número de usuários:
+
+$ cut -d: -f3 /etc/passwd | wc -l
+Bem, isso funciona na maioria dos casos. No entanto, há situações em que definimos diferentes superusuários ou outros tipos especiais de usuários que compartilham o mesmo UID (id de usuário). Assim, para ter certeza, vamos canalizar o resultado do comando cut para o comando sort e então contar o número de linhas.
+
+$ cut -d: -f3 /etc/passwd | sort -u | wc -l
+Agora, para o número de grupos:
+
+$ cut -d: -f4 /etc/passwd | sort -u | wc -l
+Liste apenas a primeira, a última e a décima linha do arquivo /etc/passwd.
+
+Podemos fazer assim:
+
+$ sed -n -e '1'p -e '10'p -e '$'p /etc/passwd
+Lembre-se de que o parâmetro -n diz ao sed para não imprimir nada além do que é especificado pelo comando p. O cifrão ($) usado aqui é uma expressão regular que representa a última linha do arquivo.
+
+Considere este exemplo do arquivo /etc/passwd. Copie as linhas abaixo para um arquivo local chamado mypasswd para este exercício.
+
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+nvidia-persistenced:x:121:128:NVIDIA Persistence Daemon,,,:/nonexistent:/sbin/nologin
+libvirt-qemu:x:64055:130:Libvirt Qemu,,,:/var/lib/libvirt:/usr/sbin/nologin
+libvirt-dnsmasq:x:122:133:Libvirt Dnsmasq,,,:/var/lib/libvirt/dnsmasq:/usr/sbin/nologin
+carol:x:1000:2000:Carol Smith,Human Resources,,,Main Office:/home/carol:/bin/bash
+dave:x:1001:1000:Dave Edwards,Human Resources,,,Main Office:/home/dave:/bin/ksh
+emma:x:1002:1000:Emma Jones,Human Resources,,,Main Office:/home/emma:/bin/bash
+frank:x:1003:1000:Frank Cassidy,Human Resources,,,Main Office:/home/frank:/bin/bash
+grace:x:1004:1000:Grace Kearns,Engineering,,,Main Office:/home/grace:/bin/ksh
+henry:x:1005:1000:Henry Adams,Accounts Payable,,,Main Office:/home/henry:/bin/bash
+john:x:1006:1000:John Chapel,Accounts Payable,,,Main Office:/home/john:/bin/bash
+Liste todos os usuários no grupo 1000 (use sed para selecionar apenas o campo apropriado) do arquivo mypasswd.
+
+O GID é o quarto campo do arquivo /etc/passwd. Você pode ter vontade de tentar o seguinte:
+
+$ sed -n /1000/p mypasswd
+Nesse caso, você obterá também esta linha:
+
+carol:x:1000:2000:Carol Smith,Human Resources,,,Main Office:/home/carol:/bin/bash
+Sabemos que não está correto, pois Carol Smith é membro do GID 2000 e a correspondência foi encontrada por causa do UID. No entanto, você deve ter notado que, após o GID, o campo seguinte começa com um caractere maiúsculo. Podemos usar uma expressão regular para resolver esse problema.
+
+$ sed -n /:1000:[A-Z]/p mypasswd
+A expressão [A-Z] busca por quaisquer caracteres em maiúsculas. Vamos falar mais sobre isso na lição correspondente.
+
+Liste apenas o nome completo de todos os usuários deste grupo (use sed e cut).
+
+Use a mesma técnica empregada para resolver a primeira parte deste exercício e canalize para um comando cut.
+
+$ sed -n /:1000:[A-Z]/p mypasswd | cut -d: -f5
+Dave Edwards,Human Resources,,,Main Office
+Emma Jones,Human Resources,,,Main Office
+Frank Cassidy,Human Resources,,,Main Office
+Grace Kearns,Engineering,,,Main Office
+Henry Adams,Accounts Payable,,,Main Office
+John Chapel,Accounts Payable,,,Main Office
+Ainda não chegamos lá! Note como os campos dentro dos resultados podem ser separados por ,. Assim, vamos canalizar a saída para outro comando cut, usando , como delimitador.
+
+$ sed -n /:1000:[A-Z]/p mypasswd | cut -d: -f5 | cut -d, -f1
+Dave Edwards
+Emma Jones
+Frank Cassidy
+Grace Kearns
+Henry Adams
+John Chapel
+Respostas aos Exercícios Exploratórios
+Usando novamente o arquivo mypasswd dos exercícios anteriores, imagine um comando Bash que selecione um indivíduo do Main Office para ganhar uma rifa. Use o comando sed para imprimir apenas as linhas do Main Office e, em seguida, uma sequência de comando cut para recuperar o primeiro nome de cada usuário a partir dessas linhas. Depois, classifique esses nomes aleatoriamente e imprima apenas o nome principal da lista.
+
+Primeiro, explore como o parâmetro -R manipula a saída do comando sort. Repita esse comando algumas vezes em sua máquina:
+
+$ sed -n /Main Office/p mypasswd | cut -d: -f5 | cut -d, -f1 | sort -R
+Eis uma solução para o problema:
+
+$ sed -n /Main Office/p mypasswd | cut -d: -f5 | cut -d, -f1 | sort -R | head -1
+Quantas pessoas trabalham em Human Resources, Engineering e Accounts Payable? (pense em explorar o comando uniq.)
+
+Continue incrementando o que você aprendeu nos exercícios anteriores. Tente o seguinte:
+
+$ sed -n /Main Office/p mypasswd
+$ sed -n /Main Office/p mypasswd | cut -d, -f2
+Note que não nos preocupamos com o delimitador :. Queremos somente o segundo campo quando dividimos as linhas pelos caracteres ,.
+
+$ sed -n /Main Office/p mypasswd | cut -d, -f2 | uniq -c
+      4 Human Resources
+      1 Engineering
+      2 Accounts Payable
+O comando uniq mostra apenas as linhas únicas (não as linhas repetidas) e o parâmetro -c diz ao uniq para contar as ocorrências de linhas iguais. Mas fique esperto: uniq considera apenas as linhas adjacentes. Quando esse não for o caso, será preciso usar o comando sort.
+
+Agora, vamos preparar um arquivo CSV (valores separados por vírgula) para poder importar facilmente, do arquivo mypasswd do exemplo anterior, o arquivo persons.csv para o LibreOffice. O conteúdo do arquivo terá o seguinte formato:
+
+First Name,Last Name,Position
+Carol,Smith,Human Resources
+...
+John,Chapel,Accounts Payable
+Dica: use os comandos sed, cut e paste para obter os resultados desejados. Note que a vírgula (,) será o delimitador desse arquivo.
+
+Comece com os comandos sed e cut, incrementando o que aprendemos nos exercícios anteriores:
+
+$ sed -n /Main Office/p mypasswd | cut -d: -f5 | cut -d" " -f1 > firstname
+Agora temos o arquivo firstname com o primeiro nome dos funcionários.
+
+$ sed -n /Main Office/p mypasswd | cut -d: -f5 | cut -d" " -f2 | cut -d, -f1 > lastname
+Agora temos o arquivo lastname com o sobrenome de cada funcionário.
+
+A seguir, vamos determinar o departamento em que cada funcionário trabalha:
+
+$ sed -n /Main Office/p mypasswd | cut -d: -f5 | cut -d, -f2 > department
+Antes de trabalharmos na resposta final, tente os seguintes comandos para ver que tipo de saída eles geram:
+
+$ cat firstname lastname department
+$ paste firstname lastname department
+E a solução é:
+
+$ paste firstname lastname department | tr '\t' ,
+$ paste firstname lastname department | tr '\t' , > names.csv
+Aqui, usamos o comando tr para traduzir \t, o separador de tabulação, por um ,. tr é bastante útil quando precisamos trocar um caractere por outro. Não deixe de ler as páginas de manual de tr e paste. Por exemplo, podemos usar a opção -d para o delimitador, para tornar o comando anterior menos complexo:
+
+$ paste -d, firstname lastname station
+Usamos o comando paste aqui para você se acostumar mais com ele. No entanto, poderíamos ter executado facilmente todas as tarefas em uma única cadeia de comando:
+
+$ sed -n /Main Office/p mypasswd | cut -d: -f5 | cut -d, -f1,2 | tr ' ' , > names.csv
+Suponha que a planilha people.csv criada no exercício anterior seja um arquivo importante e queremos ter certeza de que ninguém vai adulterá-lo desde o momento do envio até a recepção pelo destinatário. Como podemos garantir a integridade desse arquivo usando md5sum?
+
+Se você consultar as páginas de manual de md5sum, sha256sum e sha512sum, verá que todas começam com o seguinte texto:
+
+“compute and check XXX message digest”
+
+Onde “XXX” é o algoritmo que será usado para criar esse message digest (resumo de mensagens).
+
+Usaremos md5sum como exemplo e, mais tarde, você poderá tentar com os outros comandos.
+
+$ md5sum names.csv
+61f0251fcab61d9575b1d0cbf0195e25  names.csv
+Agora, por exemplo, você pode disponibilizar o arquivo através de um serviço de ftp seguro e enviar o resumo de mensagens gerado usando outro meio de comunicação seguro. Se o arquivo tiver sido ligeiramente alterado, o resumo de mensagens será totalmente diferente. Para comprovar, edite names.csv e troque James por Jones, como demonstramos aqui:
+
+$ sed -i.backup s/James/Jones/ names.csv
+$ md5sum names.csv
+f44a0d68cb480466099021bf6d6d2e65  names.csv
+Sempre que você disponibilizar arquivos para download, é aconselhável distribuir também um resumo de mensagens correspondente para que as pessoas que baixarem aquele arquivo possam produzir um novo resumo de mensagens e comparar com o original. Se você visitar o site https://kernel.org, encontrará a página https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc, onde pode obter o sha256sum de todos os arquivos disponíveis para download.
+
+Você prometeu a si mesmo que leria 100 linhas por dia de um livro clássico e decidiu começar com Mariner and Mystic de Herman Melville. Desenvolva um comando usando split para dividir este livro em seções de 100 linhas cada. Para obter o livro em formato de texto simples, pesquise em https://www.gutenberg.org.
+
+Primeiro, baixamos o livro completo do site do Project Gutenberg, onde você pode obter este e outros livros disponíveis em domínio público.
+
+$ wget https://www.gutenberg.org/files/50461/50461-0.txt
+Pode ser preciso instalar wget se ainda não estiver presente no sistema. Outra alternativa é usar curl. Use less para verificar o livro:
+
+$ less 50461-0.txt
+Agora, vamos dividir o livro em trechos de 100 linhas cada:
+
+$ split -l 100 -d 50461-0.txt melville
+50461-0.txt é o arquivo que dividiremos. melville será o prefixo dos arquivos divididos. -l 100 especifica o número de linhas e a opção -d diz ao split para numerar os arquivos (usando o sufixo fornecido). Podemos usar nl em qualquer um dos arquivos divididos (provavelmente não no último) e confirmar que todos eles têm 100 linhas.
+
+Usando ls -l no diretório /etc, que tipo de listagem obtemos? Usando o comando cut na saída do comando ls fornecido, como exibir apenas os nomes dos arquivos? E quanto ao nome dos arquivos e seu proprietário? Junto com os comandos ls -l e cut, utilize o comando tr para espremer diversas ocorrências de um espaço em um único espaço para auxiliar na formatação da saída com um comando cut.
+
+O comando ls sozinho fornece apenas os nomes dos arquivos. Podemos, no entanto, preparar a saída do ls -l (a lista longa) para extrair informações mais específicas.
+
+$ ls -l /etc | tr -s ' ' ,
+drwxr-xr-x,3,root,root,4096,out,24,16:58,acpi
+-rw-r--r--,1,root,root,3028,dez,17,2018,adduser.conf
+-rw-r--r--,1,root,root,10,out,2,17:38,adjtime
+drwxr-xr-x,2,root,root,12288,out,31,09:40,alternatives
+-rw-r--r--,1,root,root,401,mai,29,2017,anacrontab
+-rw-r--r--,1,root,root,433,out,1,2017,apg.conf
+drwxr-xr-x,6,root,root,4096,dez,17,2018,apm
+drwxr-xr-x,3,root,root,4096,out,24,16:58,apparmor
+drwxr-xr-x,9,root,root,4096,nov,6,20:20,apparmor.d
+O parâmetro -s instrui tr a reduzir os espaços repetidos a uma única instância de um espaço. O comando tr funciona para qualquer tipo de caractere repetitivo que você especificar. Em seguida, substituímos os espaços por uma vírgula ,. Na verdade, não precisamos substituir os espaços em nosso exemplo, então apenas omitiremos ,.
+
+$ ls -l /etc | tr -s ' '
+drwxr-xr-x 3 root root 4096 out 24 16:58 acpi
+-rw-r--r-- 1 root root 3028 dez 17 2018 adduser.conf
+-rw-r--r-- 1 root root 10 out 2 17:38 adjtime
+drwxr-xr-x 2 root root 12288 out 31 09:40 alternatives
+-rw-r--r-- 1 root root 401 mai 29 2017 anacrontab
+-rw-r--r-- 1 root root 433 out 1 2017 apg.conf
+drwxr-xr-x 6 root root 4096 dez 17 2018 apm
+drwxr-xr-x 3 root root 4096 out 24 16:58 apparmor
+Se quisermos apenas os nomes dos arquivos, só precisamos exibir o nono campo:
+
+$ ls -l /etc | tr -s ' ' | cut -d" " -f9
+Para o nome de arquivo e seu proprietário, precisamos do nono e do terceiro campos:
+
+$ ls -l /etc | tr -s ' ' | cut -d" " -f9,3
+E se só precisarmos dos nomes das pastas e seu proprietário?
+
+$ ls -l /etc | grep ^d | tr -s ' ' | cut -d" " -f9,3
+Este exercício pressupõe que você está em uma máquina real (não virtual). Também é preciso ter um pendrive à mão. Releia as páginas de manual do comando tail e descubra como seguir um arquivo conforme adicionamos texto a ele. Enquanto monitora a saída de um comando tail no arquivo /var/log/syslog, insira um pendrive. Escreva o comando completo que usaria para obter o Produto (Product), o Fabricante (Manufacturer) e a quantidade total de memória (Blocks) do seu pendrive.
+
+$ tail -f /var/log/syslog | grep -i 'product\:\|blocks\|manufacturer'
+Nov  8 06:01:35 brod-avell kernel: [124954.369361] usb 1-4.3: Product: Cruzer Blade
+Nov  8 06:01:35 brod-avell kernel: [124954.369364] usb 1-4.3: Manufacturer: SanDisk
+Nov  8 06:01:37 brod-avell kernel: [124955.419267] sd 2:0:0:0: [sdc] 61056064 512-byte logical blocks: (31.3 GB/29.1 GiB)
+Claro que isto é um exemplo e os resultados podem variar dependendo do fabricante do seu pendrive. Observe que agora usamos o parâmetro -i com o comando grep, pois não sabemos se as strings que procuramos estão em maiúsculas ou minúsculas. Também usamos | como um OR (ou) lógico, então procuramos por linhas contendo product OR blocks OR manufacturer.
+
+
+https://learning.lpi.org/pt/learning-materials/101-500/103/103.3/103.3_01/
+
+103.3 Gerenciamento basico de arquivos
+
+ls -l
+
+ls -ld -Lista diretorios
+
+ls -lh h human
+
+ls -la Lista arquivos ocultos
+
+* representa zero uma ou mais ocorrencias do caracter
+
+? representa uma ocorrencia
+
+[] qualquer ocorrencia inserido nos colchetes
+
+Ex: [0-9]
+Ex: [?0-9]
+
+
+Ex: find /home -name *.png - Busque dentro do diretorio /home, por nome, qualquer ocorrencia * do .png
+
+cp -r animal/* forest -Nesse caso todo o de animal sera copiado para forest
+
+$ rm *ate* 
+Os arquivos com nomes iniciando com zero, uma ou mais ocorrências de qualquer caractere, seguidos das letras ate e terminando com zero, uma ou mais ocorrências de qualquer caractere serão removidos.
+
+O ponto de interrogação
+O ponto de interrogação (?) corresponde a uma única ocorrência de um caractere.
+
+Considere a listagem:
+
+$ ls
+last.txt    lest.txt    list.txt    third.txt   past.txt
+Para retornar apenas os arquivos que começam com l seguido por qualquer caractere único e os caracteres st.txt, usamos o caractere curinga ponto de interrogação (?):
+
+$ ls l?st.txt
+last.txt    lest.txt    list.txt
+Apenas os arquivos last.txt, lest.txt e list.txt são exibidos, pois correspondem aos critérios dados.
+
+Da mesma maneira,
+
+$ ls ??st.txt
+last.txt    lest.txt    list.txt    past.txt
+exibe os arquivos cujos nomes iniciam com quaisquer dois caracteres seguidos pelo texto st.txt.
+
+
+Caracteres entre chaves
+Os curingas entre colchetes correspondem a qualquer ocorrência do(s) caractere(s) entre colchetes:
+
+$ ls l[aef]st.txt
+last.txt    lest.txt
+Este comando listaria todos os arquivos começando com l seguido por qualquer um dos caracteres do conjunto aef e terminando com st.txt.
+
+Os colchetes também podem indicar intervalos:
+
+$ ls l[a-z]st.txt
+last.txt    lest.txt    list.txt
+Esse comando exibe todos os arquivos com nomes começando com l seguido por qualquer letra minúscula no intervalo de a a z e terminando com st.txt.
+
+
+Combinando caracteres curinga
+Os caracteres curinga podem ser combinados, como em:
+
+$ ls
+last.txt    lest.txt    list.txt    third.txt   past.txt
+$ ls [plf]?st* 
+list.txt    last.txt    past.txt
+O primeiro componente curinga ([plf]) corresponde a qualquer um dos caracteres p, l ou f. O segundo componente curinga (?) corresponde a qualquer caractere único. O terceiro componente curinga (*) corresponde a zero, uma ou múltiplas ocorrências de qualquer caractere.
+
+Existem outros caracteres curinga, como o sinal de mais (+), usado para representar caractere(s) que aparecem uma ou mais vezes:
+
+$ ls
+file1.txt file.txt file23.txt fisher.txt fom23.txt
+$ ls f*[0-9]+.txt
+file1.txt file23.txt fom23.txt
+O comando anterior exibe todos os arquivos que começam com a letra f, seguido por qualquer conjunto de letras, pelo menos uma ocorrência de um dígito e termina com .txt. Observe que file.txt não é exibido, pois não corresponde a esses critérios.
+
+103.3 Gerenciamento de arquivos
+
+$ find . -name "myfile.txt"
+./myfile.txt
+O caminho inicial, neste caso, é o diretório atual. A opção -name especifica que a pesquisa é baseada no nome do arquivo. myfile.txt é o nome do arquivo a ser pesquisado. Ao usar globbing de arquivo, inclua sempre a expressão entre aspas:
+
+
+# find . -name "ftu.txt" . Significa no diretorio atual
+
+Usando critérios para acelerar a pesquisa
+Use find para localizar arquivos com base em tipo, tamanho ou hora. Se especificarmos uma ou mais opções, os resultados desejados são obtidos em menos tempo.
+
+As opções para localizar arquivos com base no tipo incluem:
+
+-type f
+busca por arquivos.
+
+-type d
+busca por diretórios.
+
+-type l
+busca por links simbólicos.
+
+$ find . -type d -name "example" Busca no diretorio atual e abaixo dele.
+
+Localizando arquivos por hora de modificação
+find também permite filtrar uma hierarquia de diretórios com base em quando o arquivo foi modificado:
+
+$ sudo find / -name "*.conf" -mtime 7
+/etc/logrotate.conf
+Este comando procura por todos os arquivos em todo o sistema de arquivos (o caminho inicial é o diretório raiz, ou seja, /) que terminam com os caracteres .conf e que foram modificados nos últimos sete dias. Este comando exige privilégios elevados para acessar diretórios na base da estrutura de diretórios do sistema, daí o uso de sudo neste caso. O argumento passado para mtime representa o número de dias desde a última modificação do arquivo.
+
+Localizando arquivos por tamanho
+O find também pode localizar arquivos por tamanho. Por exemplo, se quisermos encontrar arquivos maiores que 2G em /var:
+
+$ sudo find /var -size +2G
+/var/lib/libvirt/images/debian10.qcow2
+/var/lib/libvirt/images/rhel8.qcow2
+A opção -size exibe arquivos de tamanhos correspondentes ao argumento passado. Eis alguns exemplos de argumentos:
+
+-size 100b
+arquivos com exatamente 100 bytes.
+
+-size +100k
+arquivos maiores que 100 kilobytes.
+
+-size -20M
+arquivos menores que 20 megabytes.
+
+-size +2G
+arquivos maiores que 2 gigabytes.
+
+
+O que fazer com os resultados
+Uma vez que a pesquisa é feita, é possível realizar uma ação no conjunto de resultados usando -exec:
+
+$ find . -name "*.conf" -exec chmod 644 '{}' \;
+Esse comando filtra todos os objetos no diretório atual (.) e abaixo dele para nomes de arquivo terminando com .conf e em seguida executa o comando chmod 644 para modificar as permissões de arquivo nos resultados.
+
+Por enquanto, não se preocupe com o significado de '{}' \;, pois isso será discutido mais adiante.
+
+Usando o grep para filtrar por arquivos com base no conteúdo
+grep é usado para buscar pela ocorrência de uma palavra-chave.
+
+Considere uma situação na qual precisamos encontrar arquivos com base no conteúdo:
+
+$ find . -type f -exec grep "lpi" '{}' \; -print
+./.bash_history
+Alpine/M
+helping/M
+Esse comando busca, na hierarquia de diretórios atual (.), por objetos que são arquivos (-type f) e em seguida executa o comando grep "lpi" para cada arquivo que satisfaça as condições. Os arquivos que atendem a essas condições são impressos na tela (-print). As chaves ({}) servem para reservar o espaço para os resultados encontrados por find. As {} são postas entre aspas simples (') para evitar passar arquivos com nomes contendo caracteres especiais para o grep. O comando -exec é concluído com um ponto e vírgula (;), que deve ser escapado (\;) para não ser interpretado pelo shell.
+
+A opção -delete, se colocada no final de uma expressão, excluiria todos os arquivos correspondentes à descrição. Esta opção deve ser usada quando você tiver certeza de que os resultados correspondem apenas aos arquivos que deseja excluir.
+
+No exemplo abaixo, find localiza todos os arquivos na hierarquia começando no diretório atual e, em seguida, exclui todos os arquivos que terminam com os caracteres .bak:
+
+$ find . -name "*.bak" -delete
+
+
+Pense no tar como uma ferramenta que cria uma cola na qual os arquivos podem ser grudados, agrupados e facilmente movidos.
+
+O tar também tem a capacidade de extrair arquivos tar, exibir uma lista dos arquivos incluídos no pacote e adicionar mais arquivos a um pacote existente.
+
+A sintaxe do comando tar é a seguinte:
+
+tar [OPERATION_AND_OPTIONS] [ARCHIVE_NAME] [FILE_NAME(S)]
+OPERATION
+Somente um argumento de operação é permitido e exigido. As operações mais frequentemente usadas são:
+
+--create (-c)
+Cria um novo arquivo tar.
+
+--extract (-x)
+Extrai o pacote inteiro ou um ou mais arquivos de um pacote.
+
+--list (-t)
+Exibe uma lista dos arquivos incluídos no pacote.
+
+OPTIONS
+As opções usadas com mais frequência são:
+
+--verbose (-v)
+Mostra os arquivos que estão sendo processados pelo comando tar.
+
+--file=archive=name (-f archive-name)
+Especifica o nome de arquivo do pacote.
+
+ARCHIVE_NAME
+O nome do arquivo de pacote.
+
+FILE_NAME(S)
+Uma lista separada por espaços com os nomes de arquivos a serem extraídos. Se não estiver presente, o pacote inteiro é extraído.
+
+Criando um arquivo de pacote
+Digamos que temos um diretório chamado stuff no diretório atual e queremos salvá-lo em um arquivo chamado archive.tar. Executaríamos para isso o seguinte comando:
+
+$ tar -cvf archive.tar stuff
+stuff/
+stuff/service.conf
+Eis o que essas opções significam de fato:
+
+-c
+Cria um arquivo de pacote.
+
+-v
+Exibe o progresso no terminal enquanto o arquivo de pacote é criado. Também chamado de modo “verboso”. O -v sempre é opcional nesses comandos, mas é útil.
+
+-f
+Permite especificar o nome de arquivo do pacote.
+
+Em geral, para arquivar um único diretório ou um único arquivo no Linux, usamos:
+
+tar -cvf NAME-OF-ARCHIVE.tar /PATH/TO/DIRECTORY-OR-FILE
+Note
+O tar funciona de maneira recursiva. Ele realiza a ação solicitada em todos os diretórios subsequentes dentro do diretório especificado.
+
+Para empacotar diversos diretórios de uma vez só, listamos todos eles delimitando-os por um espaço na seção /PATH/TO/DIRECTORY-OR-FILE:
+
+$ tar -cvf archive.tar stuff1 stuff2
+Isso cria um arquivo de pacote com stuff1 e stuff2 em archive.tar
+
+Extraindo um pacote
+Podemos extrair um arquivo de pacote usando o tar:
+
+$ tar -xvf archive.tar
+stuff/
+stuff/service.conf
+Isso extrai o conteúdo de archive.tar para o diretório atual.
+
+Este comando é igual ao comando de criação de pacotes usado acima, exceto porque a opção -x substitui a opção -c.
+
+Para extrair o conteúdo do pacote para um diretório específico, usamos -C:
+
+$ tar -xvf archive.tar -C /tmp
+Isso extrai o conteúdo de archive.tar para o diretório /tmp.
+
+$ ls /tmp
+stuff
+Compactando com o tar
+O comando tar do GNU incluído nas distribuições Linux pode criar um arquivo .tar e, em seguida, compactá-lo com a compactação gzip ou bzip2 em um único comando:
+
+$ tar -czvf name-of-archive.tar.gz stuff
+Este comando criaria um arquivo compactado usando o algoritmo gzip (-z).
+
+Embora a compressão gzip seja mais freqüentemente usada para criar arquivos .tar.gz ou .tgz, o tar também suporta a compressão bzip2. Isso permite a criação de arquivos compactados bzip2, geralmente chamados de arquivos .tar.bz2, .tar.bz ou .tbz.
+
+Para isso, substituímos -z, de gzip, por -j, de bzip2:
+
+$ tar -cjvf name-of-archive.tar.bz stuff
+Para descompactar o arquivo, substituímos -c por -x, onde x significa “extract”:
+
+$ tar -xzvf archive.tar.gz
+O gzip é mais rápido, mas geralmente compacta um pouco menos, de modo que o arquivo obtido é um pouco maior. O bzip2 é mais lento, mas comprime um pouco mais, então o arquivo fica um pouco menor. Em geral, porém, gzip e bzip2 são praticamente a mesma coisa; ambos funcionam de forma semelhante.
+
+Outra alternativa seria aplicar a compressão gzip ou bzip2 usando o comando gzip para as compressões gzip e bzip para as compressões bzip. Por exemplo, para aplicar a compactação gzip, use:
+
+gzip FILE-TO-COMPRESS
+gzip
+cria o arquivo compactado com o mesmo nome, mas com a terminação .gz.
+
+gzip
+remove os arquivos originais após criar o arquivo compactado.
+
+O comando bzip2 funciona de maneira semelhante.
+
+Para descompactar os arquivos usamos gunzip ou bunzip2, dependendo do algoritmo usado para compactá-los.
+
+O comando cpio
+cpio significa “copy in, copy out”. É usado para processar arquivo de pacote como os arquivos .cpio ou .tar.
+
+O cpio executa as seguintes operações:
+
+Copiar arquivos para um pacote.
+
+Extrair arquivos de um pacote.
+
+Ele usa a lista de arquivos da entrada padrão (principalmente a saída de ls).
+
+Para criar um arquivo cpio, usamos:
+
+$ ls | cpio -o > archive.cpio
+A opção -o instrui o cpio a criar uma saída. Neste caso, o arquivo de saída criado é archive.cpio. O comando ls lista o conteúdo do diretório atual que será empacotado.
+
+Para extrair o arquivo de pacote, usamos:
+
+$ cpio -id < archive.cpio
+A opção -i é usada para realizar a extração. A opção -d cria a pasta de destino. O caractere < representa a entrada padrão. O arquivo de entrada a ser extraído é archive.cpio.
+
+O comando dd
+O dd copia dados de um local para outro. A sintaxe de linha de comando de dd difere de muitos outros programas Unix, pois ele usa a sintaxe option = value para as opções de linha de comando ao invés dos formatos padrão GNU -option value ou --option=value:
+
+$ dd if=oldfile of=newfile
+Este comando copia o conteúdo de oldfile para newfile, onde if= é o arquivo de entrada e of= refere-se ao arquivo de saída.
+
+Note
+O comando dd normalmente não exibe nada na tela até que o comando seja concluído. Ao fornecer a opção status=progress, o console exibe o andamento do trabalho realizado pelo comando. Por exemplo: dd status=progress if=oldfile of=newfile.
+
+O dd também é usado para alterar dados para maiúsculas/minúsculas ou para escrever diretamente em dispositivos de bloco como /dev/sdb:
+
+$ dd if=oldfile of=newfile conv=ucase
+Esse comando copiaria todo o conteúdo de oldfile para newfile e colocaria todo o texto em maiúsculas.
+
+O comando a seguir faria backup do disco rígido inteiro localizado em /dev/sda para um arquivo de nome backup.dd:
+
+$ dd if=/dev/sda of=backup.dd bs=4096
+
+103.4 Redirecionamento de saida
+Por padrão, apenas o conteúdo que chega a stdout é redirecionado. Isso ocorre porque o valor numérico do descritor de arquivo deve ser especificado logo antes do símbolo de maior que e, quando não especificado, o Bash redireciona a saída padrão. Portanto, usar > é equivalente a usar 1> (o valor do descritor de arquivo de stdout é 1).
+
+Para capturar o conteúdo de stderr, o redirecionamento 2> deve ser usado. A maioria dos programas de linha de comando enviam informações de depuração e mensagens de erro para o canal de erro padrão. É possível, por exemplo, capturar a mensagem de erro gerada por uma tentativa de leitura de um arquivo inexistente:
+
+$ cat /proc/cpu_info 2>/tmp/error.txt
+$ cat /tmp/error.txt
+cat: /proc/cpu_info: No such file or directory
+Tanto stdout quanto stderr são redirecionados para o mesmo destino com &> ou >&. É importante não colocar nenhum espaço ao lado do "e" comercial, 
+
+stdout = &> ou 1>
+
+stderr = >& ou 2>
+
+ Por exemplo, 1>&2 redireciona stdout para stderr. Para fazer o oposto, stderr para stdout, devemos usar 2>&1.
+
+Por exemplo, um redirecionamento para gravar stderr e stdout em um arquivo chamado log.txt pode ser escrito como >log.txt 2>&1
+
+Para simplesmente descartar a saída de um comando, seu conteúdo pode ser redirecionado para o arquivo especial /dev/null. Por exemplo, >log.txt 2>/dev/null salva o conteúdo de stdout no arquivo log.txt e descarta o stderr. O arquivo /dev/null pode ser escrito por qualquer usuário, mas nenhum dado pode ser recuperado dele, pois não é armazenado em lugar nenhum.
+
+
+ Os arquivos são substituídos pelos redirecionamentos de saída, a menos que a opção noclobber esteja habilitada no Bash, o que pode ser feito para a sessão atual com o comando set -o noclobber ou set -C:
+
+$ set -o noclobber
+$ cat /proc/cpu_info 2>/tmp/error.txt
+-bash: /tmp/error.txt: cannot overwrite existing file
+Para remover a opção noclobber da sessão atual, execute set +o noclobber ou set +C. Para tornar a opção noclobber persistente, ela deve ser incluída no perfil Bash do usuário ou no perfil de todo o sistema.
+
+Mesmo com a opção noclobber habilitada, é possível anexar dados redirecionados ao conteúdo existente. Usamos para isso um redirecionamento escrito com dois símbolos de maior que, >>:
+
+$ cat /proc/cpu_info 2>>/tmp/error.txt
+$ cat /tmp/error.txt
+cat: /proc/cpu_info: No such file or directory
+cat: /proc/cpu_info: No such file or directory
+
+ O comando uniq, como a maioria dos utilitários de linha de comando para processamento de texto, aceita os dados enviados para stdin por padrão:
+
+$ uniq -c </tmp/error.txt
+      2 cat: /proc/cpu_info: No such file or directory
+A opção -c faz com que o uniq exiba quantas vezes uma linha repetida aparece no texto. Como o valor numérico do descritor de arquivo redirecionado foi suprimido, o comando de exemplo é equivalente a uniq -c 0</tmp/error.txt
+
+
+Substituição de comando
+Outro método para capturar a saída de um comando é a substituição de comando. Ao colocar um comando entre crases, o Bash o substitui por sua saída padrão. O exemplo a seguir mostra como usar o stdout de um programa como argumento para outro programa:
+
+$ mkdir `date +%Y-%m-%d`
+$ ls
+2019-09-05
+A saída do programa date, a data atual formatada como ano-mês-dia, foi usada como um argumento para criar um diretório com o mkdir. Um resultado idêntico é obtido usando $() em vez de crases:
+
+$ rmdir 2019-09-05
+$ mkdir $(date +%Y-%m-%d)
+$ ls
+2019-09-05
+O mesmo método pode ser usado para armazenar a saída de um comando como uma variável:
+
+$ OS=`uname -o`
+$ echo $OS
+GNU/Linux
+
+
+O programa identify é parte do ImageMagick, um conjunto de ferramentas de linha de comando para inspecionar, converter e editar a maioria dos tipos de arquivo de imagem. No exemplo, o xargs pegou todos os caminhos listados por find e os colocou como argumentos para identify, que então exibe as informações para cada arquivo formatado conforme exigido pela opção -format. Os arquivos encontrados pelo find no exemplo são imagens contendo o logotipo da distribuição em um sistema de arquivos Debian. -format é um parâmetro para identify, não para xargs.
+
+A opção -n 1 exige que o xargs execute o comando fornecido com apenas um argumento por vez. No caso do exemplo, em vez de passar todos os caminhos encontrados por find como uma lista de argumentos para identify, o uso de xargs -n 1 executaria o comando identify para cada caminho separadamente. Usar -n 2 executaria o identify com dois caminhos como argumentos, -n 3 com três caminhos como argumentos e assim por diante. Da mesma forma, quando o xargs processa conteúdos com várias linhas — como é o caso com a entrada fornecida por find — a opção -L pode ser usada para limitar quantas linhas serão usadas como argumentos por execução do comando.
+
+Note
+Pode ser desnecessário usar o xargs com a opção -n 1 ou -L 1 para processar a saída gerada pelo find. O comando find tem a opção -exec para executar um comando determinado para cada item do resultado da busca.
+
+Se os caminhos contiverem caracteres de espaço, é importante executar o find com a opção -print0. Esta opção instrui o find a usar um caractere nulo entre cada entrada para que a lista possa ser analisada corretamente por xargs (a saída foi suprimida):
+
+$ find . -name '*avi' -print0 -o -name '*mp4' -print0 -o -name '*mkv' -print0 | xargs -0 du | sort -n
+A opção -0 diz ao xargs que o caractere nulo deve ser usado como separador. Dessa forma, os caminhos de arquivo fornecidos pelo find são analisados corretamente, mesmo se contiverem espaços em branco ou outros caracteres especiais. O exemplo anterior mostra como usar o comando du para descobrir o uso de espaço em disco por cada arquivo encontrado e em seguida classificar os resultados por tamanho. A saída foi suprimida para fins de concisão. Observe que para cada critério de pesquisa é necessário incluir a opção -print0 para find.
+
+Por padrão, o xargs coloca por último os argumentos do comando executado. Para mudar esse comportamento, usamos a opção -I:
+
+$ find . -mindepth 2 -name '*avi' -print0 -o -name '*mp4' -print0 -o -name '*mkv' -print0 | xargs -0 -I PATH mv PATH ./
+No último exemplo, todo arquivo encontrado por find é movido para o diretório atual. Como o(s) caminho(s) de origem devem ser informados para o mv antes do caminho de destino, um termo de substituição é dado à opção -I do xargs, que é então apropriadamente colocado junto a mv. Ao usar o caractere nulo como separador, não é necessário colocar o termo de substituição entre aspas.
+
+
+Respostas aos Exercícios Guiados
+É conveniente salvar a data de execução das ações realizadas por scripts automáticos. O comando date +%Y-%m-%d mostra a data atual no formato ano-mês-dia. Como a saída desse comando pode ser armazenada em uma variável do shell chamada TODAY usando a substituição de comando?
+
+$ TODAY=`date +%Y-%m-%d`
+ou
+
+$ TODAY=$(date +%Y-%m-%d)
+Usando o comando echo, como o conteúdo da variável TODAY pode ser enviado para a saída padrão do comando sed s/-/./g?
+
+$ echo $TODAY | sed s/-/./g
+Como a saída do comando date +%Y-%m-%d pode ser usada como uma Here string para o comando sed s/-/./g?
+
+$ sed s/-/./g <<< `date +%Y-%m-%d`
+ou
+
+$ sed s/-/./g <<< $(date +%Y-%m-%d)
+O comando convert image.jpeg -resize 25% small/image.jpeg cria uma versão menor de image.jpeg e coloca a imagem resultante em um arquivo com o mesmo nome dentro do subdiretório small. Usando o xargs, como é possível executar o mesmo comando para todas as imagens listadas no arquivo filelist.txt?
+
+$ xargs -I IMG convert IMG -resize 25% small/IMG < filelist.txt
+ou
+
+$ cat filelist.txt | xargs -I IMG convert IMG -resize 25% small/IMG
+Respostas aos Exercícios Exploratórios
+Uma rotina de backup simples cria periodicamente uma imagem da partição /dev/sda1 com dd < /dev/sda1 > sda1.img. Para realizar futuras verificações de integridade de dados, a rotina também gera um hash SHA1 do arquivo com sha1sum < sda1.img > sda1.sha1. Adicionando pipes e o comando tee, como esses dois comandos poderiam ser combinados em um só?
+
+# dd < /dev/sda1 | tee sda1.img | sha1sum > sda1.sha1
+O comando tar é usado para empacotar muitos arquivos em um só, preservando a estrutura de diretórios. A opção -T permite especificar um arquivo contendo os caminhos a arquivar. Por exemplo, find /etc -type f | tar -cJ -f /srv/backup/etc.tar.xz -T - cria o arquivo tar compactado etc.tar.xz a partir da lista fornecida pelo comando find (a opção -T - indica a entrada padrão como a lista de caminhos). Para evitar possíveis erros de análise devido a caminhos que contêm espaços, quais opções deveriam estar presentes para os comandos find e tar?
+
+Options -print0 and --null:
+
+$ find /etc -type f -print0 | tar -cJ -f /srv/backup/etc.tar.xz -T - --null
+Em vez de abrir uma nova sessão remota do shell, o comando ssh pode simplesmente executar um comando indicado como argumento: ssh user@storage "remote command". Dado que ssh também permite redirecionar a saída padrão de um programa local para a entrada padrão do programa remoto, como o comando cat canalizaria um arquivo local chamado etc.tar.gz para /srv/backup/etc.tar.gz em user@storage através de ssh?
+
+$ cat etc.tar.xz | ssh user@storage "cat > /srv/backup/etc.tar.xz"
+ou
+
+$ ssh user@storage "cat > /srv/backup/etc.tar.xz" < etc.tar.xz
