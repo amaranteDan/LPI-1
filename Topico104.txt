@@ -4,6 +4,144 @@ Tópico 104 - Dispositivos de Sistemas de arquivos Linux e padrão FHS
 
 fdisk
 
+# fdisk /dev/sda5
+
+Welcome to fdisk (util-linux 2.36).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+The device contains 'ext4' signature and it will be removed by a write command. See fdisk(8) man page and --wipe option for more details.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0x6a0c1846.
+
+Command (m for help): F
+Unpartitioned space /dev/sda5: 3.72 GiB, 3998220288 bytes, 7809024 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+
+Start     End Sectors  Size
+ 2048 7811071 7809024  3.7G
+
+Command (m for help): m
+
+Help:
+
+  DOS (MBR)
+   a   toggle a bootable flag
+   b   edit nested BSD disklabel
+   c   toggle the dos compatibility flag
+
+  Generic
+   d   delete a partition
+   F   list free unpartitioned space
+   l   list known partition types
+   n   add a new partition
+   p   print the partition table
+   t   change a partition type
+   v   verify the partition table
+   i   print information about a partition
+
+  Misc
+   m   print this menu
+   u   change display/entry units
+   x   extra functionality (experts only)
+
+  Script
+   I   load disk layout from sfdisk script file
+   O   dump disk layout to sfdisk script file
+
+  Save & Exit
+   w   write table to disk and exit
+   q   quit without saving changes
+
+  Create a new label
+   g   create a new empty GPT partition table
+   G   create a new empty SGI (IRIX) partition table
+   o   create a new empty DOS partition table
+   s   create a new empty Sun partition table
+
+
+Command (m for help): l
+
+00 Empty            24 NEC DOS          81 Minix / old Lin  bf Solaris        
+01 FAT12            27 Hidden NTFS Win  82 Linux swap / So  c1 DRDOS/sec (FAT-
+02 XENIX root       39 Plan 9           83 Linux            c4 DRDOS/sec (FAT-
+03 XENIX usr        3c PartitionMagic   84 OS/2 hidden or   c6 DRDOS/sec (FAT-
+04 FAT16 <32M       40 Venix 80286      85 Linux extended   c7 Syrinx         
+05 Extended         41 PPC PReP Boot    86 NTFS volume set  da Non-FS data    
+06 FAT16            42 SFS              87 NTFS volume set  db CP/M / CTOS / .
+07 HPFS/NTFS/exFAT  4d QNX4.x           88 Linux plaintext  de Dell Utility   
+08 AIX              4e QNX4.x 2nd part  8e Linux LVM        df BootIt         
+09 AIX bootable     4f QNX4.x 3rd part  93 Amoeba           e1 DOS access     
+0a OS/2 Boot Manag  50 OnTrack DM       94 Amoeba BBT       e3 DOS R/O        
+0b W95 FAT32        51 OnTrack DM6 Aux  9f BSD/OS           e4 SpeedStor      
+0c W95 FAT32 (LBA)  52 CP/M             a0 IBM Thinkpad hi  ea Linux extended 
+0e W95 FAT16 (LBA)  53 OnTrack DM6 Aux  a5 FreeBSD          eb BeOS fs        
+0f W95 Ext'd (LBA)  54 OnTrackDM6       a6 OpenBSD          ee GPT            
+10 OPUS             55 EZ-Drive         a7 NeXTSTEP         ef EFI (FAT-12/16/
+11 Hidden FAT12     56 Golden Bow       a8 Darwin UFS       f0 Linux/PA-RISC b
+12 Compaq diagnost  5c Priam Edisk      a9 NetBSD           f1 SpeedStor      
+14 Hidden FAT16 <3  61 SpeedStor        ab Darwin boot      f4 SpeedStor      
+16 Hidden FAT16     63 GNU HURD or Sys  af HFS / HFS+       f2 DOS secondary  
+17 Hidden HPFS/NTF  64 Novell Netware   b7 BSDI fs          fb VMware VMFS    
+18 AST SmartSleep   65 Novell Netware   b8 BSDI swap        fc VMware VMKCORE 
+1b Hidden W95 FAT3  70 DiskSecure Mult  bb Boot Wizard hid  fd Linux raid auto
+1c Hidden W95 FAT3  75 PC/IX            bc Acronis FAT32 L  fe LANstep        
+1e Hidden W95 FAT1  80 Old Minix        be Solaris boot     ff BBT            
+
+Aliases:
+   linux          - 83
+   swap           - 82
+   extended       - 05
+   uefi           - EF
+   raid           - FD
+   lvm            - 8E
+   linuxex        - 85
+
+Command (m for help): m
+
+Help:
+
+  DOS (MBR)
+   a   toggle a bootable flag
+   b   edit nested BSD disklabel
+   c   toggle the dos compatibility flag
+
+  Generic
+   d   delete a partition
+   F   list free unpartitioned space
+   l   list known partition types
+   n   add a new partition
+   p   print the partition table
+   t   change a partition type
+   v   verify the partition table
+   i   print information about a partition
+
+  Misc
+   m   print this menu
+   u   change display/entry units
+   x   extra functionality (experts only)
+
+  Script
+   I   load disk layout from sfdisk script file
+   O   dump disk layout to sfdisk script file
+
+  Save & Exit
+   w   write table to disk and exit
+   q   quit without saving changes
+
+  Create a new label
+   g   create a new empty GPT partition table
+   G   create a new empty SGI (IRIX) partition table
+   o   create a new empty DOS partition table
+   s   create a new empty Sun partition table
+
+
+
+
+
+
 ex fdisk -l /dev/sdb
 
 
@@ -38,6 +176,17 @@ Device     Boot Start      End  Sectors  Size Id Type
 
 
 ***Usando o gdisk
+
+O gdisk é o facilitador para partições GPT
+
+Cada disco possui um Identificador de Disco (GUID) exclusivo. Este é um número hexadecimal de 128 bits, atribuído aleatoriamente quando a tabela de partição é criada. Como há 3.4 × 1038 valores possíveis para esse número, as chances de que 2 discos aleatórios tenham o mesmo GUID são muito pequenas. O GUID pode ser usado para identificar quais sistemas de arquivos montar no momento da inicialização (e onde), eliminando a necessidade de usar o caminho do dispositivo para fazer isso (como /dev/sdb).
+
+Notou a frase Partition table holds up to 128 entries? É isso mesmo, dá para ter até 128 partições em um disco GPT. Por causa disso, não há necessidade de partições primárias e estendidas.
+
+O espaço livre é listado na última linha, então não precisamos de um equivalente ao comando F do fdisk.
+
+
+
 
 Ex: sudo gdisk /dev/sdb
 
@@ -130,6 +279,7 @@ R: Bios boot partition
 
 
 ***Usando parted
+Gnu parted
 
 #parted /dev/sdb
 
@@ -198,6 +348,43 @@ parted mkpart primary ext4 500GB 1100GB
 
 
 #mkfs.ext4 /dev/sdb1 - Formatando a partição para uso do ext4
+ ou passando o parametro -t
+
+#mke2fs -t ext4 /dev/sdb1
+
+O mke2fs suporta uma ampla gama de parâmetros e opções de linha de comando. Eis alguns dos mais significativos. Todos eles também se aplicam a mkfs.ext2, mkfs.ext3 e mkfs.ext4:
+
+-b SIZE
+Define o tamanho dos blocos de dados no dispositivo para SIZE, que pode ser de 1024, 2048 ou 4096 bytes por bloco.
+
+-c
+Verifica se existem blocos defeituosos no dispositivo de destino antes de criar o sistema de arquivos. Para fazer uma verificação mais detalhada, porém muito mais lenta, aplique esse parâmetro duas vezes, como em mkfs.ext4 -c -c TARGET.
+
+-d DIRECTORY
+Copia o conteúdo do diretório especificado para a raiz do novo sistema de arquivos. Útil quando se precisa “pré-preencher” o disco com um conjunto de arquivos predefinido.
+
+-F
+Perigo, Will Robinson! Esta opção força o mke2fs a criar um sistema de arquivos, mesmo se as outras opções passadas para ele ou para o alvo forem perigosas ou não fizerem nenhum sentido. Se especificado duas vezes (como em -F -F), pode inclusive ser usado para criar um sistema de arquivos em um dispositivo montado ou em uso, o que é uma coisa muito, mas muito ruim de se fazer.
+
+-L VOLUME_LABEL
+Define o rótulo do volume conforme especificado em VOLUME_LABEL. Esse rótulo deve ter ao menos 16 caracteres.
+
+-n
+"Esta é uma opção utilíssima que simula a criação do sistema de arquivos e mostra o que seria feito se executado sem a opção n. Pense nele como um modo de “teste”. É bom verificar as coisas antes de realmente efetuar quaisquer alterações no disco".
+
+-q
+Modo silencioso. O mke2fs será executado normalmente, mas não produzirá nenhuma saída para o terminal. Útil ao executar mke2fs a partir de um script.
+
+-U ID
+Este parâmetro define o UUID (Universally Unique Identifier, ou Identificador único universal) de uma partição para o valor especificado como ID. Os UUIDs são números de 128 bits em notação hexadecimal que servem para identificar uma partição para o sistema operacional. Esse número é especificado como uma string de 32 dígitos no formato 8-4-4-4-12, ou seja, 8 dígitos, hífen, 4 dígitos, hífen, 4 dígitos, hífen, 4 dígitos, hífen, 12 dígitos, como D249E380-7719-45A1-813C-35186883987E. Em vez de um ID, você também pode especificar parâmetros como clear para remover o UUID do sistema de arquivos, random para usar um UUID gerado aleatoriamente, ou time para criar um UUID baseado em tempo.
+
+-V
+Modo detalhado (ou verboso), exibe muito mais informações durante a operação do que normalmente. Útil para fins de depuração.
+
+
+
+
+
 
 ***Excluindo a partição
 
@@ -254,6 +441,10 @@ EXT3
 #mkfs -t ext3 /dev/sda5
 ou
 #mkfs.ext3 /dev/sda5 mkfs.ext2
+
+ou
+
+#mk2fs -t ext3 /dev/sda5
 
 ***Adicionando a label a partição criada
 
@@ -315,6 +506,146 @@ cat /proc/swaps
 ***Desativando
 
 #swapoff /swap
+
+Criando um sistema de arquivos exFAT
+O exFAT é um sistema de arquivos criado pela Microsoft em 2006 que aborda uma das limitações mais importantes do FAT32: o tamanho do arquivo e do disco. No exFAT, o tamanho máximo do arquivo é de 16 exabytes (no FAT32 eram 4 GB) e o tamanho máximo do disco é de 128 petabytes.
+
+Como é bem suportado pelos três principais sistemas operacionais (Windows, Linux e macOS), trata-se de uma boa escolha nos casos em que a interoperabilidade é necessária, como em drives flash de grande capacidade, cartões de memória e discos externos. Na verdade, esse é o sistema de arquivos padrão, conforme definido pela SD Association, para os cartões de memória SDXC com mais de 32 GB.
+
+O utilitário padrão para criar sistemas de arquivos exFAT é mkfs.exfat, que é um link para mkexfatfs. O comando mais básico é mkfs.exfat TARGET, onde TARGET é a partição em que você deseja que o sistema de arquivos seja criado. Por exemplo:
+# mkfs.exfat /dev/sdb2.
+
+Ao contrário dos outros utilitários discutidos nesta lição, o mkfs.exfat tem pouquíssimas opções de linha de comando. Elas são:
+
+-i VOL_ID
+Define o ID do Volume para o valor especificado em VOL_ID. Este é um número hexadecimal de 32 bits. Se não for definido, é criado um ID com base na hora atual.
+
+-n NAME
+Define o rótulo ou nome do volume. Pode ter até 15 caracteres e o padrão é sem nome.
+
+-p SECTOR
+Especifica o primeiro setor da primeira partição no disco. Este é um valor opcional e o padrão é zero.
+
+-s SECTORS
+Define o número de setores físicos por cluster de alocação. Deve ser uma potência de dois, como 1, 2, 4, 8 e assim por diante.
+
+
+Criando um sistema de arquivos Btrfs
+O utilitário mkfs.btrfs é usado para criar um sistema de arquivos Btrfs. Se o comando for usado sem nenhuma opção, ele cria um sistema de arquivos Btrfs em um determinado dispositivo, assim:
+
+# mkfs.btrfs /dev/sdb1
+Tip
+Caso não tenha o utilitário mkfs.btrfs em seu sistema, procure por btrfs-progs no gerenciador de pacotes de sua distribuição.
+
+Você pode usar -L para definir um rótulo (ou nome) para o seu sistema de arquivos. Os rótulos Btrfs podem ter até 256 caracteres, exceto por quebras de linha:
+
+# mkfs.btrfs /dev/sdb1 -L "New Disk"
+Tip
+Coloque o rótulo entre aspas (como acima) se contiver espaços.
+
+O Btrfs tem uma coisa peculiar: é possível incluir múltiplos dispositivos no comando mkfs.btrfs. Quando passamos mais de um dispositivo, o sistema de arquivos se estenderá por todos os dispositivos, numa configuração semelhante à de um RAID ou LVM. Para especificar como os metadados serão distribuídos na matriz de disco, use o parâmetro -m. Os parâmetros válidos são raid0, raid1, raid5, raid6, raid10, single e dup.
+
+Por exemplo, para criar um sistema de arquivos abrangendo /dev/sdb1 e /dev/sdc1, concatenando as duas partições em uma maior, use:
+
+# mkfs.btrfs -d single -m single /dev/sdb /dev/sdc
+Warning
+Os sistemas de arquivos abrangendo várias partições, como exemplificado acima, podem parecer vantajosos no início, mas não são uma boa ideia do ponto de vista da segurança de dados, pois uma falha em um único disco da matriz implica em perda de dados com certeza. O risco fica maior quanto mais discos você usa, pois também haverá mais pontos de falha possíveis.
+
+Gerenciando subvolumes
+Subvolumes são como sistemas de arquivos dentro de sistemas de arquivos. Pense neles como um diretório que pode ser montado (e tratado como) um sistema de arquivos independente. Os subvolumes facilitam a organização e a administração do sistema, pois cada um deles pode ter cotas ou regras de snapshot separadas.
+
+Note
+Subvolumes não são partições. Uma partição aloca um espaço fixo em uma unidade. Isso pode levar a problemas mais adiante, como uma partição ficando sem espaço quando outra tem bastante espaço restante. Não é assim com subvolumes, já que eles “compartilham” o espaço livre de seu sistema de arquivos raiz e aumentam conforme necessário.
+
+Suponha que você tenha um sistema de arquivos Btrfs montado em /mnt/disk e deseja criar um subvolume dentro dele para armazenar seus backups. Vamos chamá-lo de BKP:
+
+# btrfs subvolume create /mnt/disk/BKP
+A seguir, listamos o conteúdo do sistema de arquivos /mnt/disk. Você verá que temos um novo diretório com o mesmo nome do subvolume.
+
+$ ls -lh /mnt/disk/
+total 0
+drwxr-xr-x 1 root   root     0 jul 13 17:35 BKP
+drwxrwxr-x 1 carol carol 988 jul 13 17:30 Images
+Note
+Pois é, os subvolumes também podem ser acessados como qualquer outro diretório.
+
+Podemos verificar se o subvolume está ativo com o comando:
+
+# btrfs subvolume show /mnt/disk/BKP/
+	Name: 			BKP
+	UUID: 			e90a1afe-69fa-da4f-9764-3384f66fa32e
+	Parent UUID: 		-
+	Received UUID: 		-
+	Creation time: 		2019-07-13 17:35:40 -0300
+	Subvolume ID: 		260
+	Generation: 		23
+	Gen at creation: 	22
+	Parent ID: 		5
+	Top level ID: 		5
+	Flags: 			-
+	Snapshot(s):
+Você pode montar o subvolume em /mnt/BKP passando o parâmetro -t btrfs -o subvol = NAME para o comando mount:
+
+# mount -t btrfs -o subvol=BKP /dev/sdb1 /mnt/bkp
+Note
+O parâmetro -t especifica o tipo de sistema de arquivos a ser montado.
+
+Trabalhando com instantâneos
+Os instantâneos (snapshots) são como subvolumes, mas pré-preenchidos com o conteúdo do volume a partir do qual o instantâneo foi obtido.
+
+Quando criado, um instantâneo e o volume original têm exatamente o mesmo conteúdo. Mas a partir desse momento, eles irão divergir. As alterações feitas no volume original (como arquivos adicionados, renomeados ou excluídos) não serão refletidas no instantâneo e vice-versa.
+
+Lembre-se de que um instantâneo não duplica os arquivos e, inicialmente, praticamente não ocupa espaço em disco. Ele simplesmente duplica a árvore do sistema de arquivos enquanto aponta para os dados originais.
+
+O comando para criar um snapshot é o mesmo usado para criar um subvolume, bastando adicionar o parâmetro snapshot após btrfs subvolume. O comando abaixo cria, em /mnt/disk/snap, um instantâneo do sistema de arquivos Btrfs montado em /mnt/disk:
+
+# btrfs subvolume snapshot /mnt/disk /mnt/disk/snap
+Agora, imagine que temos o seguinte conteúdo em /mnt/disk:
+
+$ ls -lh
+total 2,8M
+-rw-rw-r-- 1 carol carol 109K jul 10 16:22 Galaxy_Note_10.png
+-rw-rw-r-- 1 carol carol 484K jul  5 15:01 geminoid2.jpg
+-rw-rw-r-- 1 carol carol 429K jul  5 14:52 geminoid.jpg
+-rw-rw-r-- 1 carol carol 467K jul  2 11:48 LG-G8S-ThinQ-Mirror-White.jpg
+-rw-rw-r-- 1 carol carol 654K jul  2 11:39 LG-G8S-ThinQ-Range.jpg
+-rw-rw-r-- 1 carol carol  94K jul  2 15:43 Mimoji_Comparativo.jpg
+-rw-rw-r-- 1 carol carol 112K jul 10 16:20 Note10Plus.jpg
+drwx------ 1 carol carol  366 jul 13 17:56 snap
+-rw-rw-r-- 1 carol carol 118K jul 11 16:36 Twitter_Down_20190711.jpg
+-rw-rw-r-- 1 carol carol 324K jul  2 15:22 Xiaomi_Mimoji.png
+Observe o diretório de snap que contém o instantâneo. Agora vamos remover alguns arquivos e verificar o conteúdo do diretório:
+
+$ rm LG-G8S-ThinQ-*
+$ ls -lh
+total 1,7M
+-rw-rw-r-- 1 carol carol 109K jul 10 16:22 Galaxy_Note_10.png
+-rw-rw-r-- 1 carol carol 484K jul  5 15:01 geminoid2.jpg
+-rw-rw-r-- 1 carol carol 429K jul  5 14:52 geminoid.jpg
+-rw-rw-r-- 1 carol carol  94K jul  2 15:43 Mimoji_Comparativo.jpg
+-rw-rw-r-- 1 carol carol 112K jul 10 16:20 Note10Plus.jpg
+drwx------ 1 carol carol  366 jul 13 17:56 snap
+-rw-rw-r-- 1 carol carol 118K jul 11 16:36 Twitter_Down_20190711.jpg
+-rw-rw-r-- 1 carol carol 324K jul  2 15:22 Xiaomi_Mimoji.png
+No entanto, se você verificar dentro do diretório snap, os arquivos excluídos ainda estarão lá e poderão ser restaurados, se necessário.
+
+$ ls -lh snap/
+total 2,8M
+-rw-rw-r-- 1 carol carol 109K jul 10 16:22 Galaxy_Note_10.png
+-rw-rw-r-- 1 carol carol 484K jul  5 15:01 geminoid2.jpg
+-rw-rw-r-- 1 carol carol 429K jul  5 14:52 geminoid.jpg
+-rw-rw-r-- 1 carol carol 467K jul  2 11:48 LG-G8S-ThinQ-Mirror-White.jpg
+-rw-rw-r-- 1 carol carol 654K jul  2 11:39 LG-G8S-ThinQ-Range.jpg
+-rw-rw-r-- 1 carol carol  94K jul  2 15:43 Mimoji_Comparativo.jpg
+-rw-rw-r-- 1 carol carol 112K jul 10 16:20 Note10Plus.jpg
+-rw-rw-r-- 1 carol carol 118K jul 11 16:36 Twitter_Down_20190711.jpg
+-rw-rw-r-- 1 carol carol 324K jul  2 15:22 Xiaomi_Mimoji.png
+Também é possível criar instantâneos somente leitura. Eles funcionam exatamente como os instantâneos graváveis, com a diferença de que o conteúdo do instantâneo não pode ser alterado, eles são “congelados” no tempo. Basta adicionar o parâmetro -r ao criar o instantâneo:
+
+# btrfs subvolume snapshot -r /mnt/disk /mnt/disk/snap
+Algumas palavras sobre compactação
+O Btrfs suporta a compactação transparente de arquivos, com três algoritmos diferentes disponíveis para o usuário. Isso é feito automaticamente arquivo por arquivo, contanto que o sistema de arquivos seja montado com a opção -o compress. Os algoritmos são inteligentes o bastante para detectar arquivos incompressíveis e não tentarão compactá-los, economizando recursos do sistema. Assim, em um único diretório, você pode ter arquivos compactados e descompactados juntos. O algoritmo de compressão padrão é o ZLIB, mas o LZO (mais rápido, taxa de compressão pior) ou o ZSTD (mais rápido que o ZLIB, compressão comparável) estão disponíveis, com diversos níveis de compressão (veja o objetivo correspondente nas opções de montagem).
+
 
 ***104.2 Integridade do sistema
 
@@ -401,32 +732,6 @@ tmpfs          tmpfs     197M   56K  197M   1% /run/user/1000
 
 #ls /sbin/fsck.*
 
-***Verificando a integridade do Sistema
-
-#ls /sbin/fsck.*
-
-***Verificando a integridade do Sistema
-
-#ls /sbin/fsck.*
-
-***Verificando a integridade do Sistema
-
-#ls /sbin/fsck.*
-
-***Verificando a integridade do Sistema
-
-#ls /sbin/fsck.*
-
-***Verificando a integridade do Sistema
-
-#ls /sbin/fsck.*
-
-***Verificando a integridade do Sistema
-
-#ls /sbin/fsck.*
-
-***Verificando a integridade do Sistema
-
 fsck - verificar o arquivo /etc/fstab
 
 #ls /sbin/fsck.*
@@ -447,12 +752,211 @@ fsck - verificar o arquivo /etc/fstab
 #fsck -f /dev/sda5
 
 
+Os seguintes comandos foram abordados nesta lição:
+
+fdisk
+
+gdisk
+
+mkfs.ext2, mkfs.ext3, mkfs.ext4, mkfs.xfs, mkfs.vfat e mkfs.exfat
+
+parted
+
+btrfs
+
+mkswap
+
+swapon e swapoff
+
+Respostas aos Exercícios Guiados
+Qual esquema de particionamento deve ser usado para particionar um disco rígido de 3 TB em três partições de 1 GB? Por quê?
+
+GPT, já que o MBR suporta discos rígidos de no máximo 2 TB.
+
+No gdisk, como podemos descobrir quanto espaço está disponível no disco?
+
+Usamos p (print). O espaço livre total será mostrado como a última linha de informação antes da própria tabela de partição.
+
+Qual seria o comando para criar um sistema de arquivos ext3, verificando antes se há setores defeituosos, com o rótulo MyDisk e um UUID aleatório, no dispositivo /dev/sdc1?
+
+O comando seria mkfs.ext3 -c -L MyDisk -U random /dev/sdc1. Também seria possível usar mk2efs -t ext3 em vez de mkfs.ext3
+
+Usando o parted, qual seria o comando para criar uma partição ext4 de 300 MB, começando com 500 MB no disco?
+
+O comando seria mkpart primary ext4 500m 800m. Lembre-se de que é necessário criar o sistema de arquivos usando mkfs.ext4, já que o parted não faz isso.
+
+Imagine que você tenha 2 partições, uma em /dev/sda1 e outra em /dev/sda2, ambas com 20 GB de tamanho. Como você pode usá-las em um único sistema de arquivos Btrfs, de forma que o conteúdo de uma partição seja automaticamente espelhado na outra, como em uma configuração RAID1? Qual será o tamanho do sistema de arquivos?
+
+O comando seria mkfs.btrfs /dev/sda1 /dev/sdb1 -m raid1. O sistema de arquivos resultante teria um tamanho de 20 GB, já que uma partição age simplesmente como um espelho da outra.
+
+Respostas aos Exercícios Exploratórios
+Considere um disco de 2 GB com uma tabela de partição MBR e o seguinte layout:
+
+Disk /dev/sdb: 1.9 GiB, 1998631936 bytes, 3903578 sectors
+Disk model: DataTraveler 2.0
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x31a83a48
+
+Device     Boot   Start     End Sectors  Size Id Type
+/dev/sdb1          2048 1050623 1048576  512M 83 Linux
+/dev/sdb3       2099200 3147775 1048576  512M 83 Linux
+É possível criar uma partição de 600 MB nele? Por quê?
+
+Não, pois não há espaço contíguo suficiente. A primeira pista de que tem algo “errado” é a lista de dispositivos: temos /dev/sdb1 e /dev/sdb3, mas não /dev/sdb2. Então, algo está faltando.
+
+Em seguida, precisamos ver onde uma partição termina e onde a outra começa. A partição um termina no setor 1050623, e a partição 2 no 2099200. Há uma “lacuna” de 1048577 setores. Como cada setor tem 512 bytes, o total seriam 536.871.424 bytes. Dividindo por 1024, obtemos 524.288 Kilobytes. Dividimos por 1024 novamente e obtemos…​ 512 MB. Esse é o tamanho da “lacuna”.
+
+Se o disco tem 2 GB, resta então um máximo de 512 MB após a partição 3. Mesmo que no total haja cerca de 1 GB não-alocado, o maior bloco contíguo tem 512 MB. Portanto, não há espaço para uma partição de 600 MB.
+
+Em um disco em /dev/sdc, temos uma primeira partição de 1 GB contendo cerca de 256 MB de arquivos. Usando parted, como podemos reduzi-la para que tenha somente espaço suficiente para os arquivos?
+
+Essa operação teria várias etapas. Primeiro, encolhemos o sistema de arquivos usando resize2fs. Ao invés de especificar o novo tamanho diretamente, podemos usar o parâmetro -M para que ele fique “grande o bastante”. Assim: resize2fs -M /dev/sdc1.
+
+Em seguida, redimensionamos a própria partição com o parted usando resizepart. Como se trata da primeira partição, podemos pressupor que ela começa em zero e termina em 241 MB. Assim, o comando seria resizepart 1 241M.
+
+Imagine que você tem um disco em /dev/sdb e deseja criar uma partição swap de 1 GB no início dele. Assim, usando parted, você cria a partição com mkpart primary linux-swap 0 1024M. A seguir, você habilita o swap (troca) nesta partição com swapon /dev/sdb1, mas obtém a seguinte mensagem de erro:
+
+swapon: /dev/sdb1: read swap header failed
+
+O que deu errado?
+
+Você criou uma partição do tipo correto (linux-swap), mas lembre-se de que o mkpart não cria um sistema de arquivos. Você esqueceu de configurar a partição como espaço de troca com mkswap antes de usá-la.
+
+Ao longo desta lição, você experimentou alguns comandos no parted mas, por engano, excluiu a 3ª partição do seu disco rígido. Você sabe que ela vinha depois de uma partição UEFI de 250 MB e de uma partição de troca de 4 GB, e tinha 10 GB de tamanho. Qual comando você pode usar para recuperá-la?
+
+Não entre em pânico, você tem todas as informações necessárias para recuperar a partição. Basta usar rescue e fazer as contas. Você tinha 250 MB + 4096 MB (4*1024) antes, então o ponto inicial deve ser em torno de 4346 MB. Juntando com 10.240 MB (10*1024) de tamanho, ela deve terminar em 14.586 MB. Então, rescue 4346m 14586m deve resolver o problema. Pode ser preciso dar um pouco de “folga” ao rescue, começando um pouco antes e terminando um pouco depois, dependendo da geometria do seu disco.
+
+Imagine que você tenha uma partição não utilizada de 4 GB em /dev/sda3. Usando fdisk, qual seria a sequência de operações para transformá-lo em uma partição swap ativa?
+
+Primeiro, altere o tipo de partição para “Linux Swap” (82), grave suas alterações no disco e saia. Depois, use mkswap para configurar a partição como área de troca. Em seguida, use swapon para habilitá-la.
+
+
+
 ***Reparando o sistema
+
+Antes de reparar, tem que desmontar
+
+fsck -File System Check
+
+Sem parametros, chama o e2fsck
+
+Verificando
+
+fsck -t vfat /dev/sdc ou fsck.msdos /dev/sdc
+
+Tipos do fsck
+
+# fsck
+fsck         fsck.cramfs  fsck.exfat   fsck.ext2    fsck.ext3    fsck.ext4    fsck.fat     fsck.minix   fsck.msdos   fsck.vfat
+
+O fsck aceita alguns argumentos de linha de comando. Estes são alguns dos mais comuns:
+
+-A
+Verifica todos os sistemas de arquivos listados em /etc/fstab.
+
+-C
+Exibe uma barra de progresso ao verificar um sistema de arquivos. Atualmente funciona apenas em sistemas de arquivos ext2/3/4.
+
+-N
+Imprime na tela o que seria feito e sai, sem de fato verificar o sistema de arquivos.
+
+-R
+Quando usado em conjunto com -A, ele pula a verificação do sistema de arquivos raiz.
+
+-V
+Modo detalhado, imprime mais informações do que o normal durante a operação. Útil para depuração
+
+
+Para especificamente o ext2, ext3 e ext4
+
+e2fsck.ext2 e2fsck.ext3 e2fsck.ext4 são links para o fsck
+
+
+O usuário deve digitar y para corrigir o problema, n para deixá-lo sem solução ou a para corrigir o problema atual e todos os subsequentes.
+
+É claro que sentar em frente a um terminal esperando o e2fsck perguntar o que fazer não é um uso produtivo do seu tempo, especialmente se você estiver lidando com um grande sistema de arquivos. Dessa forma, existem opções que fazem com que o e2fsck seja executado em modo não interativo:
+
+-p
+Essa opção tenta corrigir automaticamente quaisquer erros encontrados. Se for encontrado um erro que requeira intervenção do administrador do sistema, o e2fsck fornecerá uma descrição do problema e sairá.
+
+-y
+Responde y (sim) a todas as questões.
+
+-n
+O oposto de -y. Além de responder n (não) a todas as questões, faz com que o sistema de arquivos seja montado somente para leitura e, portanto, não possa ser modificado.
+
+-f
+Força o e2fsck a verificar um sistema de arquivos mesmo se ele estiver marcado como “limpo”, ou seja, que foi corretamente desmontado.
+
+
+
 
 ***Cada tipo de arquivo disponibiliza uma ferramenta de manutenção.
 
 
 tune2fs - Para ext2/ext3/ext4. Pode ser usada para adicionar journaling na ext2 e tranformar loem ext3.
+
+Exemplo:
+
+
+# tune2fs -l /dev/sda5
+tune2fs 1.45.6 (20-Mar-2020)
+Filesystem volume name:   <none>
+Last mounted on:          /var
+Filesystem UUID:          7f74f184-23c0-4715-94b3-42310d9c8875
+Filesystem magic number:  0xEF53
+Filesystem revision #:    1 (dynamic)
+Filesystem features:      has_journal ext_attr resize_inode dir_index filetype needs_recovery extent 64bit flex_bg sparse_super large_file huge_file dir_nlink extra_isize metadata_csum
+Filesystem flags:         signed_directory_hash 
+Default mount options:    user_xattr acl
+Filesystem state:         clean
+Errors behavior:          Continue
+Filesystem OS type:       Linux
+Inode count:              244320
+Block count:              976384
+Reserved block count:     48819
+Free blocks:              270673
+Free inodes:              232066
+First block:              0
+Block size:               4096
+Fragment size:            4096
+Group descriptor size:    64
+Reserved GDT blocks:      476
+Blocks per group:         32768
+Fragments per group:      32768
+Inodes per group:         8144
+Inode blocks per group:   509
+Flex block group size:    16
+Filesystem created:       Thu Jan 21 21:00:27 2021
+Last mount time:          Sun Apr 18 18:49:13 2021
+Last write time:          Sun Apr 18 18:49:13 2021
+Mount count:              48
+Maximum mount count:      -1
+Last checked:             Thu Jan 21 21:00:27 2021
+Check interval:           0 (<none>)
+Lifetime writes:          12 GB
+Reserved blocks uid:      0 (user root)
+Reserved blocks gid:      0 (group root)
+First inode:              11
+Inode size:               256
+Required extra isize:     32
+Desired extra isize:      32
+Journal inode:            8
+Default directory hash:   half_md4
+Directory Hash Seed:      f550ebe0-7d4a-432a-8da7-bb193756af0b
+Journal backup:           inode blocks
+Checksum type:            crc32c
+Checksum:                 0x2a921dca
+
+Dica: Qual parametro do do e2fsck é possivel definir um intervalo de tempo para que  para verificar o sistema?
+-i.
+Também é possível definir um intervalo de tempo entre as verificações com o parâmetro -i, seguido por um número e as letras d para dias, m para meses e y para anos. Por exemplo, -i 10d verificaria o sistema de arquivos na reinicialização seguinte a cada 10 dias.
+
+-L defini um rotulo.
+
 
 dumpe2fs - Exibe informação dos grupos de supreblocos do EXT2/3/4.
 
@@ -495,27 +999,54 @@ tune2fs
 -C *Esta oção mostra a quantidade de vezes que o sistema ja foi montado
 -L *Informa a label
 
+Opção especial -J. Permite usar  outros parametros: -J size=10, location=100M, device =/dev/sda1.
+
+-f força a completar uma operação. Usar com cautelaaaaa.
+
+
 Ex:
-tune2fs -c 15 /dev/sdb1
 
-tune2fs -L Backup /dev/sdb1
+tune2fs -j /dev/sda1 Converte um sistema ext2 para ext3.
 
-tune2fs -m 10 /dev/sdb1
+tune2fs -c 15 /dev/sdb1 - Configura numero maximo de contagens
+
+tune2fs -L Backup /dev/sdb1 Seta uma Label
+
+tune2fs -m 10 /dev/sdb1 - Configura uma porcentagem de blocos reservados.
 
 ***Comandos com XFS
 
 xfs_repair [opção] <dispositivo>
 
--n Apenas informar os erros
+-n Apenas informar os erros -Significa no modify
 -v Exibe detalhes da saida do comando
 
-# xfs_repair /dev/sdb1
+# xfs_repair -n /dev/sdb1
+
+Apos a verificação, pode prosseguir para o reparo
+
+#xfs_repair /dev/sdb1
+
+xfs_repair aceita uma série de opções de linha de comando. Dentre elas:
+
+-l LOGDEV and -r RTDEV
+Necessários se o sistema de arquivos tem log externo e seções em tempo real. Neste caso, substitua LOGDEV e RTDEV pelos dispositivos correspondentes.
+
+-m N
+Usado para limitar o uso de memória de xfs_repair para N megabytes, algo que pode ser útil nas configurações do servidor. De acordo com a página do manual, por padrão xfs_repair adapta seu uso de memória conforme necessário, até 75% da RAM física do sistema.
+
+-d
+O modo “dangerous” (perigoso) permite reparar sistemas de arquivos montados como apenas leitura,
+
+-v
+Você deve ter adivinhado: modo verboso. Cada vez que este parâmetro é usado, a “verbosidade” é aumentada (por exemplo,-v -v imprime mais informações do que apenas -v).
+
 
 xfs_fsr - Utilitario de desfragmentação
 *Usado com o sistema montado e ativo
 
 Ex:
-# xfs_db -c frag -r /dev/sdb1
+# xfs_db -c frag -r /dev/sdb1 -Usado para visualizr diversos parametros de um sistema de arquivos XFS
 
 #xfs_fsr /dev/sdb1
 
@@ -523,6 +1054,71 @@ Ex:
 xfs_bmap -v /dev/sdb1
 
 Obs: xfs_db -r Podemos criar um arquivo contendo toda a fragmentação do disco
+
+
+
+Usando du, como podemos verificar quanto espaço está sendo usado apenas pelos arquivos no diretório atual?
+
+Primeiro, use o parâmetro -S para separar a saída do diretório atual de seus subdiretórios. Em seguida, use -d 0 para limitar a profundidade da saída a zero, indicando “sem subdiretórios”. Não se esqueça do -h para obter uma saída em formato “legível para humanos”:
+
+$ du -S -h -d 0
+or
+
+$ du -Shd 0
+Usando df, liste as informações de cada sistema de arquivos ext4, incluindo na saída os seguintes campos, nesta ordem: dispositivo, ponto de montagem, número total de inodes, número de inodes disponíveis, porcentagem de espaço livre.
+
+Podemos filtrar sistemas de arquivos com a opção -t seguida pelo nome do sistema de arquivos. Para obter a saída necessária, use --output=source,target,itotal,iavail,pcent. Assim, a resposta é:
+
+$ df -t ext4 --output=source,target,itotal,iavail,pcent
+Qual é o comando para executar o e2fsck em /dev/sdc1 no modo não interativo, tentando corrigir automaticamente a maioria dos erros?
+
+O parâmetro para tentar corrigir automativamente a maioria dos erros é -p. Então, a resposta é:
+
+# e2fsck -p /dev/sdc1
+Suponha que /dev/sdb1 seja um sistema de arquivos ext2. Como podemos convertê-lo para ext3 e, ao mesmo tempo, redefinir sua contagem de montagens e alterar seu rótulo para UserData?
+
+Lembre-se de que para converter um sistema de arquivos ext2 em ext3 basta adicionar um diário, o que pode ser feito com o parâmetro -j. Para redefinir a contagem de montagem, use -c 0. Para alterar o rótulo use -L UserData. A resposta correta é:
+
+# tune2fs -j -c 0 -L UserData /dev/sdb1
+Como verificar se há erros em um sistema de arquivos XFS, sem reparar qualquer dano encontrado?
+
+Use o parâmetro -n parameter, como em xfs -n, seguido pelo dispositivo correspondente.
+
+Respostas aos Exercícios Exploratórios
+Considere um sistema de arquivos ext4 em /dev/sda1 com os parâmetros a seguir, obtidos com tune2fs:
+
+Mount count:              8
+Maximum mount count:      -1
+O que acontecerá na próxima inicialização se o comando tune2fs -c 9 /dev/sda1 for emitido?
+
+O comando define a contagem de montagem máxima do sistema de arquivos para 9. Como atualmente ela está em 8, a próxima inicialização do sistema causará uma verificação do sistema de arquivos.
+
+Considere a saída a seguir de du -h:
+
+$ du -h
+216K	./somedir/anotherdir
+224K	./somedir
+232K	.
+Quanto espaço está ocupado apenas pelos arquivos no diretório atual? Como poderíamos reescrever o comando para mostrar essas informações com mais clareza?
+
+Do total de 232 K usados, 224 K são ocupados pelo diretório somedir e seus subdiretórios. Assim, se excluirmos esses, restam 8K sendo ocupados pelos arquivos no diretório atual. Essa informação pode ser exibida mais claramente com o parâmetro -S, que separa os diretórios na contagem.
+
+O que aconteceria ao sistema de arquivos ext2 /dev/sdb1 se o comando abaixo fosse emitido?
+
+# tune2fs -j /dev/sdb1 -J device=/dev/sdc1 -i 30d
+Um diário seria adicionado a /dev/sdb1, convertendo-o em ext3. O diário será armazenado no dispositivo /dev/sdc1 e o sistema de arquivos será verificado a cada 30 dias.
+
+Como podemos verificar se há erros em um sistema de arquivos XFS em /dev/sda1 que tem uma seção de log em /dev/sdc1, mas sem fazer nenhum reparo?
+
+Use xfs_repair, seguido por -l /dev/sdc1 para indicar o dispositivo que contém a seção de log e -n para evitar que sejam feitas alterações.
+
+# xfs_repair -l /dev/sdc1 -n
+Qual a diferença entre os parâmetros -T e -t do df?
+
+O parâmetro -T inclui o tipo de cada sistema de arquivos na saída de df. -t é um filtro e mostra apenas sistemas de arquivos do tipo solicitado na saída, excluindo todos os outros.
+
+
+
 
 ***103.4 Controla Montagens e desmontagens do sistema de arquivos
 
@@ -546,6 +1142,12 @@ Obs: arquivo lost+found - Arquivo do sistema no ponto raiz que é gerado durante
 ex
 # mount -t ext3,ext4,devpts
 
+# mount -t ext4
+/dev/sda3 on / type ext4 (rw,relatime,errors=remount-ro)
+/dev/sda1 on /boot type ext4 (rw,relatime)
+/dev/sda5 on /var type ext4 (rw,relatime)
+
+
 -o Permite definir opções de montagem
 
 ro Somente leitura
@@ -564,13 +1166,14 @@ rm -f /storage/hosts
 
 Arquivo /etc/fstab
 
+# <file system> <mount point>                           <type>  <options>       <dump>      <pass>
+
+# / was on      /dev/sda3 during installation  
+UUID=923a359e-b4b1-4d62-bc54-194ef54faacc /                                  ext4    errors=remount-ro 0       1
 
 
-# <file system> <mount point>   <type>  <options>       <dump>  <pass>
 
-# / was on /dev/sda3 during installation
-UUID=923a359e-b4b1-4d62-bc54-194ef54faacc /               ext4    errors=remount-ro 0       1
-# /boot was on /dev/sda1 during installation
+# /boot was on  /dev/sda1 during installation
 UUID=ccbb56ac-0bc9-4432-97db-e7ef888cc9ec /boot           ext4    defaults        0       2
 # /var was on /dev/sda5 during installation
 UUID=7f74f184-23c0-4715-94b3-42310d9c8875 /var            ext4    defaults        0       2
@@ -578,15 +1181,247 @@ UUID=7f74f184-23c0-4715-94b3-42310d9c8875 /var            ext4    defaults      
 UUID=0a29a596-3668-415a-982a-b7df2ef40284 none            swap    sw              0       0
 /dev/sr0        /media/cdrom0   udf,iso9660 user,noauto     0       0
 
+FILESYSTEM
+O dispositivo que contém o sistema de arquivos a ser montado. Em vez do dispositivo, você pode especificar o UUID ou rótulo da partição, algo que discutiremos mais tarde.
+
+MOUNTPOINT
+Onde o sistema de arquivos será montado.
+
+TYPE
+O tipo de sistema de arquivos.
+
+OPTIONS
+Opções de montagem que serão passadas para mount.
+
+DUMP
+Indica se qualquer sistema de arquivos ext2, ext3 ou ext4 deve ser considerado para backup pelo comando dump. Normalmente o valor é zero, o que significa que devem ser ignorados.
+
+PASS
+Quando diferente de zero, define a ordem na qual os sistemas de arquivos serão checados na inicialização. Normalmente é zero.
+
+
+atime e noatime
+Por padrão, cada vez que um arquivo é lido, a informação de data e hora de acesso é atualizada. Se essa opção for desativada (com noatime), a E/S do disco fica mais veloz. Não confundir com a hora de modificação, que é atualizada sempre que um arquivo é gravado.
+
+auto e noauto
+Se o sistema de arquivos pode (ou não) ser montado automaticamente com mount -a.
+
+defaults
+Passa as opções rw, suid, dev, exec, auto, nouser e async para mount.
+
+dev e nodev
+Indica se os dispositivos de caractere ou de bloco no sistema de arquivos montado devem ser interpretados.
+
+exec e noexec
+Permite ou nega a permissão para executar binários no sistema de arquivos.
+
+user e nouser
+Permite (ou não) a um usuário comum montar o sistema de arquivos.
+
+group
+Permite a um usuário montar o sistema de arquivos se o usuário pertencer ao mesmo grupo que possui o dispositivo que o contém.
+
+owner
+Permite a um usuário montar um sistema de arquivos se ele for proprietário do dispositivo que o contém.
+
+suid e nosuid
+Permite ou não que os bits SETUID e SETGID tenham efeito.
+
+ro e rw
+Montam um sistema de arquivos como somente leitura ou gravável.
+
+remount
+Tenta remontar um sistema de arquivos já montado. Não é usado em /etc/fstab, mas como um parâmetro para mount -o. Por exemplo, para remontar a partição já montada /dev/sdb1 como somente leitura, você pode usar o comando mount -o remount,ro /dev/sdb1. Ao remontar, não é necessário especificar o tipo de sistema de arquivos, apenas o nome do dispositivo ou o ponto de montagem.
+
+sync e async
+Definem se todas as operações de E/S devem ser realizadas no sistema de arquivos de forma síncrona ou assíncrona. async geralmente é o padrão. A página de manual de mount avisa que usar sync em mídias com um número limitado de ciclos de gravação (como drives flash ou cartões de memória) pode encurtar a vida útil do dispositivo.
+
+Montando discos com Systemd
+Systemd é o processo init, o primeiro processo a ser executado em muitas distribuições Linux. Ele é responsável por gerar outros processos, iniciar serviços e inicializar o sistema. Entre muitas outras tarefas, o systemd também pode ser usado para gerenciar a montagem (e a montagem automática) de sistemas de arquivos.
+
+Para usar este recurso do systemd, você precisa criar um arquivo de configuração chamado unidade de montagem. Cada volume a ser montado tem sua própria unidade de montagem e elas devem ser postas em /etc/systemd/system/.
+
+As unidades de montagem são arquivos de texto simples com a extensão .mount. O formato básico é mostrado abaixo:
+
+[Unit]
+Description=
+
+[Mount]
+What=
+Where=
+Type=
+Options=
+
+[Install]
+WantedBy=
+Description=
+Descrição curta da unidade de montagem, algo como Mounts the backup disk.
+
+What=
+O que deve ser montado. O volume tem de ser especificado como /dev/disk/by-uuid/VOL_UUID, onde VOL_UUID é o UUID do volume.
+
+Where=
+Deve ser o caminho completo para o local em que o volume será montado.
+
+Type=
+O tipo de sistema de arquivos.
+
+Options=
+Opções de montagem que podem ser desejáveis; são as mesmas usadas com o comando mount ou em /etc/fstab.
+
+WantedBy=
+Usado para o gerenciamento de dependências. Neste caso, usaremos multi-user.target, que indica que sempre que o sistema inicializar em um ambiente multiusuário (uma inicialização normal) a unidade será montada.
+
+Nosso exemplo anterior do disco externo poderia ser escrito como:
+
+[Unit]
+Description=External data disk
+
+[Mount]
+What=/dev/disk/by-uuid/56C11DCC5D2E1334
+Where=/mnt/external
+Type=ntfs
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target
+Mas ainda não acabamos. Para funcionar corretamente, a unidade de montagem deve ter o mesmo nome do ponto de montagem. Neste caso, o ponto de montagem é /mnt/external, de forma que o nome do arquivo precisa ser mnt-external.mount.
+
+Depois disso, precisamos reiniciar o daemon do systemd com o comando systemctl e iniciar a unidade:
+
+# systemctl daemon-reload
+# systemctl start mnt-external.mount
+Agora o conteúdo do disco externo deve estar disponível em /mnt/external. Para verificar o status da montagem, use o comando systemctl status mnt-external.mount, como mostrado abaixo:
+
+# systemctl status mnt-external.mount
+● mnt-external.mount - External data disk
+   Loaded: loaded (/etc/systemd/system/mnt-external.mount; disabled; vendor pres
+   Active: active (mounted) since Mon 2019-08-19 22:27:02 -03; 14s ago
+    Where: /mnt/external
+     What: /dev/sdb1
+    Tasks: 0 (limit: 4915)
+   Memory: 128.0K
+   CGroup: /system.slice/mnt-external.mount
+
+ago 19 22:27:02 pop-os systemd[1]: Mounting External data disk...
+ago 19 22:27:02 pop-os systemd[1]: Mounted External data disk.
+O comando systemctl start mnt-external.mount só habilita a unidade para a sessão atual. Se quiser habilitá-la em todas as inicializações, substitua start por enable:
+
+# systemctl enable mnt-external.mount
+Montagem automática de uma unidade de montagem
+As unidades de montagem podem ser montadas automaticamente sempre que o ponto de montagem for acessado. Para isso, precisamos de um arquivo .automount, junto com o arquivo .mount descrevendo a unidade. O formato básico é:
+
+[Unit]
+Description=
+
+[Automount]
+Where=
+
+[Install]
+WantedBy=multi-user.target
+Como anteriormente, Description= é uma breve descrição do arquivo e Where= é o ponto de montagem. Por exemplo, um arquivo .automount em nosso exemplo anterior ficaria assim:
+
+[Unit]
+Description=Automount for the external data disk
+
+[Automount]
+Where=/mnt/external
+
+[Install]
+WantedBy=multi-user.target
+Salve o arquivo com o mesmo nome do ponto de montagem (neste caso, mnt-external.automount), recarregue o systemd e inicie a unidade:
+
+# systemctl daemon-reload
+# systemctl start mnt-external.automount
+Agora, sempre que o diretório /mnt/external for acessado, o disco será montado. Como anteriormente, para habilitar a montagem automática em cada inicialização usaríamos:
+
+# systemctl enable mnt-external.automount
+
+Respostas aos Exercícios Guiados
+Usando mount, como você montaria um sistema de arquivos ext4 em /dev/sdc1 para /mnt/external como somente leitura, usando as opções noatime e async?
+
+# mount -t ext4 -o noatime,async,ro /dev/sdc1 /mnt/external
+Ao desmontar um sistema de arquivos em /dev/sdd2, aparece a mensagem de erro target is busy. Como descobrir quais arquivos do sistema de arquivos estão abertos e quais processos os abriram?
+
+Use lsof seguido pelo nome do dispositivo:
+
+$ lsof /dev/sdd2
+Considere a seguinte entrada em /etc/fstab: /dev/sdb1 /data ext4 noatime,noauto,async. Esse sistema de arquivos será montado se o comando mount -a for emitido? Por quê?
+
+Ele não será montado. A chave é o parâmetro noauto, que indica que esta entrada será ignorada por mount -a.
+
+Como descobrir o UUID de um sistema de arquivos sob /dev/sdb1?
+
+Use lsblk -f, seguido pelo nome do sistema de arquivos:
+
+$ lsblk -f /dev/sdb1
+Como usar mount para remontar como somente leitura um sistema de arquivos exFAT com o UUID 6e2c12e3-472d-4bac-a257-c49ac07f3761, montado em /mnt/data?
+
+Visto que o sistema de arquivos está montado, você não precisa se preocupar com o tipo de sistema de arquivos ou o ID, basta usar a opção remount com o parâmetro ro (somente leitura) e o ponto de montagem:
+
+# mount -o remount,ro /mnt/data
+Como obter uma lista de todos os sistemas de arquivos ext3 e ntfs atualmente montados em um sistema?
+
+Use mount -t, seguido por uma lista separada por vírgula dos sistemas de arquivos:
+
+# mount -t ext3,ntfs
+Respostas aos Exercícios Exploratórios
+Considere a entrada a seguir em /etc/fstab: /dev/sdc1 /backup ext4 noatime,nouser,async. Seria possível um usuário montar esse sistema de arquivos com o comando mount /backup? Por quê?
+
+Não, o parâmetro nouser impede que usuários comuns montem este sistema de arquivos.
+
+Considere um sistema de arquivos remoto montado em /mnt/server que se tornou inacessível devido à perda de conectividade de rede. Como poderíamos forçar a desmontagem, ou montá-lo como somente leitura se isso não for possível?
+
+Passe os parâmetros -f e -r para unmount. O comando seria umount -f -r /mnt/server. Lembre-se de que podemos agrupar parâmetros, então umount -fr /mnt/server também funcionaria.
+
+Escreva uma entrada de /etc/fstab para montar um volume btrfs com o rótulo Backup em /mnt/backup, com opções padrão e sem permitir a execução de binários por ele.
+
+A linha seria LABEL=Backup /mnt/backup btrfs defaults,noexec
+
+Considere a seguinte unidade de montagem do systemd:
+
+[Unit]
+Description=External data disk
+
+[Mount]
+What=/dev/disk/by-uuid/56C11DCC5D2E1334
+Where=/mnt/external
+Type=ntfs
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target
+Qual seria uma entrada equivalente a /etc/fstab neste sistema de arquivos??
+
+A entrada seria: UUID=56C11DCC5D2E1334 /mnt/external ntfs defaults
+
+Qual deve ser o nome de arquivo da unidade acima, para que ela possa ser usada pelo systemd? Onde ela deve ser posta?
+
+O nome de arquivo deve ser idêntico ao do ponto de montagem, no caso mnt-external.mount, posto em /etc/systemd/system.
+
+
 ***104.5 Gerenciamento de permissões
+
+r read    =4
+w write   =2
+x execute =1
+
+
 
 Usuarios e grupo
 
 # whoami
 
 ***Grupos a que pertenço
-# groups
 
+#getent group -Verificando os grupos existentes no sistema
+
+# groups -Verificando o grupo a qual pertenço
+
+# groupmems -g ccdrom -l -Verificando os integrantes do grupo cdrom
+groupmems: group 'ccdrom' does not exist in /etc/group
+
+#groups dublin -Checando meus grupos
 dublin cdrom floppy sudo audio dip video plugdev netdev bluetooth scanner kaboxer
 
 id -Verificando o id 
@@ -595,6 +1430,7 @@ uid=1000(dublin) gid=1000(dublin) groups=1000(dublin),24(cdrom),25(floppy),27(su
 
 
 ***Alterar grupo dono
+getent group -Verificando os grupos existentes no sistema
 
 chgrp
 
@@ -691,8 +1527,13 @@ Ex 0666
 #umask - Comando que verifica valor padrão.
 022
 
+#umask -S Verificando como foi definido a umask
+u=rwx,g=rx,0=
+
 ***Alterando a umask
 #umask 0077
+ou
+#umask u=rwx,g=rwx,o= -Representa permissão 770
 
 Permissões suid e guid
 
@@ -743,6 +1584,10 @@ Hardlink (Link Fisico)
 
 Hardlinks são um ou mais nomes que um inode do sistema de arquivos pode ter.
 
+Apontam para a mesma partição
+Quando excluidos o arquivo original, permanece o hardlink
+Não podem ser appontados para partições diferentes
+
 ***Criar hardlink
 
 Ex:
@@ -758,11 +1603,17 @@ Ex:
 
 Um arquivo so é excluido quando se apaga o hardlink.
 
+Para apagar ou move um hardlink usar respectivamente rm ou mv
+
 Só é possivel criar hardlinks para arquivos.
 
 ***Links Simbolicos
 
 Links simbolicos apontam para qualquer alvo.
+
+Podem apontar para outras partiçoes
+
+Quando o link simbolico removido, perder se a referencia
 
 *Criando sof link
 ln -s aquivos.tar.gz backup.tar.gz
@@ -776,7 +1627,8 @@ Diretórios que não podem ser montados em ontras partiçoes. Residem na raiz
 
 /bin /sbin /etc /lib
 
-/mnt /media Pontos de montagem para outras partições
+/mnt Ponto de montagem temporario para outras partiçoes 
+/media Pontos de montagem para midias, pendrives, cdrom
 
 /proc /sys
 /dev
@@ -801,7 +1653,78 @@ pela variavel PATH.
 #which systemctl
 /usr/bin/systemctl
 
-***Encontando links
+***Encontrando arquivos
+
+Find 
+o find precisa de dois argumentos: um ponto de partida e o que procurar. Por exemplo, para pesquisar todos os arquivos no diretório atual (e seus subdiretórios) cujo nome termina em .jpg, usaríamos:
+
+$ find . -name '*.jpg'
+./pixel_3a_seethrough_1.jpg
+A expressão *.jpg deve ser posta entre aspas simples, para evitar que o shell interprete o padrão como um comando. Experimente sem as aspas e veja o que acontece.
+
+Por padrão, o find começa no ponto de partida e vai descendo pelos subdiretórios (e subdiretórios desses subdiretórios) encontrados. Para restringir esse comportamento, use os parâmetros -maxdepth N, onde N é o número máximo de níveis.
+
+Para pesquisar apenas no diretório atual, usaríamos -maxdepth 1. Suponha que você tem a seguinte estrutura de diretório:
+
+directory
+├── clients.txt
+├── partners.txt -> clients.txt
+└── somedir
+    ├── anotherdir
+    └── clients.txt
+Para pesquisar dentro de somedir, você precisará usar -maxdepth 2 (o diretório atual +1 nível abaixo). Para pesquisar dentro de anotherdir, -maxdepth 3 seria necessário (o diretório atual +2 níveis abaixo). O parâmetro -mindepth N faz o contrário, pesquisando apenas em diretórios no mínimo N níveis abaixo.
+
+O parâmetro -mount pode ser usado para evitar que o find mergulhe em sistemas de arquivos montados. Também é possível restringir a pesquisa a tipos específicos de sistemas de arquivos usando o parâmetro -fstype. Assim, find /mnt -fstype exfat -iname "*report*" buscaria somente dentro de sistemas de arquivos exFAT montados sob /mnt.
+
+Buscando por atributos
+Podemos usar os parâmetros abaixo para pesquisar arquivos com atributos específicos, como os que podem ser gravados por seu usuário, os que têm um conjunto específico de permissões ou que têm um determinado tamanho:
+
+-user USERNAME
+Encontra arquivos de que o usuário USERNAME é proprietário.
+
+-group GROUPNAME
+Encontra arquivos de que o grupo GROUPNAME é proprietário.
+
+-readable
+Encontra arquivos que podem ser lidos pelo usuário atual.
+
+-writable
+Encontra arquivos que podem ser gravados pelo usuário atual.
+
+-executable
+Encontra arquivos que podem ser executados pelo usuário atual. No caso dos diretórios, ele encontrará quaisquer diretórios em que o usuário pode entrar (permissão x).
+
+-perm NNNN
+Encontra quaisquer arquivos que tenham exatamente a permissão NNNN. Por exemplo, -perm 0664 corresponde a quaisquer arquivos que o usuário e grupo podem ler e gravar e que outros podem ler (ou rw-rw-r--).
+
+Adicione um - antes de NNNN para procurar por arquivos que tenham pelo menos a permissão especificada. Por exemplo, -perm -644 encontraria arquivos que tenham permissões de ao menos 644 (rw-r—​r--). Isso inclui arquivos com 664 (rw-rw-r--) ou mesmo 775 (rwxrwx-r-x).
+
+-empty
+Encontra arquivos e diretórios vazios.
+
+-size N
+Encontra qualsquer arquivos de tamanho N, onde N por padrão é um número de blocos de 512 bytes. Podemos adicionar sufixos a N para as outras unidades: Nc conta o tamanho em bytes, Nk em kibibytes (KiB, múltiplos de 1024 bytes), NM em mebibytes (MiB, múltiplos de 1024 * 1024) e NG para gibibytes (GiB, múltiplos de 1024 * 1024 * 1024).
+
+Aqui também, podemos usar os prefixos + ou - (que aqui significam maior que e menor que) para buscar por tamanhos relativos. Por exemplo, -size -10M corresponderia a qualquer arquivo menor de 10 MiB.
+
+Assim, para pesquisar arquivos em seu diretório inicial que contenham o padrão report (sem distinção entre maiúsculas e minúsculas) em qualquer parte do nome, tenham permissões 0644, foram acessados há 10 dias e cujo tamanho é de pelo menos 1 Mib, usaríamos
+
+$ find ~ -iname "*report*" -perm 0644 -atime 10 -size +1M
+Busca por tempo
+Além da busca por atributos, também é possível realizar buscas por data e hora, encontrando arquivos que foram acessados, tiveram seus atributos alterados ou foram modificados durante um determinado período de tempo. Os parâmetros são:
+
+-amin N, -cmin N, -mmin N
+Corresponde a arquivos que foram acessados, tiveram atributos alterados ou foram modificados (respectivamente) N minutos atrás.
+
+-atime N, -ctime N, -mtime N
+Corresponde a arquivos que foram acessados, tiveram atributos alterados ou foram modificados N*24 horas atrás.
+
+Para -cmin N e -ctime N, qualquer alteração de atributo é levada em conta, incluindo mudanças nas permissões, leitura ou gravação no arquivo. Isso torna esses parâmetros especialmente poderosos, uma vez que praticamente qualquer operação envolvendo o arquivo fará com que ele corresponda aos parâmetros da busca.
+
+O exemplo a seguir corresponderia a qualquer arquivo no diretório atual que foi modificado há menos de 24 horas e é maior que 100 MiB:
+
+$ find . -mtime -1 -size +100M
+
 # find . -samefile arq2
 
 # find . - inum 8095
@@ -818,7 +1741,6 @@ pela variavel PATH.
 
 Ex # /sbin/fdisk /dev/sdb
 
-Which para comandos embutidos no shell
 type avalia como o shell vai localizar os comandos
 
 Which - Retorna o caminho completo para o comando.
@@ -893,6 +1815,179 @@ Report bugs to mitr@redhat.com.
 Ex locate -c lspci - Faz apenas uma contagem de vezes que aparece
 
 4
+Usando locate e updatedb
+locate e updatedb são comandos que podem ser usados para encontrar rapidamente um arquivo correspondente a um padrão dado em um sistema Linux. Mas, ao contrário de find, locate não pesquisa por um padrão no sistema de arquivos: em vez disso, ele consulta um banco de dados construído com a execução do comando updatedb. Os resultados são muito velozes, mas podem ser imprecisos dependendo da data da última atualização do banco de dados.
+
+A maneira mais simples de usar locate é simplesmente fornecer a ele um padrão a pesquisar. Por exemplo, para encontrar todas as imagens JPEG em seu sistema, você usaria locate jpg. A lista de resultados pode ser bastante longa, mas teria a seguinte aparência:
+
+$ locate jpg
+/home/carol/Downloads/Expert.jpg
+/home/carol/Downloads/Hotbit.jpg
+/home/carol/Downloads/Mate1.jpg
+/home/carol/Downloads/Mate2.jpg
+/home/carol/Downloads/Mate3.jpg
+/home/carol/Downloads/Pentaro.jpg
+/home/carol/Downloads/Sala.jpg
+/home/carol/Downloads/pixel_3a_seethrough_1.jpg
+/home/carol/Downloads/jpg_specs.doc
+Quando buscamos pelo padrão jpg, o locate mostra qualquer coisa que contenha esse padrão, não importa o que venha antes ou depois. Você pode ver um exemplo disso no arquivo jpg_specs.doc na lista acima: ele contém o padrão, mas sua extensão não é jpg.
+
+Tip
+Com locate, estamos procurando por padrões, e não por extensões de arquivo.
+
+Em princípio, o padrão diferencia maiúsculas de minúsculas. Isso significa que arquivos contendo .JPG não seriam mostrados, pois o padrão está em letras minúsculas. Para evitar isso, passe o parâmetro -i para locate. Repetindo nosso exemplo anterior:
+
+$ locate -i .jpg
+/home/carol/Downloads/Expert.jpg
+/home/carol/Downloads/Hotbit.jpg
+/home/carol/Downloads/Mate1.jpg
+/home/carol/Downloads/Mate1_old.JPG
+/home/carol/Downloads/Mate2.jpg
+/home/carol/Downloads/Mate3.jpg
+/home/carol/Downloads/Pentaro.jpg
+/home/carol/Downloads/Sala.jpg
+/home/carol/Downloads/pixel_3a_seethrough_1.jpg
+Observe que o arquivo Mate1_old.JPG, destacado em negrito acima, não estava presente na listagem anterior.
+
+Para passar vários padrões para locate, basta separá-los com espaços. O exemplo abaixo faria uma busca sem distinção entre maiúsculas e minúsculas por quaisquer arquivos que correspondam aos padrões zip e jpg:
+
+$ locate -i zip jpg
+/home/carol/Downloads/Expert.jpg
+/home/carol/Downloads/Hotbit.jpg
+/home/carol/Downloads/Mate1.jpg
+/home/carol/Downloads/Mate1_old.JPG
+/home/carol/Downloads/Mate2.jpg
+/home/carol/Downloads/Mate3.jpg
+/home/carol/Downloads/OPENMSXPIHAT.zip
+/home/carol/Downloads/Pentaro.jpg
+/home/carol/Downloads/Sala.jpg
+/home/carol/Downloads/gbs-control-master.zip
+/home/carol/Downloads/lineage-16.0-20190711-MOD-quark.zip
+/home/carol/Downloads/pixel_3a_seethrough_1.jpg
+/home/carol/Downloads/jpg_specs.doc
+Ao usar múltiplos padrões, você pode solicitar ao locate que exiba apenas os arquivos que correspondam a todos eles. Isso é feito com a opção -A. O exemplo a seguir mostraria qualquer arquivo que corresponda aos padrões .jpg e .zip:
+
+$ locate -A .jpg .zip
+/home/carol/Downloads/Pentaro.jpg.zip
+Se quiser contar o número de arquivos que correspondem a um determinado padrão em vez de mostrar o caminho completo, você pode usar a opção -c. Por exemplo, para contar o número de arquivos .jpg em um sistema:
+
+$ locate -c .jpg
+1174
+Um problema com o locate é que ele mostra apenas as entradas presentes no banco de dados gerado pelo updatedb (localizado em /var/lib/mlocate.db). Se o banco de dados estiver desatualizado, a saída poderá mostrar arquivos que foram excluídos desde a última vez em que foi atualizado. Uma maneira de evitar isso é adicionar o parâmetro -e, que fará com que ele verifique se o arquivo ainda existe antes de mostrá-lo na saída.
+
+Obviamente, isso não fará com que os arquivos criados após a última atualização do banco de dados apareçam. Para isso será necessário atualizar o banco de dados com o comando updatedb. O tempo para a execução dessa operação dependerá da quantidade de arquivos em seu disco.
+
+Controlando o comportamento de updatedb
+O comportamento do updatedb pode ser controlado pelo arquivo /etc/updatedb.conf. Trata-se de um arquivo de texto no qual cada linha controla uma variável. As linhas em branco são ignoradas e as linhas que começam com o caractere # são tratadas como comentários.
+
+PRUNEFS=
+Quaisquer tipos de sistemas de arquivos indicados após este parâmetro não serão analisados pelo updatedb. A lista de tipos deve ser separada por espaços e os tipos em si não diferenciam maiúsculas de minúsculas, de forma que NFS e nfs são a mesma coisa.
+
+PRUNENAMES=
+Lista de nomes de diretórios separados por espaços que não deverá ser analisada pelo updatedb.
+
+PRUNEPATHS=
+Lista de nomes de caminhos que devem ser ignorados pelo updatedb. Os nomes de caminhos devem ser separados por espaços e especificados da mesma maneira como seriam mostrados pelo updatedb (por exemplo, /var/spool /media)
+
+PRUNE_BIND_MOUNTS=
+Esta é uma simples variável de yes ou no. Se definida como yes, as bind mounts (montagens de ligação: diretórios montados em outros locais com o comando mount --bind) serão ignoradas.
+
+Encontrando binários, páginas de manual e código-fonte
+O which é um comando muito útil que mostra o caminho completo para um executável. Por exemplo, se você quiser localizar o executável para bash, pode usar:
+
+$ which bash
+/usr/bin/bash
+Se a opção -a for adicionada, o comando mostrará todos os nomes de caminho que correspondem ao executável. Observe a diferença:
+
+$ which mkfs.ext3
+/usr/sbin/mkfs.ext3
+
+$ which -a mkfs.ext3
+/usr/sbin/mkfs.ext3
+/sbin/mkfs.ext3
+Tip
+Para descobrir quais diretórios estão no PATH, use o comando echo $PATH. Ele exibe (echo) o conteúdo da variável PATH ($PATH) no terminal.
+
+type é um comando semelhante que mostra informações sobre um binário, incluindo sua localização e tipo. Basta usar type seguido do nome do comando:
+
+$ type locate
+locate is /usr/bin/locate
+O parâmetro -a funciona da mesma maneira que em which, mostrando todos os nomes de caminho que correspondem ao executável. Assim:
+
+$ type -a locate
+locate is /usr/bin/locate
+locate is /bin/locate
+E o parâmetro -t mostra o tipo de arquivo do comando que pode ser alias, keyword, function, builtin ou file. Por exemplo:
+
+$ type -t locate
+file
+
+$ type -t ll
+alias
+
+$ type -t type
+type is a built-in shell command
+O comando whereis é mais versátil e, além dos binários, também pode ser usado para mostrar a localização das páginas do manual ou mesmo o código-fonte de um programa (se disponível em seu sistema). Basta digitar whereis seguido do nome binário:
+
+$ whereis locate
+locate: /usr/bin/locate /usr/share/man/man1/locate.1.gz
+Os resultados acima incluem binários (/usr/bin/locate) e páginas de manual comprimidas (/usr/share/man/man1/locate.1.gz).
+
+Podemos filtrar rapidamente os resultados usando opções de linha de comando como -b, para limitá-los apenas aos binários, -m, para limitá-los apenas a páginas de manual, ou -s, para limitá-los apenas ao código-fonte. Repetindo o exemplo acima, os resultados seriam:
+
+$ whereis -b locate
+locate: /usr/bin/locate
+
+$ whereis -m locate
+locate: /usr/share/man/man1/locate.1.gz
 
 
+Respostas aos Exercícios Guiados
+Usando find, pesquise apenas no diretório atual por arquivos que são graváveis pelo usuário, foram modificados nos últimos 10 dias e são maiores que 4 GB.
 
+Para isso, precisamos dos parâmetros -writable, -mtime e -size:
+
+find . -writable -mtime -10 -size 4G
+Usando locate, encontre todos os arquivos contendo os padrões report e updated, update ou updating em seus nomes.
+
+Como locate precisa encontrar todos os padrões correspondentes, use a opção -A:
+
+locate -A "report" "updat"
+Como descobrir onde a página de manual para ifconfig está armazenada?
+
+Use o parâmetro -m para o whereis:
+
+whereis -m ifconfig
+Qual variável precisa ser adicionada a /etc/updatedb.conf para que updatedb ignore sistemas de arquivos ntfs?
+
+A variável é PRUNEFS= seguida pelo tipo do sistema de arquivos: PRUNEFS=ntfs
+
+Um administrador de sistema deseja montar um disco interno (/dev/sdc1). De acordo com o FHS, em qual diretório este disco deve ser montado?
+
+Na prática, o disco pode ser montado em qualquer lugar. Porém, o FHS recomenda que montagens temporárias sejam feitas em /mnt
+
+Respostas aos Exercícios Exploratórios
+Quando locate é usado, os resultados são puxados de um banco de dados gerado por updatedb. No entanto, este banco de dados pode estar desatualizado, fazendo com que o locate mostre arquivos que não existem mais. Como fazer com que locate mostre apenas arquivos existentes em sua saída?
+
+Adicione o parâmetro -e a locate, como em locate -e PATTERN.
+
+Encontre qualquer arquivo no diretório ou subdiretórios atuais até 2 níveis abaixo, excluindo sistemas de arquivos montados, que contenham o padrão Status ou statute em seus nomes.
+
+Lembre-se de que para -maxdepth também devemos levar em conta o diretório atual, de forma que queremos três níveis (o atual, mais 2 níveis para baixo):
+
+find . -maxdepth 3  -mount -iname "*statu*"
+Limitando a pesquisa aos sistemas de arquivos ext4, encontre quaisquer arquivos sob /mnt que tenham no mínimo permissões de execução para o grupo, sejam legíveis para o usuário atual e tenham tido qualquer atributo alterado nas últimas 2 horas.
+
+Use o parâmetro -fstype de mount para limitar a pesquisa a tipos específicos de sistemas de arquivos. Um arquivo legível pelo usuário atual teria ao menos 4 no primeiro dígito de permissões, e um executável pelo grupo teria ao menos 1 no segundo dígito. Como não estamos preocupados com as permissões de outros, podemos usar 0 no terceiro dígito. Use -cmin N para filtrar alterações recentes de atributos, lembrando que N é especificado em minutos. Assim:
+
+find /mnt -fstype ext4 -perm -410 -ctime 120
+Encontre arquivos vazios que foram criados há mais de 30 dias e estão pelo menos dois níveis abaixo do diretório atual.
+
+O parâmetro -mindepth N pode ser usado para limitar a pesquisa a pelo menos N níveis abaixo, mas é necessário incluir o diretório atual na contagem. Use -empty para procurar por arquivos vazios e -mtime N para ver a data e hora de modificação. Assim:
+
+find . -empty -mtime +30 -mindepth 3
+Considere que os usuários carol e john fazem parte do grupo mkt. Encontre no diretório pessoal de john quaisquer arquivos que também possam ser lidos por carol.
+
+Considerando que os dois são membros do mesmo grupo, precisamos de pelo menos um r (4) nas permissões de grupo e não estamos preocupados com os outros. Assim:
+
+find /home/john -perm -040
