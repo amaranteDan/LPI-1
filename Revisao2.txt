@@ -935,3 +935,64 @@ $ cat etc.tar.xz | ssh user@storage "cat > /srv/backup/etc.tar.xz"
 ou
 
 $ ssh user@storage "cat > /srv/backup/etc.tar.xz" < etc.tar.xz
+
+Monitorando processos
+
+Comando watch
+
+
+Monitoramento de processos
+Um processo ou tarefa é uma instância de um programa em execução. Assim, criamos novos processos toda vez que digitamos comandos no terminal.
+
+O comando watch executa um programa periodicamente (por padrão, a cada 2 segundos) e nos permite observar a mudança da saída do programa ao longo do tempo. Por exemplo, podemos monitorar como a média de trabalho muda conforme mais processos são executados digitando watch uptime:
+
+Every  2.0s: uptime          debian: Tue Aug 20 23:31:27 2019
+
+ 23:31:27 up 21 min,  1 user,  load average: 0.00, 0.00, 0.00
+O comando roda até ser interrompido, então teríamos de pará-lo com Ctrl+C. Obtemos duas linhas na saída: a primeira corresponde ao watch e nos informa a frequência com que o comando será executado (Every 2.0s: uptime), qual o comando/programa a observar (uptime) além do nome do host e a data (debian: Tue Aug 20 23:31:27 2019). A segunda linha da saída é o tempo de atividade e inclui a hora (23:31:27), o tempo em que o sistema está ativo (up 21 min), o número de usuários ativos (1 user) e a carga média do sistema ou o número de processos em execução ou em estado de espera nos últimos 1, 5 e 15 minutos (load average: 0.00, 0.00, 0.00).
+
+
+Enviando sinais para processos: kill
+Cada processo possui um identificador de processo ou PID exclusivo. Uma maneira de descobrir o PID de um processo é usar o comando pgrep seguido pelo nome do processo:
+
+$ pgrep sleep
+1201
+Note
+O identificador de um processo também pode ser descoberto com o comando pidof (p.ex. pidof sleep).
+
+Como no caso do pgrep, o comando pkill elimina um processo com base em seu nome:
+
+$ pkill sleep
+[1]+  Terminated              sleep 60
+Para eliminar várias instâncias do mesmo processo, o comando killall pode ser usado:
+
+$ sleep 60 &
+[1] 1246
+$ sleep 70 &
+[2] 1247
+$ killall sleep
+[1]-  Terminated              sleep 60
+[2]+  Terminated              sleep 70
+Tanto pkill quanto killall funcionam da mesma maneira que kill, ou seja, enviam um sinal de encerramento para o(s) processo(s) especificado(s). Se nenhum sinal for fornecido, o padrão SIGTERM é enviado. No entanto, kill só aceita um ID de trabalho ou de processo como argumento.
+
+Os sinais podem ser especificados por:
+
+Nome:
+
+$ kill -SIGHUP 1247
+Número:
+
+$ kill -1 1247
+Opção:
+
+$ kill -s SIGHUP 1247
+Para fazer com que kill funcione de forma semelhante a pkill ou killall (evitando os comandos para descobrir os PIDs correspondentes), podemos usar a substituição de comandos:
+
+$ kill -1 $(pgrep sleep)
+Como você já deve saber, uma sintaxe alternativa é kill -1 `pgrep sleep`.
+
+Tip
+Para uma lista exaustiva de todos os sinais de kill e seus códigos, digite kill -l no terminal. Use -KILL (-9 ou -s KILL) para eliminar processos rebeldes quando todos os outros sinais falharem.
+
+
+
