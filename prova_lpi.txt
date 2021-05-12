@@ -1,0 +1,275 @@
+*********************************************
+Iniciando a Revisão da Prova 101 - 11/05/2021
+
+Iniciando o 101 - Arquitetura do Sistema
+
+Resultado da prova
+
+62% Arquitetura de Sistemas
+41% Instalação do Linux e gerenciamento de pacotes
+65% Comandos Linux
+57% Sistemas de Arquivos
+
+Pontuação do Exame: 430
+35 corretas
+25 incorretas
+
+************************************************
+101.1 
+Peso 2
+
+Interface grafica do Usuario: KDE, GNOME XFCE.
+
+Desktop Hospeda todos os programas que funcionam em ambiente grafico
+
+Display Manager - Gerenciar os logins da interface grafica e seleciona o tipo de ambiente grafico
+
+Servidor X - Base da implantação do ambiente grafico e server o ambiente de estações Xorg.
+
+tty Terminais locais que interpretam os comandos. Camada de multiuser
+
+Sistema Operacional -Camada que auxilia e hospeda todos os aplicativos das camadas superiores.
+
+Kernel - Nucleo de processamento entre as camadas superiores e o hardware.
+
+Hardware - Camada com os dispositivos como cdrom, teclado, monitor etc.
+
+Bios (Basic Input/Output System) é um sistema integrado em memoria ROM a placa Mae que administra os recursos de entrada e saida de hardware, barramentos para placas de expansao, portas de comunicacao e unidades de disco.
+
+Importante para o funcionamento de arquiteturas do Linux x86 e derivadas, pois numera todos os recursos de acesso aos componentes do computador, atraves de alocação de IRQs, endereços de 
+acesso direto a memoria (DMA) e endereços de entrada e saida (IOs).
+
+
+UEFI - permite incorporar recursos mais sofisticados de identificação, configuração, testes e atualização de firmware
+
+Utilitario da Bios Invocado pelas teclas "Del" "f2" "f12" para acessar o utilitario.
+
+Por meio dele se faz a liberação, bloqueio de perifericos integrados, ativar proteção basica contra erros, configurar endereços I/O IRQ e DMA.
+
+Pode ser usado por exemplo para alterar a velocidade de comunicação de uma memoria.
+Alterar recursos de processadores para proporcionar economia de energia, prover segurança.
+
+***Diretorios /proc e /sys
+São diretorios virtuais criados na inicialização do sistema. O kernel usa esse dois diretorios para controlar os dispositivos de hardware ativos e os processos relacionados.
+
+/sys encontramos arquivos referentes ao hardware onde é possivel realizar algumas alterações de valores.
+Como funciona: Os arquivos desse diretorio são controlados por meio de comandos e progrmaas do sistema. Quando um dispositivo é adicionado, é gerado um arquivo no diretorio que é gerenciado pelo programa "UDEV" que cria o arquivo correspondente.
+
+/sys tem os seguintes arquivos:
+
+
+/block - Informações de dispositivos de blocos, como HD, CD, DVD
+/bus   - Barramentos suportados pelo Kernel
+/class - Organiza os dispositivos em subdiretorios
+/dev
+/devices
+/firmware
+/fs
+/hypervisor
+/kernel
+/module - Modulos carregados na memoria, pelo kernel
+/power  - Controlador de energia
+
+
+/proc Tem os seguintes arquivos:
+
+
+dr-xr-xr-x  3 root root  0 May 10 23:05 acpi  -> Controlador de energia/tampa laptop
+dr-xr-xr-x 12 root root 0 May 10 23:06 asound
+-r--r--r--  1 root root 0 May 11 22:20 buddyinfo
+dr-xr-xr-x  4 root root 0 May 10 23:06 bus      -> Barramento
+-r--r--r--  1 root root 0 May 10 23:05 cgroups ->Controlador de recursos
+-r--r--r--  1 root root 0 May 10 23:05 cmdline -> Passa parametros aos kernel
+-r--r--r--  1 root root 0 May 11 22:20 consoles
+-r--r--r--  1 root root 0 May 10 23:06 cpuinfo  -> Informações da cpu, bugs, core, etc
+-r--r--r--  1 root root 0 May 11 22:20 crypto
+-r--r--r--  1 root root 0 May 10 23:06 devices  -> dispositivos utilizados pelo kernel
+-r--r--r--  1 root root 0 May 10 23:06 diskstats
+-r--r--r--  1 root root 0 May 11 22:20 dma -> dispositivos com acesso direto a memoria s/ o auxilio do processador para ler e escrever.
+
+dr-xr-xr-x  3 root root 0 May 11 22:20 driver
+dr-xr-xr-x  3 root root 0 May 11 22:20 dynamic_debug
+-r--r--r--  1 root root 0 May 11 22:20 execdomains
+-r--r--r--  1 root root 0 May 11 22:20 fb
+-r--r--r--  1 root root 0 May 10 23:05 filesystems ->Tipos de sistemas de arquivos
+dr-xr-xr-x  5 root root 0 May 10 23:06 fs
+-r--r--r--  1 root root 0 May 11 18:40 interrupts  -> IRQs usadas pelo sistema
+-r--r--r--  1 root root 0 May 11 22:20 iomem
+-r--r--r--  1 root root 0 May 11 22:20 ioports     -> portas de entrada e saida
+dr-xr-xr-x 57 root root 0 May 10 23:06 irq
+-r--r--r--  1 root root 0 May 10 23:06 kallsyms
+-r--------  1 root root   May 10 23:05 kcore -> Info sobre a memoria RAM
+-r--r--r--  1 root root 0 May 11 22:20 keys
+-r--r--r--  1 root root 0 May 11 22:20 key-users
+-r--------  1 root root 0 May 10 23:06 kmsg
+-r--------  1 root root 0 May 11 22:20 kpagecgroup
+-r--------  1 root root 0 May 11 22:20 kpagecount
+-r--------  1 root root 0 May 11 22:20 kpageflags
+-r--r--r--  1 root root 0 May 10 23:10 loadavg
+-r--r--r--  1 root root 0 May 11 22:20 locks
+-r--r--r--  1 root root 0 May 10 23:06 meminfo -> Dados da memoria, qtda
+-r--r--r--  1 root root 0 May 11 22:20 misc
+-r--r--r--  1 root root 0 May 11 22:20 modules
+lrwxrwxrwx  1 root root 11 May 10 23:06 mounts -> self/mounts
+dr-xr-xr-x  5 root root 0 May 11 22:20 mpt
+-rw-r--r--  1 root root 0 May 10 23:06 mtrr
+lrwxrwxrwx  1 root root 8 May 10 23:05 net -> self/net
+-r--------  1 root root 0 May 11 22:20 pagetypeinfo
+-r--r--r--  1 root root 0 May 11 18:51 partitions -> Lista as partições
+dr-xr-xr-x  5 root root 0 May 10 23:06 pressure
+-r--r--r--  1 root root 0 May 11 22:20 sched_debug
+-r--r--r--  1 root root 0 May 11 22:20 schedstat
+lrwxrwxrwx  1 root root 0 May 10 23:05 self -> 8539
+-r--------  1 root root 0 May 11 22:20 slabinfo
+-r--r--r--  1 root root 0 May 11 22:20 softirqs
+-r--r--r--  1 root root 0 May 10 23:06 stat
+-r--r--r--  1 root root 0 May 10 23:05 swaps  -> Dados da partição swap 
+dr-xr-xr-x  1 root root 0 May 10 23:05 sys
+--w-------  1 root root 0 May 10 23:06 sysrq-trigger
+dr-xr-xr-x  5 root root 0 May 11 22:20 sysvipc
+lrwxrwxrwx  1 root root  0 May 10 23:05 thread-self -> 8539/task/8539
+-r--------  1 root root  0 May 11 22:20 timer_list
+dr-xr-xr-x  6 root root  0 May 10 23:06 tty
+-r--r--r--  1 root root  0 May 10 23:05 uptime -> Carga do sistema/tempo
+-r--r--r--  1 root root  0 May 11 18:45 version
+-r--------  1 root root  0 May 11 22:20 vmallocinfo
+-r--r--r--  1 root root  0 May 10 23:06 vmstat -> Estatistica da memoria
+-r--r--r--  1 root root  0 May 10 23:06 zoneinfo -> Info 
+
+# cat /proc/interrupts
+
+$ cat interrupts 
+            CPU0       CPU1       
+   0:          2          0   IO-APIC    2-edge      timer
+   1:          0      23431   IO-APIC    1-edge      i8042
+   8:          1          0   IO-APIC    8-edge      rtc0
+   9:          0          0   IO-APIC    9-fasteoi   acpi
+  12:      66717          0   IO-APIC   12-edge      i8042
+  14:          0          0   IO-APIC   14-edge      ata_piix
+  15:      86994          0   IO-APIC   15-edge      ata_piix
+  16:          0      13752   IO-APIC   16-fasteoi   vmwgfx, snd_ens1371
+  17:      54672          0   IO-APIC   17-fasteoi   ehci_hcd:usb2, ioc0
+  18:          0         73   IO-APIC   18-fasteoi   uhci_hcd:usb1
+  19:      43705          0   IO-APIC   19-fasteoi   eth0
+
+Dica: Em sistemas com mais de um processador é comum existir mais de 16 IRQs.
+
+Primeira controladora ide do ide0 IRQ14
+Segunda controladora ide  ide1 IRQ15
+
+Teclado PS2 IRQ1
+Mouse Ps2 IRQ12
+
+#cat /proc/ioports
+
+$ cat ioports 
+0000-0000 : PCI Bus 0000:00
+  0000-0000 : dma1
+  0000-0000 : PNP0001:00
+    0000-0000 : pic1
+  0000-0000 : timer0
+  0000-0000 : timer1
+  0000-0000 : keyboard
+  0000-0000 : PNP0800:00
+  0000-0000 : keyboard
+  0000-0000 : rtc0
+  0000-0000 : dma page reg
+  0000-0000 : PNP0001:00
+    0000-0000 : pic2
+
+$ cat dma
+ 4: cascade
+
+
+$ cat partitions
+major minor  #blocks  name
+
+  11        0    4199580 sr0 -> cdrom
+   8        0   41943040 sda -> Partiçoes tipo Linux
+   8        1     584704 sda1
+   8        2          1 sda2
+   8        3   35496960 sda3
+   8        5    3905536 sda5
+   8        6    1951744 sda6
+Tipo LVM (dm-1)
+
+
+$ cat cmdline -> Parametros passados ao kernel no momento que ele é iniciado 
+BOOT_IMAGE=/vmlinuz-5.9.0-kali1-amd64 root=UUID=923a359e-b4b1-4d62-bc54-194ef54faacc ro quiet splash
+
+***Inspeção de Dispositivos
+
+Para identificar corretamente os dispositivos carregados é preciso inspecionar los.
+
+lspci - Mostra os dispositivos pci conectados ao barramento pci, como controladoras de disco, placas externas, controladoras usb, placas integradas.
+
+lsusb -> Inspeciona dispositivos usb conectados.
+
+****Modulos X drivers
+
+No linux os modulos são os drivers necessarios para o funcionamento do hardware.
+Os desenvolvedores do linux ja desenvolvem o sistema com a maioria embutida.
+Mas isso não quer dizer que um driver que é usado no Windows funcione no Linux.
+
+***lspci
+
+$ lspci
+00:00.0 Host bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX Host bridge (rev 01)
+00:01.0 PCI bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge (rev 01)
+00:07.0 ISA bridge: Intel Corporation 82371AB/EB/MB PIIX4 ISA (rev 08)
+00:07.1 IDE interface: Intel Corporation 82371AB/EB/MB PIIX4 IDE (rev 01)
+00:07.3 Bridge: Intel Corporation 82371AB/EB/MB PIIX4 ACPI (rev 08)
+00:07.7 System peripheral: VMware Virtual Machine Communication Interface (rev 10)
+00:0f.0 VGA compatible controller: VMware SVGA II Adapter
+00:10.0 SCSI storage controller: Broadcom / LSI 53c1030 PCI-X Fusion-MPT Dual Ultra320 SCSI (rev 01)
+02:02.0 Multimedia audio controller: Ensoniq ES1371/ES1373 / Creative Labs CT2518 (rev 02)
+02:03.0 USB controller: VMware USB2 EHCI Controller
+
+
+$ lspci -v (-v de verboso)                                                                                  
+00:00.0 Host bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX Host bridge (rev 01)
+        Subsystem: VMware Virtual Machine Chipset
+        Flags: bus master, medium devsel, latency 0
+        Kernel driver in use: agpgart-intel
+
+00:01.0 PCI bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge (rev 01) (prog-if 00 [Normal decode])
+        Flags: bus master, 66MHz, medium devsel, latency 0
+        Bus: primary=00, secondary=01, subordinate=01, sec-latency=64
+        I/O behind bridge: [disabled]
+        Memory behind bridge: [disabled]
+        Prefetchable memory behind bridge: [disabled]
+
+00:07.0 ISA bridge: Intel Corporation 82371AB/EB/MB PIIX4 ISA (rev 08)
+        Subsystem: VMware Virtual Machine Chipset
+        Flags: bus master, medium devsel, latency 0
+
+
+$ lspci -nn (-nn: nomes e numerico)                                                                                 
+00:00.0 Host bridge [0600]: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX Host bridge [8086:7190] (rev 01)
+00:01.0 PCI bridge [0604]: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge [8086:7191] (rev 01)
+00:07.0 ISA bridge [0601]: Intel Corporation 82371AB/EB/MB PIIX4 ISA [8086:7110] (rev 08)
+00:07.1 IDE interface [0101]: Intel Corporation 82371AB/EB/MB PIIX4 IDE [8086:7111] (rev 01)
+00:07.3 Bridge [0680]: Intel Corporation 82371AB/EB/MB PIIX4 ACPI [8086:7113] (rev 08)
+00:07.7 System peripheral [0880]: VMware Virtual Machine Communication Interface [15ad:0740] (rev 10)
+
+$ lspci -s 02:02.0 -k  (-s: select | -k kernel) selecionando o dispositivo e verificando o kernel associado.
+
+02:02.0 Multimedia audio controller: Ensoniq ES1371/ES1373 / Creative Labs CT2518 (rev 02)
+        DeviceName: sound
+        Subsystem: Ensoniq Audio PCI 64V/128/5200 / Creative CT4810/CT5803/CT5806 [Sound Blaster PCI]
+        Kernel driver in use: snd_ens1371
+        Kernel modules: snd_ens1371
+
+
+$ lspci -s 02:03.0 -v (Resultado semelhante ao -k:kernel porem com outros detalhes como: Flags, IRQ:17)                                                                                                                                                       
+02:03.0 USB controller: VMware USB2 EHCI Controller (prog-if 20 [EHCI])
+        DeviceName: ehci
+        Subsystem: VMware USB2 EHCI Controller
+        Physical Slot: 35
+        Flags: bus master, fast devsel, latency 64, IRQ 17
+        Memory at fd5ef000 (32-bit, non-prefetchable) [size=4K]
+        Capabilities: <access denied>
+        Kernel driver in use: ehci-pci
+        Kernel modules: ehci_pci
+
+
