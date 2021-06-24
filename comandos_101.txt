@@ -1,0 +1,124 @@
+*** Lista apenas de comandos e exemplos.
+
+101. Arquitetura do sistema.
+
+Determinar e configurar o hardware
+
+/sys - Arquivos mais importantes
+
+/sys/block - Informações de blocos HD, CD, DVD
+/sys/bus   - Informações de barramentos suportados pelo kernel
+/sys/class - Organização dos dispositivos suportados pelo sistema em subdiretorios
+/sys/module  Modulos carregados na memória pelo kernel
+
+Arquivos importantes do /proc -Podem ser solicitados na prova
+
+ acpi   -Controlador de energia
+ asound
+ buddyinfo
+ bus    -Informações sobre o barramento
+ cgroups  -Gerenciador de recursos para virtualização e container
+ cmdline  -Parametro mais importante. Passa parametros para o kernel durante a inicialização
+ consoles
+ cpuinfo  -Traz diversas informações sobre os nucleos do processador. Exemplo. Bugs /vendor id/model name
+ crypto
+ devices
+ diskstats
+ dma       -Informações sobre uso da memoria dma e que processos escrevem e leem direto na memoria RAM sem o auxilio do processador.
+ driver
+ filesystems -Mostra sistemas de arquivos disponivel e montado pelo comando mount
+ fs
+ interrupts  -Lista de IRQS associados aos dispositivos
+ iomem
+ ioports     -Exibe faixas de memoria associada ao dispositivo bem como as entradas e saidasno arquivo
+ irq
+ kallsyms    -Exibe todos os simbolos conhecidos pelo kernel e acessiveis/exportados pelos modulos.
+ kcore       -Exibe informações sobre a memoria RAM
+ keys
+ key-users
+ kmsg
+ kpagecgroup
+ kpagecount
+ kpageflags
+ loadavg
+ locks
+ meminfo    -Estatisticas sobre o uso da memoria
+ misc
+ modules
+ mounts -> self/mounts
+ mpt
+ mtrr      -Memory Type Range Registers -Usado pela familia Intel P6 para controlar o acesso dos processos ao range de memoria.
+ self/net
+ pagetypeinfo
+ partitions  -Contem informação sobre as partições, numeros de blocos e nome dos dispositivos. Usar o /proc/devices para identificar os blocos.
+ pressure
+ sched_debug
+ schedstat
+ slabinfo
+ softirqs
+ stat
+ swaps      -Informação sobre a swap, onde esta montada, tamanho e prioridade
+ sys
+ sysrq-trigger
+ sysvipc
+ thread-self -> 2883/task/2883
+ timer_list
+ tty
+ uptime   -Traz informações sobre o tempo que o sistema esta "up" ligado
+ version  -Informações sobre a versão de Kernel, versão do sistema
+ vmallocinfo
+ vmstat   -Informações e estatistica da Memória Virtual
+ zoneinfo
+
+
+### Descobrindo a versão do Kernel
+
+#uname -r 
+5.9.0-kali1-amd64
+
+#cat /proc/sys/kernel/osrelease
+5.9.0-kali1-amd64
+
+#### Listando os recursos de Hardware no Linux
+
+**lsmod - Lista modulos carregados pelo kernel
+
+Traz 3 informações. 
+Module                  Size  Used by
+snd                   110592  10 snd_seq_device,snd_timer,snd_ac97_codec,snd_pcm,snd_rawmidi,snd_ens1371
+
+#lsmod | grep snd - Listando um modulo especifico e quem depende dele para funcionar
+snd_ens1371            32768  2
+snd_ac97_codec        180224  1 snd_ens1371
+ac97_bus               16384  1 snd_ac97_codec
+gameport               20480  1 snd_ens1371
+snd_rawmidi            45056  1 snd_ens1371
+snd_seq_device         16384  1 snd_rawmidi
+snd_pcm               135168  2 snd_ac97_codec,snd_ens1371
+snd_timer              49152  1 snd_pcm
+snd                   110592  10 snd_seq_device,snd_timer,snd_ac97_codec,snd_pcm,snd_rawmidi,snd_ens1371
+soundcore              16384  1 snd
+
+
+***Modinfo - Informações detalhadas sobre o modulo.
+
+#modinfo snd
+filename:       /lib/modules/5.9.0-kali1-amd64/kernel/sound/core/snd.ko
+alias:          char-major-116-*
+license:        GPL
+description:    Advanced Linux Sound Architecture driver for soundcards.
+author:         Jaroslav Kysela <perex@perex.cz>
+depends:        soundcore
+retpoline:      Y
+intree:         Y
+name:           snd
+vermagic:       5.9.0-kali1-amd64 SMP mod_unload modversions 
+parm:           slots:Module names assigned to the slots. (array of charp)
+parm:           major:Major # for sound driver. (int)
+parm:           cards_limit:Count of auto-loadable soundcards. (int)
+
+***Modinfo -F filename - Exibe apenas um campo especifico
+
+#modinfo -F filename snd
+/lib/modules/5.9.0-kali1-amd64/kernel/sound/core/snd.ko
+
