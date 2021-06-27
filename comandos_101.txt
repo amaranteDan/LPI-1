@@ -122,3 +122,199 @@ parm:           cards_limit:Count of auto-loadable soundcards. (int)
 #modinfo -F filename snd
 /lib/modules/5.9.0-kali1-amd64/kernel/sound/core/snd.ko
 
+***Remover modulos
+
+#rmmod cdrom -> Remover o modulo se nao houver dependencias
+$ lsmod | grep cdrom
+cdrom                  73728  1 sr_mod
+
+#rmmod sr_mod -> Removendo a dependencia
+#rmmod ccdrom -> Remover o modulo
+
+***modprobe também pode ser usado para remover módulos ou carrega los
+
+#modprobe -r (--remove) cdrom -> Remove um modulo ou dependencias
+
+#modprobe -D (--show-depends) ccdrom -> Mostra as dependencias
+# modprobe -D cdrom
+insmod /lib/modules/5.9.0-kali1-amd64/kernel/drivers/cdrom/cdrom.ko
+
+#modprobe -c --showconfig cdrom -> Mostra a configuração do modulo
+
+***Passando parametros para o modulo
+
+#modprobe -v cdrom lockdoor=0 -> Fechando a bandeja do cdrom.
+
+**Sub comandos do modprobe
+
+-b, --use-blacklist -> Para colocar o modulo em uma lista negra
+-f, --force -> Para forçar a remoção de um modulo ou depedencia.
+
+***Listando Dispositivos PCI.
+
+***lspci
+
+Caso não esteja instalado na sua distribuição, o pacote é: pciutils
+
+Formato XX:YY.Z ->Numero da função pci
+        |   |-->Numero do slot pci
+        |->Numerodo barramento pci
+
+
+-s Busca o endereço a ser verificado
+-v Modo com mais detalhes. Ex
+-nn Nome e numero - Saida formato numerico
+
+
+# lspci -s 02:02.0 -v                                                                        
+02:02.0 Multimedia audio controller: Ensoniq ES1371/ES1373 / Creative Labs CT2518 (rev 02)
+        DeviceName: sound
+        Subsystem: Ensoniq Audio PCI 64V/128/5200 / Creative CT4810/CT5803/CT5806 [Sound Blaster PCI]
+        Physical Slot: 34
+        Flags: bus master, medium devsel, latency 64, IRQ 16
+        I/O ports at 2040 [size=64]
+        Capabilities: [40] PCI Advanced Features
+        Kernel driver in use: snd_ens1371
+        Kernel modules: snd_ens1371
+
+
+#lspci -nn 
+02:02.0 Multimedia audio controller [0401]: Ensoniq ES1371/ES1373 / Creative Labs CT2518 [1274:1371] (rev 02)
+
+# lspci -nn -s 02:03.0 -> Adicionando mais opções
+02:03.0 USB controller [0c03]: VMware USB2 EHCI Controller [15ad:0770]
+
+# lspci -s 02:03.0 -k ->Veriifcando o kernel em uso pelo dispositivo.
+02:03.0 USB controller: VMware USB2 EHCI Controller
+        DeviceName: ehci
+        Subsystem: VMware USB2 EHCI Controller
+        Kernel driver in use: ehci-pci
+        Kernel modules: ehci_pci
+
+**O arquivo modules.pcimap - /lib/modules/<versão do kernel> prove ao sistema um mapeamento dos 
+dispositivos pci a serem mapeados
+
+
+***Dispositivos USB
+
+**Comando lsusb
+
+Pacote usbutils
+
+Padrões de Usb
+
+O usbfs -> Sistema de arquivos virtual do USB. Diretorio /proc/bus/usb.
+
+OHCI -> Primeira versão 1.0
+UHCI -> Padrão criado pela Intel -Implementação de Hardware mais barata.
+EHCI -> Criada pela Intel. Versão 2.0
+
+**Verificando o padrão usado no sistema
+# lspci -v |grep [UOE]HCI
+02:00.0 USB controller: VMware USB1.1 UHCI Controller (prog-if 00 [UHCI])
+        Subsystem: VMware USB1.1 UHCI Controller
+02:03.0 USB controller: VMware USB2 EHCI Controller (prog-if 20 [EHCI])
+        Subsystem: VMware USB2 EHCI Controller
+
+
+# dmesg |grep [UOE]HCI
+[    3.862037] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+[    3.863356] uhci_hcd 0000:02:00.0: UHCI Host Controller
+[    3.869044] ehci-pci: EHCI PCI platform driver
+[    3.873116] usb usb1: Product: UHCI Host Controller
+[    3.873730] ehci-pci 0000:02:03.0: EHCI Host Controller
+[    3.939050] ehci-pci 0000:02:03.0: USB 2.0 started, EHCI 1.00
+[    3.939144] usb usb2: Product: EHCI Host Controller
+
+
+***Comando lsusb
+
+# lsusb
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 0e0f:0002 VMware, Inc. Virtual USB Hub
+Bus 001 Device 002: ID 0e0f:0003 VMware, Inc. Virtual Mouse
+Bus 001 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+
+#lsusb -v ->Informações detalhadas
+
+#lsusb -v -s 2:3 - Informações detalhadas no Barramento 2 / 3 Dispositivo
+
+***Dispositivos SCSI
+
+Cada Barramento possui ate 15 dispositivos por canal. 
+
+# lsscsi                                                                                     
+[1:0:0:0]    cd/dvd  NECVMWar VMware IDE CDR10 1.00  /dev/sr0 
+[2:0:0:0]    disk    VMware,  VMware Virtual S 1.0   /dev/sda 
+|  | | |
+|
+|
+
+# lsscsi -l
+[1:0:0:0]    cd/dvd  NECVMWar VMware IDE CDR10 1.00  /dev/sr0 
+  state=running queue_depth=1 scsi_level=6 type=5 device_blocked=0 timeout=30
+[2:0:0:0]    disk    VMware,  VMware Virtual S 1.0   /dev/sda 
+  state=running queue_depth=32 scsi_level=3 type=0 device_blocked=0 timeout=180
+
+# scsiinfo -l -> Obtendo informações sobre dispositivos scsi
+/dev/sda
+
+# scsiinfo -i /dev/sda
+
+Inquiry command
+---------------
+Relative Address                   0
+Wide bus 32                        1
+Wide bus 16                        1
+Synchronous neg.                   1
+Linked Commands                    0
+Command Queueing                   1
+SftRe                              1
+Device Type                        0
+Peripheral Qualifier               0
+Removable?                         0                                                                                                                                           
+Device Type Modifier               0                                                                                                                                           
+ISO Version                        0                                                                                                                                           
+ECMA Version                       0                                                                                                                                           
+ANSI Version                       2                                                                                                                                           
+AENC                               0                                                                                                                                           
+TrmIOP                             0                                                                                                                                           
+Response Data Format               2                                                                                                                                           
+Vendor:                    VMware,                                                                                                                                             
+Product:                   VMware Virtual S                                                                                                                                    
+Revision level:            1.0       
+
+***Udev -> Substitui o gerenciador de dispositivos devfs a parti da versão 2.6.12 do kernel.
+
+*São gerados dinamicamente conforme os itens de hardware são instalados. Diretorio /etc/udev/udev.conf e arquivos das regras /etc/udev/rules.d
+
+comandos udevadm monitor / udevmonitor -> Gerenciam eventos do kernel.
+
+# udevadm monitor
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+KERNEL - the kernel uevent
+
+/sysfs -> Montado no /sys exporta informações sobre dispositivos para que os utilitarios de espaço do usuario possam acessar as informações.
+
+*Comando systemctl
+
+D-Bus -> Barramento de software distribuido que permite que os aplicativos de desktop enviem mensagens uns aos outros e recebam mensagens do kernel.
+
+daemon: dbus.service
+
+101.2 Inicialização do sistema
+Peso 3  
+
+
+O Processo de Inicialização.
+
+1 -> Ligar o sistema a Bios carrega os primeiros 440 bytes de 512 bytes total. Ai esta a MBR (MAster Boot Record) 1 Estagio.
+2 -> MBR carregada, inicio do 2 estagio do gerenciador de boot.
+3 -> O Segundo estagio se encarregada de seguir com a carga do sistema operacional, localiza e carrega o Kernel e a initr (Initial RAM DRIVE). Initrd opcional dependendo do SO4 -> O kernel do linux carregado na memoria pelo 2 estagio é executado. Se controla o hardware basico, controladoras de disco, hds e o kernel executa o /sbin/init
+5 -> O /sbin/init le o /etc/inittab e executa os scripts de inicialização do sistema. /etc/init.d/*) no runlevel configurado.
+
+
+
+
+
