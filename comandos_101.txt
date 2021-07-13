@@ -314,6 +314,9 @@ O Processo de Inicialização.
 3 -> O Segundo estagio se encarregada de seguir com a carga do sistema operacional, localiza e carrega o Kernel e a initr (Initial RAM DRIVE). Initrd opcional dependendo do SO4 -> O kernel do linux carregado na memoria pelo 2 estagio é executado. Se controla o hardware basico, controladoras de disco, hds e o kernel executa o /sbin/init
 5 -> O /sbin/init le o /etc/inittab e executa os scripts de inicialização do sistema. /etc/init.d/*) no runlevel configurado.
 
+O processo de Inicialização do UEFI.
+
+
 
 
 
