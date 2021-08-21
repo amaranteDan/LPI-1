@@ -1,0 +1,351 @@
+usage: yum [options] COMMAND
+
+Lista de Comandos Principais :
+
+alias                     Lista ou cria alias de comandos
+autoremove                remove todos os pacotes desnecessários que foram originalmente instalado como dependências
+check                     verifica se há problemas no packagedb
+check-update              verifica se há atualizações de pacote disponíveis
+clean                     remove dados em cache
+deplist                   [obsoleto, use repoquery --deplist] Lista as dependências dos pacotes e quais pacotes as fornecem
+distro-sync               sincroniza os pacotes instalados com as últimas versões disponíveis
+downgrade                 Desatualiza um pacote
+group                     exibe ou usa as informações dos grupos
+help                      exibe uma mensagem de ajuda para uso
+history                   exibe ou usa o histórico de transações
+info                      exibe detalhes sobre um pacote ou grupo de pacotes
+install                   instala um ou mais pacotes em seu sistema
+list                      lista um pacote ou grupos de pacotes
+makecache                 gera o cache de metadados
+mark                      marca ou desmarca pacotes instalados como instalados pelo usuário.
+module                    Interaja com os módulos.
+provides                  localiza qual pacote fornece o valor dado
+reinstall                 reinstala um pacote
+remove                    remove um ou mais pacotes do seu sistema
+repolist                  exibe os repositórios de software configurados
+repoquery                 pesquisa por pacotes coincidindo com a palavra-chave
+repository-packages       executa comandos em cima de todos os pacotes em um dado repositório
+search                    pesquisa detalhes do pacote para a string fornecida
+shell                     executa um shell interativo YUM
+swap                      run an interactive YUM mod for remove and install one spec
+updateinfo                exibe avisos sobre pacotes
+upgrade                   atualiza um ou mais pacotes em seu sistema
+upgrade-minimal           atualiza, mas apenas o pacote 'mais recente' que coincide e que corrige um problema que afeta o seu sistema
+
+Lista de Comandos de Plugin:
+
+builddep                  Install build dependencies for package or spec file
+changelog                 Mostrar o log de alterações do pacote de dados
+config-manager            manage yum configuration options and repositories
+copr                      Interagir com repositórios COPR.
+debug-dump                descarregar para arquivo as informações sobre pacotes rpm instalados
+debug-restore             restaurar pacotes gravados no arquivo de depuração-descarregamento
+debuginfo-install         Instalar pacotes debuginfo
+download                  Baixar o pacote para o diretório corrente
+groups-manager            create and edit groups metadata file
+needs-restarting          determinar se os binários atualizados necessitam de restart
+playground                Interagir com o repositório Playground.
+repoclosure               Exibir uma lista de dependências não resolvidas para os repositórios
+repodiff                  Listar as diferenças entre dois conjuntos de repositórios
+repograph                 Output a full package dependency graph in dot format
+repomanage                Gerenciar um diretório de pacotes rpm
+reposync                  baixar todos os pacotes do repositório remoto
+
+General YUM options:
+  -c [config file], --config [config file]
+                        configurar localização do arquivo
+  -q, --quiet           operação discreta
+  -v, --verbose         operação detalhada
+  --version             mostre a versão do YUM e sai
+  --installroot [path]  definir raiz de instalação
+  --nodocs              não instalar documentações
+  --noplugins           desabilitar todos plugins
+  --enableplugin [plugin]
+                        habilitar plugins por nome
+  --disableplugin [plugin]
+                        desabilitar plugins pelo nome
+  --releasever RELEASEVER
+                        substituir o valor de $releasever em arquivos config e
+                        repo
+  --setopt SETOPTS      Configurando opções arbitrárias de repositório e
+                        configurações
+  --skip-broken         soluciona problemas depsolve ignorando pacotes
+  -h, --help, --help-cmd
+                        exibe a ajuda de comando
+  --allowerasing        permite apagar pacotes instalados para resolver
+                        dependências
+  -b, --best            tente as melhores versões de pacotes disponíveis em
+                        transações.
+  --nobest              não limite a transação ao melhor candidato
+  -C, --cacheonly       executar por completo a partir do cache do sistema,
+                        não atualiza o cache
+  -R [minutes], --randomwait [minutes]
+                        máximo tempo de espera do comando
+  -d [debug level], --debuglevel [debug level]
+                        nível de depuração na saída
+  --debugsolver         despejar em arquivos resultados detalhados da
+                        resolução
+  --showduplicates      mostrar duplicados em repos e em comandos de
+                        pesquisa/listagem
+  -e ERRORLEVEL, --errorlevel ERRORLEVEL
+                        nível de erro na saída
+  --obsoletes           habilita a lógica de processamento obsoleto de yum
+                        para atualizar ou exibir recursos que o pacote
+                        obsoleta para informações, lista e recomposição
+  --rpmverbosity [debug level name]
+                        nível de depuração na saída para o rpm
+  -y, --assumeyes       responder sim para todas as perguntas automaticamente
+  --assumeno            responder não para todas as perguntas automaticamente
+  --enablerepo [repo]   Ativar repositórios adicionais. Opção de lista.
+                        Suporta globs, pode ser especificado várias vezes.
+  --disablerepo [repo]  Desativar repositórios. Opção de lista. Suporta globs,
+                        pode ser especificado várias vezes.
+  --repo [repo], --repoid [repo]
+                        habilitar apenas repositório específicos por um id ou
+                        um glob, pode ser especificado diversas vezes
+  --enable              ativar repos com o comando config-manager (salva
+                        automaticamente)
+  --disable             desativar repositórios com o comando config-manager
+                        (salva automaticamente)
+  -x [package], --exclude [package], --excludepkgs [package]
+                        excluir pacotes por nome ou glob
+  --disableexcludes [repo], --disableexcludepkgs [repo]
+                        desabilitar excludepkgs
+  --repofrompath [repo,path]
+                        rótulo e caminho para um repositório adicional a ser
+                        usado (mesmo caminho que em uma baseurl), podem ser
+                        especificados várias vezes.
+  --noautoremove        desativar a remoção de dependências que não são mais
+                        usadas
+  --nogpgcheck          desativar verificação de assinatura gpg (se a política
+                        RPM permitir)
+  --color COLOR         controla o uso da cor
+  --refresh             marcar metadados como vencidos antes de executar o
+                        comando
+  -4                    resolver somente endereços IPv4
+  -6                    resolver somente endereços IPv6
+  --destdir DESTDIR, --downloaddir DESTDIR
+                        definir o diretório para copiar os pacotes para
+  --downloadonly        baixar somente pacotes
+  --comment COMMENT     adicione um comentário à transação
+  --bugfix              Incluir pacotes bugfix relevantes, nas atualizações
+  --enhancement         Incluir pacotes de aprimoramentos relevantes, nas
+                        atualizações
+  --newpackage          Incluir pacotes newpackage relevantes, nas
+                        atualizações
+  --security            Incluir pacotes de segurança relevantes, nas
+                        atualizações
+  --advisory ADVISORY, --advisories ADVISORY
+                        Incluir pacotes necessários para corrigir o aviso
+                        informado, nas atualizações
+  --bz BUGZILLA, --bzs BUGZILLA
+                        Incluir pacotes necessários para corrigir o BZ
+                        informado, nas atualizações
+  --cve CVES, --cves CVES
+                        Incluir pacotes necessários para corrigir o CVE
+                        informado, nas atualizações
+  --sec-severity {Critical,Important,Moderate,Low}, --secseverity {Critical,Important,Moderate,Low}
+                        Incluir pacotes de segurança relevantes coincidindo
+                        com a severidade, nas atualizações
+  --forcearch ARCH      Forçar o uso de uma arquitetura
+******************************************************
+Utilização: rpm [OPÇÃO...]
+
+Consultar/Verificar as opções de seleção do pacote:
+  -a, --all                                consultar/verificar todos os pacotes
+  -f, --file                               consultar/verificar pacote(s) que
+                                           detém o arquivo
+  -g, --group                              consultar/verificar pacote(s) em um
+                                           grupo
+  -p, --package                            consultar/verificar um arquivo de
+                                           pacote
+      --pkgid                              consultar/verificar pacote(s) com
+                                           um identificador de pacotes
+      --hdrid                              consultar/verificar pacote(s) com
+                                           um identificador de cabeçalhos
+      --triggeredby                        consultar o(s) pacote(s) disparado
+                                           pelo pacote
+      --whatconflicts                      consultar/verificar pacotes que
+                                           precisam de uma dependência
+      --whatrequires                       consultar/verificar pacotes que
+                                           precisam de uma dependência
+      --whatobsoletes                      query/verify the package(s) which
+                                           obsolete a dependency
+      --whatprovides                       consultar/verificar pacote(s) que
+                                           fornecem uma dependência
+      --whatrecommends                     query/verify the package(s) which
+                                           recommends a dependency
+      --whatsuggests                       query/verify the package(s) which
+                                           suggests a dependency
+      --whatsupplements                    query/verify the package(s) which
+                                           supplements a dependency
+      --whatenhances                       query/verify the package(s) which
+                                           enhances a dependency
+      --nomanifest                         não processar arquivos que não
+                                           são de pacotes como manifestos
+
+Query/Verify file selection options:
+  -c, --configfiles                        only include configuration files
+  -d, --docfiles                           only include documentation files
+  -L, --licensefiles                       only include license files
+  -A, --artifactfiles                      only include artifact files
+      --noghost                            exclude %%ghost files
+      --noconfig                           exclude %%config files
+      --noartifact                         exclude %%artifact files
+
+Opções de consulta (com -q ou --query):
+      --dump                               descarregar informações básicas
+                                           do arquivo
+  -l, --list                               listar arquivos do pacote
+      --queryformat=QUERYFORMAT            utilizar o seguinte formato de
+                                           consulta
+  -s, --state                              exibir o estado dos arquivos
+                                           listados
+
+Opções de verificação (com -V ou --verify):
+      --nofiledigest                       não verificar o digest dos arquivos
+      --nofiles                            não verificar os arquivos do pacote
+      --nodeps                             não verificar as dependências do
+                                           pacote
+      --noscript                           não executar script(s) de
+                                           verificação
+
+Opções de Instalação/Atualização/Remoção:
+      --allfiles                           instala todos os arquivos, até
+                                           configurações que poderiam ser
+                                           ignoradas
+      --allmatches                         remover todos os pacotes iguais ao
+                                           <pacote> (normalmente um erro é
+                                           gerado se o <pacote> especificou
+                                           múltiplos pacotes)
+      --badreloc                           realocar arquivos em pacotes não
+                                           realocáveis
+  -e, --erase=<pacote>+                    remover (desinstalar) pacote
+      --excludedocs                        não instalar documentação
+      --excludepath=<caminho>              ignorar arquivos com componentes
+                                           principais <caminho> 
+      --force                              atalho para --replacepkgs
+                                           --replacefiles
+  -F, --freshen=<arquivo_do_pacote>+       atualizar pacote(s) se já
+                                           estiver(em) instalado(s)
+  -h, --hash                               exibir cerquilhas a medida que o
+                                           pacote instala (bom com -v)
+      --ignorearch                         não verificar a arquitetura do
+                                           pacote
+      --ignoreos                           não verificar o sistema
+                                           operacional do pacote
+      --ignoresize                         não verificar o espaço em disco
+                                           antes de instalar
+      --noverify                           short hand for --ignorepayload
+                                           --ignoresignature
+  -i, --install                            instalar pacote(s)
+      --justdb                             atualizar o banco de dados, mas
+                                           não modificar o sistema de arquivos
+      --nodeps                             não verificar as dependências do
+                                           pacote
+      --nofiledigest                       não verificar o digest dos arquivos
+      --nocontexts                         não instalar contextos de
+                                           segurança dos arquivos
+      --nocaps                             don't install file capabilities
+      --noorder                            não reordenar a instalação dos
+                                           pacotes para satisfazer as
+                                           dependências
+      --noscripts                          não executar scriptlet(s) do pacote
+      --notriggers                         não executar nenhum scriptlet
+                                           disparado por este pacote
+      --oldpackage                         atualizar para uma versão mais
+                                           antiga do pacote (--force em
+                                           atualizações faz isso
+                                           automaticamente)
+      --percent                            exibir porcentagens na medida em
+                                           que o pacote vai sendo instalado
+      --prefix=<dir>                       realocar o pacote para <dir>, se
+                                           for realocável
+      --relocate=<antigo>=<novo>           realocar arquivos do caminho
+                                           <antigo> para o <novo>
+      --replacefiles                       ignorar conflitos de arquivos entre
+                                           pacotes
+      --replacepkgs                        reinstalar se o pacote já estiver
+                                           presente
+      --test                               não instalar, mas dizer se a
+                                           instalação funcionaria ou não
+  -U, --upgrade=<arquivo_do_pacote>+       atualizar pacote(s)
+      --reinstall=<arquivo_do_pacote>+     reinstall package(s)
+
+Opções comuns para todos os executáveis e modos rpm:
+  -D, --define="MACRO EXPR"                definir MACRO com valor EXPR
+      --undefine=MACRO                     undefine MACRO
+  -E, --eval="EXPR"                        imprimir expansão do macro da EXPR
+      --target=CPU-VENDOR-OS               Specify target platform
+      --macros=<ARQUIVO:...>               ler <ARQUIVO:...> ao invés do(s)
+                                           arquivo(s) padrão
+      --load=<FILE>                        load a single macro file
+      --noplugins                          don't enable any plugins
+      --nodigest                           não verificar digest(s) dos pacotes
+      --nosignature                        não verificar a(s) assinatura(s)
+                                           do pacote
+      --rcfile=<ARQUIVO:...>               ler <ARQUIVO:...> ao invés do(s)
+                                           arquivo(s) padrão
+  -r, --root=ROOT                          utilizar ROOT como o diretório de
+                                           nível mais alto (default: "/")
+      --dbpath=DIRECTORY                   use database in DIRECTORY
+      --querytags                          exibir etiquetas de consulta
+                                           conhecidas
+      --showrc                             exibir configuração final do
+                                           rpmrc e do macro
+      --quiet                              fornece uma saída menos detalhada
+  -v, --verbose                            fornece uma saída mais detalhada
+      --version                            mostra a versão do rpm que está
+                                           sendo usada
+
+Options implemented via popt alias/exec:
+      --scripts                            list install/erase scriptlets from
+                                           package(s)
+      --setperms                           set permissions of files in a
+                                           package
+      --setugids                           set user/group ownership of files
+                                           in a package
+      --setcaps                            set capabilities of files in a
+                                           package
+      --restore                            restore file/directory permissions
+      --conflicts                          list capabilities this package
+                                           conflicts with
+      --obsoletes                          list other packages removed by
+                                           installing this package
+      --provides                           list capabilities that this package
+                                           provides
+      --requires                           list capabilities required by
+                                           package(s)
+      --recommends                         list capabilities recommended by
+                                           package(s)
+      --suggests                           list capabilities suggested by
+                                           package(s)
+      --supplements                        list capabilities supplemented by
+                                           package(s)
+      --enhances                           list capabilities enhanced by
+                                           package(s)
+      --info                               list descriptive information from
+                                           package(s)
+      --changelog                          list change logs for this package
+      --changes                            list changes for this package with
+                                           full time stamps
+      --xml                                list metadata in xml
+      --triggers                           list trigger scriptlets from
+                                           package(s)
+      --filetriggers                       list filetrigger scriptlets from
+                                           package(s)
+      --last                               list package(s) by install time,
+                                           most recent first
+      --dupes                              list duplicated packages
+      --filesbypkg                         list all files from each package
+      --fileclass                          list file names with their classes
+      --filecolor                          list file names with their colors
+      --fileprovide                        list file names with their provides
+      --filerequire                        list file names with requires
+      --filecaps                           list file names with their POSIX1.e
+                                           capabilities
+
+Help options:
+  -?, --help                               Mostrar esta mensagem de ajuda
+      --usage                              Mostrar uma mensagem de
+                                           utilização sucinta
