@@ -22,9 +22,7 @@ A partição de inicialização contém arquivos usados pelo gerenciador de inic
 
 Tecnicamente, uma partição de inicialização não é necessária, pois na maioria dos casos o GRUB pode montar a partição raiz (/) e carregar os arquivos a partir de um diretório /boot separado.
 
-No entanto, uma partição de inicialização separada pode ser interessante, seja por segurança (garantindo que o sistema seja inicializado mesmo em caso de falha no sistema de arquivos raiz), ou se você desejar usar um sistema de arquivos que o carregador de inicialização não pode entender na partição raiz, ou se usar um método não suportado de criptografia ou compactação.
 
-A partição de inicialização geralmente é a primeira partição no disco. Isso ocorre porque a IBM PC BIOS original endereçava os discos usando cilindros, cabeças e setores (CHS), com um máximo de 1024 cilindros, 256 cabeças e 63 setores, resultando em um tamanho máximo de disco de 528 MB (504 MB no MS-DOS). Isso significa que qualquer coisa além dessa marca não estaria acessível em sistemas legados, a menos que um esquema de endereçamento de disco diferente (como o Endereçamento de bloco lógico, LBA) fosse usado.
 
 Portanto, para obter compatibilidade máxima, a partição de inicialização geralmente está localizada no início do disco e termina antes do cilindro 1024 (528 MB), garantindo que, aconteça o que acontecer, a máquina sempre poderá carregar o kernel.
 
@@ -63,35 +61,6 @@ A partição de troca não pode ser montada como as outras, o que significa que 
 Um sistema pode ter diversas partições de troca (embora isso seja incomum), e o Linux também suporta o uso de arquivos de troca em vez de partições, o que pode ser útil para aumentar rapidamente o espaço de troca quando necessário.
 
 O tamanho da partição de troca é um tema controverso. A regra antiga dos primeiros dias do Linux (“duas vezes a quantidade de RAM”) nem sempre se aplica, dependendo de como o sistema está sendo usado e da quantidade de RAM física instalada.
-
-Na documentação do Red Hat Enterprise Linux 7, a Red Hat recomenda o seguinte:
-
-Quantidade de RAM	Tamanho de troca recomendado	Tamanho de troca recomendado com hibernação
-< 2 GB de RAM
-
-2x a quantidade de RAM
-
-3x a quantidade de RAM
-
-2-8 GB de RAM
-
-Igual à quantidade de RAM
-
-2x a quantidade de RAM
-
-8-64 GB de RAM
-
-No mínimo 4 GB
-
-1.5x a quantidade de RAM
-
-> 64 GB de RAM
-
-No mínimo 4 GB
-
-Não recomendado
-
-Obviamente, a quantidade de troca pode depender da carga de trabalho. Se a máquina estiver executando um serviço crítico, como um banco de dados, servidor Web ou SAP, é aconselhável verificar o valor recomendado na documentação desses serviços (ou consultar o fornecedor do software).
 
 
 LVM
