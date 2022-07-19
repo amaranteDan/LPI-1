@@ -2,19 +2,12 @@ Objetivo 102.1 Particionamento de Disco
 
 Pense em um disco (ou dispositivo de armazenamento, já que os dispositivos modernos não contêm nenhum “disco”) como um “receptáculo físico” para seus dados.
 
-Antes de um disco poder ser usado por um computador, ele precisa ser particionado. Uma partição é um subconjunto lógico do disco físico, uma espécie de “cerca” lógica. O particionamento é uma maneira de “compartimentar” as informações armazenadas no disco, separando, por exemplo, os dados do sistema operacional dos dados do usuário.
-
-Todo disco precisa de pelo menos uma partição, mas é possível definir várias partições se necessário, e as informações a respeito delas são armazenadas em uma tabela de partições. Essa tabela inclui informações sobre o primeiro e o último setores da partição e seu tipo, além de detalhes adicionais sobre cada partição.
-
-
 Pontos de montagem
-Antes que um sistema de arquivos possa ser acessado no Linux, ele precisa ser montado. Isso significa vincular o sistema de arquivos a um ponto específico na árvore de diretórios do sistema, chamado ponto de montagem.
+Isso significa vincular o sistema de arquivos a um ponto específico na árvore de diretórios do sistema, chamado ponto de montagem.
 
 Quando montado, o conteúdo do sistema de arquivos estará disponível no ponto de montagem. Por exemplo, imagine que você tenha uma partição com os dados pessoais de seus usuários (o diretório pessoal deles), contendo os diretórios /john, /jack e /carol. Quando montados em /home, o conteúdo desses diretórios estará disponível em /home/john, /home/jack e /home/carol.
 
-O ponto de montagem deve existir antes de o sistema de arquivos ser montado. Não é possível montar uma partição em /mnt/userdata se esse diretório não existir. No entanto, se o diretório existir e contiver arquivos, esses arquivos ficarão indisponíveis até você desmontar o sistema de arquivos. Ao listar o conteúdo do diretório, veremos os arquivos armazenados no sistema de arquivos montado, não o conteúdo original do diretório.
-
-Os sistemas de arquivos podem ser montados em qualquer lugar que você desejar. No entanto, certas práticas são recomendadas para facilitar a administração do sistema.
+O ponto de montagem são diretorios associados com partições.
 
 Tradicionalmente, todos os dispositivos externos eram montados no diretório /mnt. Ali existia uma série de pontos de ancoragem pré-configurados para os dispositivos mais comuns, como drives de CD-ROM (/mnt/cdrom) e de disquete (/mnt/floppy).
 
